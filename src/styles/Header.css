@@ -1,0 +1,156 @@
+/* =============================
+   Global Header Styling
+   ============================= */
+/* =============================
+   Theme
+============================= */
+:root {
+  --ht-blue-dark: #123A78;
+  --ht-blue-light: #1E4B8E;
+  --ht-link-color: #ffffff;
+  --ht-active-bg: #ffffff;
+  --ht-active-text: #123A78;
+  --ht-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* =============================
+   Header base
+============================= */
+.ht-header {
+  position: fixed;
+  top: 0; left: 0; width: 100%;
+  z-index: 1000;
+  background: linear-gradient(90deg, var(--ht-blue-dark), var(--ht-blue-light));
+  color: var(--ht-link-color);
+  box-shadow: var(--ht-shadow);
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.ht-header-row {
+  max-width: 1300px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+}
+
+/* =============================
+   Language
+============================= */
+.ht-lang {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  opacity: 0.95;
+  transition: .3s ease;
+}
+.ht-lang:hover { opacity: .75; }
+.ht-caret { font-size: 12px; }
+
+/* =============================
+   Navigation
+============================= */
+.ht-nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  font-weight: 500;
+  font-size: 15px;
+
+  /* mobile: make horizontal scrollable row */
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.ht-nav::-webkit-scrollbar { display: none; }
+
+.ht-nav-link {
+  color: var(--ht-link-color);
+  transition: .3s ease;
+  padding: 8px 14px;
+  border-radius: 22px;
+}
+.ht-nav-link:hover { opacity: .75; }
+
+.ht-nav-active {
+  background: var(--ht-active-bg);
+  color: var(--ht-active-text);
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0,0,0,.2);
+}
+
+/* =============================
+   Responsive
+============================= */
+@media (max-width: 1024px) {
+  .ht-header-row { padding: 10px 16px; }
+  .ht-nav { gap: 14px; font-size: 14px; }
+  .ht-nav-link { padding: 7px 12px; }
+}
+
+@media (max-width: 720px) {
+  /* hide language on very small screens to free space */
+  .ht-lang { display: none; }
+
+  .ht-header-row {
+    gap: 10px;
+  }
+  .ht-nav {
+    gap: 10px;
+  }
+  .ht-nav-link {
+    padding: 6px 10px;
+    border-radius: 18px;
+  }
+}
+/* ---- Right-side auth buttons ---- */
+.ht-auth-group{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.ht-auth-btn{
+  display:inline-block;
+  padding:8px 14px;
+  border-radius:20px;
+  font-weight:700;
+  transition:.2s ease;
+  text-decoration:none;
+}
+
+.ht-auth-outline{
+  color:#fff;
+  border:1px solid rgba(255,255,255,.55);
+  background:transparent;
+}
+.ht-auth-outline:hover{ background:rgba(255,255,255,.12); }
+
+.ht-auth-solid{
+  background:#F2BE42;           /* gold */
+  color:#0f2d5c;                 /* ink */
+  border:1px solid transparent;
+  box-shadow:0 4px 10px rgba(0,0,0,.15);
+}
+.ht-auth-solid:hover{ filter:brightness(1.05); }
+
+.ht-auth-active{
+  box-shadow:0 0 0 2px #fff inset;
+}
+
+/* Responsive: stack auth buttons under nav if narrow */
+@media (max-width: 880px){
+  .ht-header-row{
+    gap:10px;
+  }
+  .ht-nav{
+    gap:12px;
+  }
+  .ht-auth-btn{
+    padding:7px 12px;
+  }
+}

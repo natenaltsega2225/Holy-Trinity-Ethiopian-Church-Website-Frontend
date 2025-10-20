@@ -1,0 +1,71 @@
+:root{
+  --mbr-blue-700:#133a74;
+  --mbr-blue-800:#0f2d5c;
+  --mbr-gold:#F2BE42;
+  --mbr-ink:#0f2d5c;
+  --mbr-ring:#e7eef6;
+  --mbr-shadow:0 16px 34px rgba(15,45,92,.12);
+}
+
+.mbr-wrap{
+  padding:72px 0 48px;
+  background:#fff;
+  color:#0f2340;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;
+}
+.mbr-container{max-width:1200px;margin:0 auto;padding:0 24px}
+
+/* Pill heading */
+.mbr-pillbar{display:flex;justify-content:flex-start;margin-bottom:14px}
+.mbr-pill{
+  background:rgba(19,58,116,.12);
+  color:var(--mbr-blue-800);
+  padding:10px 18px;
+  border-radius:24px 24px 6px 6px;
+  font-weight:800; letter-spacing:.2px;
+}
+
+/* Header text */
+.mbr-head{text-align:center;margin-bottom:6px}
+.mbr-title{margin:0 0 6px;font-size:40px;font-weight:800;color:var(--mbr-blue-700)}
+.mbr-sub{margin:10px auto 0;max-width:940px;color:#41506a;font-size:18px;line-height:1.7}
+
+/* Grid */
+.mbr-grid{display:grid;gap:22px;margin-top:22px;grid-template-columns:1fr}
+@media (min-width:780px){ .mbr-grid{grid-template-columns:repeat(2,1fr)} }
+@media (min-width:1040px){ .mbr-grid{grid-template-columns:repeat(4,1fr)} }
+
+/* Card */
+.mbr-card{
+  display:block;
+  background:#fff;
+  border:1px solid var(--mbr-ring);
+  border-radius:18px;
+  padding:22px 20px 18px;
+  box-shadow:0 8px 22px rgba(15,45,92,.06);
+  color:inherit; text-decoration:none;
+  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  position:relative; overflow:hidden; isolation:isolate;
+}
+.mbr-card:hover{ transform:translateY(-3px); box-shadow:var(--mbr-shadow); border-color:#dbe6f6; }
+
+/* Gold badge flourish */
+.mbr-badge{
+  position:absolute; top:-28px; left:-28px;
+  width:96px; height:96px; border-radius:50%;
+  background:radial-gradient(closest-side, rgba(242,190,66,.9), rgba(242,190,66,.25) 70%, transparent);
+  pointer-events:none;
+}
+
+.mbr-card-title{margin:2px 0 6px;font-size:18px;font-weight:800;color:var(--mbr-blue-800)}
+.mbr-card-desc{margin:0;color:#4e607e;line-height:1.65;min-height:84px}
+
+/* CTA */
+.mbr-cta{
+  display:inline-flex;align-items:center;gap:6px;margin-top:14px;
+  font-weight:800;color:var(--mbr-blue-800);
+  background:rgba(15,45,92,.06); padding:8px 12px; border-radius:12px; transition:.18s ease;
+}
+.mbr-card:hover .mbr-cta{ background:rgba(242,190,66,.28); color:var(--mbr-ink); }
+.mbr-arrow{ transition:transform .18s ease; }
+.mbr-card:hover .mbr-arrow{ transform:translateX(2px); }

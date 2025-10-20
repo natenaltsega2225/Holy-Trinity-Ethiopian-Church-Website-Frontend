@@ -1,0 +1,124 @@
+/* ===== Serve (Ministries) Cards – custom CSS (no Tailwind) ===== */
+:root{
+  --sv-blue-700:#133a74;
+  --sv-blue-800:#0f2d5c;
+  --sv-blue-900:#0b306f;
+  --sv-gold:#F2BE42;
+  --sv-ink:#0f2d5c;
+  --sv-ring:#e7eef6;
+  --sv-shadow:0 16px 36px rgba(15,45,92,.12);
+}
+
+.serve-section{
+  padding:72px 0;
+  background:#ffffff;
+  color:#0f2340;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;
+}
+
+.serve-container{
+  max-width:1200px;
+  margin:0 auto;
+  padding:0 24px;
+}
+
+.serve-header{
+  text-align:center;
+  margin-bottom:28px;
+}
+.serve-title{
+  margin:0;
+  font-size:40px;
+  font-weight:800;
+  color:var(--sv-blue-700);
+}
+.serve-subtitle{
+  margin:12px auto 0;
+  max-width:880px;
+  color:#41506a;
+  font-size:18px;
+  line-height:1.7;
+}
+
+/* Grid */
+.serve-grid{
+  display:grid;
+  gap:22px;
+  grid-template-columns:1fr;
+  margin-top:26px;
+}
+@media (min-width:700px){
+  .serve-grid{ grid-template-columns:repeat(2,1fr); }
+}
+@media (min-width:1040px){
+  .serve-grid{ grid-template-columns:repeat(3,1fr); }
+}
+
+/* Card */
+.serve-card{
+  display:block;
+  background:#fff;
+  border:1px solid var(--sv-ring);
+  border-radius:20px;
+  padding:22px 20px 18px;
+  box-shadow:0 8px 22px rgba(15,45,92,.06);
+  text-decoration:none;
+  color:inherit;
+  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+}
+.serve-card:hover{
+  transform:translateY(-3px);
+  box-shadow:var(--sv-shadow);
+  border-color:#dbe6f6;
+}
+
+/* Gold badge flourish (top-left) */
+.serve-badge{
+  position:absolute;
+  top:-28px; left:-28px;
+  width:90px; height:90px;
+  background:radial-gradient(closest-side, rgba(242,190,66,.9), rgba(242,190,66,.2) 70%, transparent);
+  border-radius:50%;
+  z-index:-1;
+  opacity:.8;
+}
+
+.serve-card-title{
+  margin:2px 0 6px;
+  font-size:20px;
+  font-weight:800;
+  color:var(--sv-blue-800);
+}
+.serve-card-desc{
+  margin:0;
+  color:#4e607e;
+  line-height:1.65;
+  min-height:64px; /* keeps rows even */
+}
+
+/* Footer link */
+.serve-link{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  margin-top:14px;
+  font-weight:700;
+  color:var(--sv-blue-800);
+  background:rgba(15,45,92,.06);
+  padding:8px 12px;
+  border-radius:12px;
+  transition:.18s ease;
+}
+.serve-card:hover .serve-link{
+  background:rgba(242,190,66,.28);
+  color:var(--sv-ink);
+}
+.serve-arrow{
+  transition:transform .18s ease;
+}
+.serve-card:hover .serve-arrow{
+  transform:translateX(2px);
+}

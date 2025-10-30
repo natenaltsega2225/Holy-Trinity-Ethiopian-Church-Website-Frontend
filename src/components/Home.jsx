@@ -7,7 +7,7 @@ import Ministries from "./ministries";
 import Serve from "./Serve";
 import Forms from "./Forms";
 import Payments from "./Payments";
-import "../styles/home.css";
+import "../styles/home.css"; // updated import
 // import "../styles/About.css";
 import NewsEvents from "./NewsEvents";
 import GoogleMap from "./GoogleMap";

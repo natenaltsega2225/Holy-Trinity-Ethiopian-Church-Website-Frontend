@@ -2,7 +2,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Heart, Users, BookOpen } from "lucide-react"; // Lucide icons
-import "../styles/Serve.css";
+import "../styles/serve.css";
 
 const Serve = () => {
   const navigate = useNavigate();

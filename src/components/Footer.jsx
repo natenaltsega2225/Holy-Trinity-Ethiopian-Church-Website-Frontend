@@ -1,6 +1,6 @@
 import React from "react";
 import { MapPin, Phone, Mail, Facebook, Youtube, Instagram, MessageCircle } from "lucide-react";
-import "../styles/footer.css";
+import "../styles/footer.css"; // updated import
 
 const Footer = () => {
   return (

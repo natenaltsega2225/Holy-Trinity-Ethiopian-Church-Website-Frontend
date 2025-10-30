@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { FaUserFriends, FaChild, FaMapMarkedAlt } from "react-icons/fa";
-import "../styles/forms.css";
+import "../styles/forms.css"; // updated import
 
 const formItems = [
   {

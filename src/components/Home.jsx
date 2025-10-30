@@ -8,7 +8,7 @@ import Serve from "./Serve";
 import Forms from "./Forms";
 import Payments from "./Payments";
 import "../styles/Home.css";
-import "../styles/About.css";
+// import "../styles/About.css";
 import NewsEvents from "./NewsEvents";
 import GoogleMap from "./GoogleMap";
 

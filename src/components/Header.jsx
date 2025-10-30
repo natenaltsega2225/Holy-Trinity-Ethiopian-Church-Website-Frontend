@@ -1,6 +1,7 @@
 import React from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import "../styles/header.css"; // updated the import 
+import "../styles/header.css"; // file must be exactly `header.css`
+
 
 export default function Header() {
   const location = useLocation();

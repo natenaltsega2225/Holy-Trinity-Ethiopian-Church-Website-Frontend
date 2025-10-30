@@ -1,0 +1,170 @@
+.news-page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 20px;
+  font-family: Arial, sans-serif;
+}
+
+.news-page-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.news-page-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.news-page-header p {
+  font-size: 1.1rem;
+  color: #555;
+}
+
+/* Horizontal card layout */
+.news-cards-horizontal {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding-bottom: 20px;
+  scroll-behavior: smooth;
+}
+
+.news-card-horizontal {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  min-width: 250px;
+  flex: 0 0 auto;
+  padding: 20px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+
+.news-card-horizontal:hover {
+  transform: translateY(-5px);
+}
+
+.news-card-main h4 {
+  color: #a67c00;
+  font-size: 0.85rem;
+  margin-bottom: 5px;
+}
+
+.news-card-main h3 {
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+}
+
+.news-card-main p {
+  font-size: 0.95rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.news-card-btn {
+  background-color: #a67c00;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+
+.news-card-btn:hover {
+  background-color: #854f00;
+}
+
+/* Drop down details */
+.news-card-details {
+  margin-top: 10px;
+  border-top: 1px solid #eee;
+  padding-top: 10px;
+}
+
+.news-card-details ul {
+  list-style: disc;
+  padding-left: 20px;
+  margin: 0;
+}
+
+.news-card-details li {
+  margin-bottom: 5px;
+}
+
+/* Calendar styling */
+.news-calendar-section {
+  margin-top: 50px;
+}
+
+.nv-cal {
+  max-width: 600px;
+  margin: 0 auto;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  background: #fff;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+
+.nv-cal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.nv-cal-title {
+  font-weight: bold;
+}
+
+.nv-cal-nav {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.nv-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+}
+
+.nv-cal-dow {
+  font-weight: bold;
+  padding: 5px 0;
+}
+
+.nv-cal-cell {
+  padding: 10px 0;
+  border: 1px solid #f0f0f0;
+  position: relative;
+}
+
+.nv-cal-muted {
+  color: #ccc;
+}
+
+.nv-cal-today {
+  background-color: #a67c00;
+  color: #fff;
+  border-radius: 50%;
+}
+
+.nv-cal-legend {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.nv-cal-legend .dot.today {
+  width: 12px;
+  height: 12px;
+  background-color: #a67c00;
+  border-radius: 50%;
+  display: inline-block;
+}

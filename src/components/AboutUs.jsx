@@ -1,130 +1,102 @@
-//src/components/AboutUs.jsx
-import React, { useState, useRef } from "react";
-import "../styles/about.css";
+import React from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import "../styles/About.css";
 
 const AboutUs = () => {
-  const [activeCard, setActiveCard] = useState("faith");
-  const contentRef = useRef(null);
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const handleCardClick = (card) => {
-    setActiveCard(card);
-    setTimeout(() => {
-      contentRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 100);
+  const handleVisitClick = (e) => {
+    e.preventDefault();
+
+    if (location.pathname === "/") {
+      // Already on the homepage → scroll directly
+      const section = document.getElementById("google-map"); // or "map" if that's your id
+      if (section) {
+        section.scrollIntoView({ behavior: "smooth" });
+      }
+    } else {
+      // Not on home → navigate, then scroll to map
+      navigate("/", { state: { scrollTo: "google-map" } });
+    }
   };
 
   return (
-    <div className="about-container">
-      {/* Page Title */}
-      <h1 className="about-title">Who We Are</h1>
-      <p className="about-subtitle">
-        Learn about our faith, heritage, and leadership in the Ethiopian Orthodox Tewahedo Church.
-        Click a card to view the section below.
-      </p>
+    <>
+      {/* ABOUT / FOUR PILLARS */}
+      <section id="about-us" className="ht-section">
+        <div className="ht-container">
+          <h3 className="ht-h3">About Our Church</h3>
+          <p className="ht-lead">
+            Holy Trinity Ethiopian Orthodox Tewahedo Church is a vibrant spiritual
+            community dedicated to preserving our ancient faith while serving our
+            modern world. We welcome all who seek to grow in their relationship
+            with God through the rich traditions of Ethiopian Orthodoxy.
+          </p>
 
-      {/* Smart Card Section */}
-      <div className="about-card-grid">
-        <button
-          className={`about-card ${activeCard === "faith" ? "active" : ""}`}
-          onClick={() => handleCardClick("faith")}
-        >
-          <h3>Our Faith</h3>
-          <p>The Orthodox Creed and essentials of our faith.</p>
-          <span className="card-link">Open →</span>
-        </button>
+          <div className="ht-grid ht-grid-4">
+            <div className="ht-card">
+              <div className="ht-icon-ring">⌂</div>
+              <h4 className="ht-card-title">Sacred Tradition</h4>
+              <p className="ht-card-text">
+                Preserving over 1,600 years of Ethiopian Orthodox Tewahedo Church
+                tradition and liturgy.
+              </p>
+            </div>
+            <div className="ht-card">
+              <div className="ht-icon-ring">❤</div>
+              <h4 className="ht-card-title">Community Love</h4>
+              <p className="ht-card-text">
+                Building a loving, supportive community that cares for one
+                another in Christ’s name.
+              </p>
+            </div>
+            <div className="ht-card">
+              <div className="ht-icon-ring">👥</div>
+              <h4 className="ht-card-title">Fellowship</h4>
+              <p className="ht-card-text">
+                Bringing together families and individuals in worship, service,
+                and spiritual growth.
+              </p>
+            </div>
+            <div className="ht-card">
+              <div className="ht-icon-ring">📖</div>
+              <h4 className="ht-card-title">Teaching</h4>
+              <p className="ht-card-text">
+                Providing biblical education and spiritual guidance for all ages
+                and backgrounds.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-        <button
-          className={`about-card ${activeCard === "history" ? "active" : ""}`}
-          onClick={() => handleCardClick("history")}
-        >
-          <h3>Our History</h3>
-          <p>From apostolic roots to our parish story.</p>
-          <span className="card-link">Open →</span>
-        </button>
+      <div
+  className="about-actions"
+  style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }} // reduced from 2rem to 1rem
+>
+  <Link to="/about-us/details" className="ht-btn ht-btn-gold">
+    More About Our Church
+  </Link>
+</div>
 
-        <button
-          className={`about-card ${activeCard === "clergy" ? "active" : ""}`}
-          onClick={() => handleCardClick("clergy")}
-        >
-          <h3>Clergy</h3>
-          <p>Meet the clergy who shepherd our community.</p>
-          <span className="card-link">Open →</span>
-        </button>
-      </div>
 
-      {/* Content Section */}
-      <div className="about-content" ref={contentRef}>
-        {activeCard === "faith" && (
-          <>
-            <h2>Our Faith</h2>
-            <p>
-              The Orthodox Creed summarizes what we believe and confess in the Ethiopian Orthodox Tewahedo Church.
-            </p>
 
-            <h3>THE ORTHODOX CREED OF FAITH</h3>
-
-            <p>
-              We believe in one God, God the Father, the Pantocrator, Who created heaven and earth, and all things,
-              seen and unseen.
-            </p>
-
-            <p>
-              We believe in one Lord Jesus Christ, the Only-Begotten Son of God, begotten of the Father before all ages;
-              Light of Light, true God of true God, begotten not created, of one essence with the Father, by Whom all
-              things were made; Who for us, men, and for our salvation, came down from heaven, and was incarnated of the
-              Holy Spirit and of the Virgin Mary, and became man.
-            </p>
-
-            <p>
-              And He was crucified for us under Pontius Pilate, suffered, and was buried. And on the third day He rose
-              from the dead, according to the Scriptures, and ascended into the heavens; and sat at the right hand of His
-              Father, and also He is coming again in His glory to judge the living and the dead, whose kingdom has no end.
-            </p>
-
-            <p>
-              Yes, we believe in the Holy Spirit, the Lord, the Life-Giver, Who proceeds from the Father, Who, with the
-              Father and the Son, is worshipped and glorified, Who spoke in the prophets. And in one holy, catholic, and
-              apostolic church. We confess one baptism for the remission of sins.
-            </p>
-
-            <p>
-              We look for the resurrection of the dead, and the life of the coming age. Amen.
-            </p>
-          </>
-        )}
-
-        {activeCard === "history" && (
-          <>
-            <h2>Our History</h2>
-            <p>
-              Christianity took root in Ethiopia in the 4th century through Saint Frumentius (Abba Selama). Since then,
-              the Ethiopian Orthodox Tewahedo Church has preserved ancient faith, liturgy, and scripture.
-            </p>
-            <p>
-              Our parish continues this apostolic heritage today—gathering for liturgy, serving our community, and
-              teaching future generations in faith.
-            </p>
-          </>
-        )}
-
-        {activeCard === "clergy" && (
-          <>
-            <h2>Clergy</h2>
-            <p>
-              Our clergy shepherd the church through prayer, sacraments, teaching, and pastoral care. This section will
-              include the clergy members who serve our parish with love and devotion.
-            </p>
-            <ul>
-              <li>Liturgical Service & Sacraments</li>
-              <li>Confession & Spiritual Guidance</li>
-              <li>Teaching & Leadership</li>
-            </ul>
-          </>
-        )}
-      </div>
-    </div>
+      {/* CTA BLUE */}
+      <section id="visit" className="ht-cta ht-cta-blue">
+        <div className="ht-container ht-cta-inner">
+          <h3>Join Our Sacred Community</h3>
+          <p>
+            Whether you're seeking spiritual guidance, community fellowship, or a deeper
+            understanding of Ethiopian Orthodox traditions, we invite you to be part of our family.
+          </p>
+          <button className="ht-btn ht-btn-gold" onClick={handleVisitClick}>
+            Visit Us This Sunday
+          </button>
+        </div>
+      </section>
+    </>
   );
 };
 
 export default AboutUs;
-

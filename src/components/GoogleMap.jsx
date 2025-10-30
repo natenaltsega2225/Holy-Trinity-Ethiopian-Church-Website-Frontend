@@ -7,7 +7,11 @@ const GoogleMap = () => {
   );
 
   return (
-    <section className="map-section" aria-label="Church location on Google Maps">
+    <section
+      id="google-map"
+      className="map-section"
+      aria-label="Church location on Google Maps"
+    >
       <div className="map-container">
         <iframe
           className="map-iframe"

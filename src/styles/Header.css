@@ -1,7 +1,4 @@
 /* =============================
-   Global Header Styling
-   ============================= */
-/* =============================
    Theme
 ============================= */
 :root {
@@ -10,7 +7,9 @@
   --ht-link-color: #ffffff;
   --ht-active-bg: #ffffff;
   --ht-active-text: #123A78;
-  --ht-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  --ht-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  --ht-hover-bg: rgba(255, 255, 255, 0.1);
+  --ht-dropdown-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 }
 
 /* =============================
@@ -18,12 +17,13 @@
 ============================= */
 .ht-header {
   position: fixed;
-  top: 0; left: 0; width: 100%;
+  top: 0; left: 0; width: 100%; height: 8%;
   z-index: 1000;
   background: linear-gradient(90deg, var(--ht-blue-dark), var(--ht-blue-light));
   color: var(--ht-link-color);
   box-shadow: var(--ht-shadow);
   font-family: 'Segoe UI', Arial, sans-serif;
+  transition: all 0.3s ease;
 }
 
 .ht-header-row {
@@ -32,7 +32,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 24px;
+  padding: 16px 28px; /* slightly wider padding */
+  gap: 24px;
 }
 
 /* =============================
@@ -41,13 +42,13 @@
 .ht-lang {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px; /* slightly bigger gap */
   cursor: pointer;
   font-size: 14px;
   opacity: 0.95;
-  transition: .3s ease;
+  transition: 0.3s ease;
 }
-.ht-lang:hover { opacity: .75; }
+.ht-lang:hover { opacity: 0.75; }
 .ht-caret { font-size: 12px; }
 
 /* =============================
@@ -56,11 +57,9 @@
 .ht-nav {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 28px; /* slightly bigger gap */
   font-weight: 500;
   font-size: 15px;
-
-  /* mobile: make horizontal scrollable row */
   overflow-x: auto;
   white-space: nowrap;
   -webkit-overflow-scrolling: touch;
@@ -70,54 +69,34 @@
 
 .ht-nav-link {
   color: var(--ht-link-color);
-  transition: .3s ease;
-  padding: 8px 14px;
-  border-radius: 22px;
+  transition: all 0.3s ease;
+  padding: 10px 18px; /* slightly bigger */
+  border-radius: 24px; /* more rounded like Lovable */
 }
-.ht-nav-link:hover { opacity: .75; }
+.ht-nav-link:hover {
+  background: var(--ht-hover-bg);
+}
 
 .ht-nav-active {
   background: var(--ht-active-bg);
   color: var(--ht-active-text);
   font-weight: 600;
-  box-shadow: 0 2px 6px rgba(0,0,0,.2);
+  box-shadow: 0 3px 8px rgba(0,0,0,.25); /* slightly deeper shadow */
 }
 
 /* =============================
-   Responsive
+   Auth Buttons
 ============================= */
-@media (max-width: 1024px) {
-  .ht-header-row { padding: 10px 16px; }
-  .ht-nav { gap: 14px; font-size: 14px; }
-  .ht-nav-link { padding: 7px 12px; }
-}
-
-@media (max-width: 720px) {
-  /* hide language on very small screens to free space */
-  .ht-lang { display: none; }
-
-  .ht-header-row {
-    gap: 10px;
-  }
-  .ht-nav {
-    gap: 10px;
-  }
-  .ht-nav-link {
-    padding: 6px 10px;
-    border-radius: 18px;
-  }
-}
-/* ---- Right-side auth buttons ---- */
 .ht-auth-group{
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:12px; /* slightly bigger gap */
 }
 
 .ht-auth-btn{
   display:inline-block;
-  padding:8px 14px;
-  border-radius:20px;
+  padding:9px 18px; /* slightly bigger */
+  border-radius:24px;
   font-weight:700;
   transition:.2s ease;
   text-decoration:none;
@@ -128,29 +107,56 @@
   border:1px solid rgba(255,255,255,.55);
   background:transparent;
 }
-.ht-auth-outline:hover{ background:rgba(255,255,255,.12); }
+.ht-auth-outline:hover{ background:rgba(255,255,255,.15); }
 
 .ht-auth-solid{
-  background:#F2BE42;           /* gold */
-  color:#0f2d5c;                 /* ink */
+  background:#F2BE42;
+  color:#0f2d5c;
   border:1px solid transparent;
-  box-shadow:0 4px 10px rgba(0,0,0,.15);
+  box-shadow:0 5px 12px rgba(0,0,0,.18); /* enhanced shadow */
 }
-.ht-auth-solid:hover{ filter:brightness(1.05); }
+.ht-auth-solid:hover{ filter:brightness(1.07); }
 
 .ht-auth-active{
   box-shadow:0 0 0 2px #fff inset;
 }
 
-/* Responsive: stack auth buttons under nav if narrow */
-@media (max-width: 880px){
-  .ht-header-row{
-    gap:10px;
-  }
-  .ht-nav{
-    gap:12px;
-  }
-  .ht-auth-btn{
-    padding:7px 12px;
-  }
+/* =============================
+   Responsive
+============================= */
+@media (max-width: 1024px) {
+  .ht-header-row { padding: 14px 20px; }
+  .ht-nav { gap: 18px; font-size: 14px; }
+  .ht-nav-link { padding: 8px 14px; }
+}
+
+@media (max-width: 720px) {
+  .ht-lang { display: none; }
+  .ht-header-row { gap: 12px; }
+  .ht-nav { gap: 12px; }
+  .ht-nav-link { padding: 7px 12px; border-radius: 20px; }
+  .ht-auth-btn { padding: 8px 14px; }
+}
+
+/* =============================
+   Dropdown Enhancement
+============================= */
+.ht-dropdown {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: var(--ht-dropdown-shadow);
+  padding: 6px 0;
+  min-width: 140px;
+}
+
+.ht-dropdown-item {
+  padding: 10px 16px;
+  font-size: 14px;
+  color: #123A78;
+  transition: 0.2s;
+  cursor: pointer;
+}
+.ht-dropdown-item:hover {
+  background: var(--ht-hover-bg);
+  color: #123A78;
 }

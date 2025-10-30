@@ -1,75 +1,112 @@
 .footer {
-  background-color: var(--church-blue);
-  color: var(--primary-foreground);
-  padding: 1.5rem 1rem;
+  background: linear-gradient(90deg, #123A78, #1E4B8E); /* same as header */
+  color: #ffffff;
+  padding: 3rem 1rem;
+  font-family: 'Segoe UI', Arial, sans-serif;
 }
 
 .footer-container {
-  max-width: 1120px;
+  max-width: 1200px;
   margin: 0 auto;
-}
-
-.footer-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.footer-section {
   text-align: center;
 }
 
-.footer-title {
-  font-weight: 500;
-  text-decoration: underline;
-}
-
-.footer-text {
-  font-size: 0.875rem;
-}
-
-.footer-email {
-  font-size: 0.875rem;
-  text-decoration: underline;
-}
-
-.social-media {
+/* Info Cards */
+/* Info Cards */
+.footer-cards {
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-bottom: 2rem;
 }
 
-.social-icon {
-  padding: 0.5rem;
-  background-color: white;
-  border-radius: 0.25rem;
-  transition: background-color 0.2s ease-in-out;
+.footer-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: 220px; /* default width */
+  transition: transform 0.3s ease, background 0.3s ease;
+  word-break: break-word; /* allow long words/emails to wrap */
+}
+
+.footer-card:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Make Email Card slightly wider */
+.footer-card.email-card {
+  width: 260px;
+}
+
+/* Icon wrapper */
+.footer-card .icon-wrapper {
+  width: 50px;
+  height: 50px;
+  margin: 0 auto 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 50%;
+  background: rgba(242, 190, 66, 0.2); /* gold accent */
+  color: #F2BE42;
 }
 
-.social-icon:hover {
-  background-color: #f3f4f6;
+.footer-card h4 {
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #ffffff;
 }
 
-.social-icon .icon {
-  height: 1.25rem;
-  width: 1.25rem;
+.footer-card p a {
+  color: #ffffff;
+  text-decoration: underline;
+  transition: color 0.2s ease;
 }
 
-.social-icon.facebook .icon {
-  color: #1877f2;
+.footer-card p a:hover {
+  color: #F2BE42;
 }
 
-.social-icon.youtube .icon {
-  color: #ff0000;
+/* Social Icons */
+.footer-social {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
 }
 
-.social-icon.instagram .icon {
-  color: #e1306c;
+.footer-social a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  color: #ffffff;
+  transition: all 0.3s ease;
 }
 
-.social-icon.contact .icon {
-  color: #25d366;
+.footer-social a:hover {
+  background: rgba(242, 190, 66, 0.3);
+  color: #F2BE42;
+  transform: translateY(-3px);
+}
+
+/* Footer Bottom */
+.footer-bottom {
+  font-size: 0.875rem;
+  color: rgba(255,255,255,0.7);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .footer-cards {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { FaHandHoldingHeart, FaCoins } from "react-icons/fa";
-import "../styles/Payments.css";
+import "../styles/payments.css";
 
 const paymentItems = [
   {

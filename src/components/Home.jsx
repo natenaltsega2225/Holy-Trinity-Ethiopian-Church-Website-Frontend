@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
 import Header from "./Header";
 import AboutUs from "./AboutUs";
-import Ministries from "./ministries";
+import Ministries from "./Ministries";
 import Serve from "./Serve";
 import Forms from "./Forms";
 import Payments from "./Payments";

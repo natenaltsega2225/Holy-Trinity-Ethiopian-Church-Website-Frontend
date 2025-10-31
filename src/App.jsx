@@ -4,16 +4,16 @@ import { Routes, Route, Navigate } from "react-router-dom";
 // PAGES / COMPONENTS
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import Ministries from "./components/ministries";
+import Ministries from "./components/Ministries";
 import Home from "./components/Home";
 import AboutUs from "./components/AboutUs";
 import NewsEvents from "./components/NewsEvents";
 import NewsEventsPage from "./pages/NewsEventsPage";
 import Login from "./components/Login";
 import Register from "./components/Register";
-import HolyBible from "./pages/ministries/HolyBible";
-import Sermons from "./pages/ministries/Sermons";
-import DeaconsClass from "./pages/ministries/DeaconsClass";
+// import HolyBible from "./pages/ministries/HolyBible";
+// import Sermons from "./pages/ministries/Sermons";
+// import DeaconsClass from "./pages/ministries/DeaconsClass";
 
 // ✅ New replacements
 import Forms from "./components/Forms";
@@ -52,9 +52,9 @@ const App = () => {
 
           {/* Ministries */}
           <Route path="/ministries" element={<Ministries />} />
-          <Route path="/ministries/holy-bible" element={<HolyBible />} />
-          <Route path="/ministries/sermons" element={<Sermons />} />
-          <Route path="/ministries/deacons-class" element={<DeaconsClass />} />
+          {/* <Route path="/ministries/holy-bible" element={<HolyBible />} /> */}
+          {/* <Route path="/ministries/sermons" element={<Sermons />} /> */}
+          {/* <Route path="/ministries/deacons-class" element={<DeaconsClass />} /> */}
 
           {/* News & Events */}
           <Route path="/news-events" element={<NewsEvents />} />

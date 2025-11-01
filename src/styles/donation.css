@@ -1,0 +1,231 @@
+/* ===========================
+   Donation Page Styles
+=========================== */
+
+/* General Container */
+.donation-wrap {
+  padding: 50px 20px;
+  background-color: #f9f9f9;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.donation-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ===========================
+   Verse Section
+=========================== */
+.donation-verse {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.donation-verse blockquote {
+  font-size: 1.5rem;
+  font-style: italic;
+  color: #333;
+  position: relative;
+  padding: 20px 40px;
+  border-left: 5px solid #f2be42;
+  background-color: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  border-radius: 8px;
+}
+
+.donation-verse blockquote footer {
+  margin-top: 10px;
+  display: block;
+  text-align: right;
+  font-size: 1rem;
+  color: #666;
+}
+
+/* ===========================
+   Donation Form
+=========================== */
+.donation-form-wrap {
+  background-color: #fff;
+  padding: 30px 25px;
+  margin-bottom: 50px;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.donation-form-title {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #1a1f71;
+}
+
+.donation-form label {
+  display: block;
+  margin-bottom: 15px;
+  font-weight: 500;
+  color: #333;
+}
+
+.donation-form input {
+  width: 100%;
+  padding: 12px 15px;
+  margin-top: 5px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.donation-form input:focus {
+  border-color: #f2be42;
+  outline: none;
+}
+
+/* Card Number Icon */
+.card-number-label {
+  position: relative;
+}
+
+.card-number-label .card-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Expiration and CVV row */
+.donation-form-row {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.donation-form-row label {
+  flex: 1 1 150px;
+}
+
+/* Donate Button */
+.donation-btn {
+  display: inline-block;
+  background-color: #f2be42;
+  color: #1a1f71;
+  font-weight: bold;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: background-color 0.3s;
+  width: 100%;
+}
+
+.donation-btn:hover {
+  background-color: #e0a823;
+}
+
+/* ===========================
+   Other Payment Methods
+=========================== */
+.donation-methods {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.donation-methods h3 {
+  font-size: 1.8rem;
+  margin-bottom: 25px;
+  color: #1a1f71;
+}
+
+.donation-methods-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 25px;
+}
+
+.donation-method {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  flex: 0 1 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 250px;
+  max-width: 220px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.donation-method:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+}
+
+.donation-method-icon {
+  font-size: 3rem;
+  margin-bottom: 15px;
+}
+
+.payment-icon {
+  max-width: 80px;
+  max-height: 80px;
+  object-fit: contain;
+}
+
+/* Payment Info (church details) */
+.donation-method p {
+  font-size: 0.95rem;
+  text-align: center;
+  margin-bottom: 10px;
+  color: #333;
+  font-weight: 500;
+}
+
+.donation-method .payment-info {
+  font-size: 0.85rem;
+  color: #555;
+  text-align: center;
+}
+
+/* ===========================
+   Responsive
+=========================== */
+@media screen and (max-width: 992px) {
+  .donation-form-row {
+    flex-direction: column;
+  }
+
+  .donation-methods-grid {
+    gap: 20px;
+  }
+
+  .donation-method {
+    flex: 0 1 45%;
+    min-height: 220px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .donation-form-wrap {
+    padding: 20px 15px;
+  }
+
+  .donation-form-title {
+    font-size: 1.7rem;
+  }
+
+  .donation-method {
+    flex: 0 1 90%;
+    min-height: 200px;
+  }
+
+  .donation-method-icon {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+  }
+}

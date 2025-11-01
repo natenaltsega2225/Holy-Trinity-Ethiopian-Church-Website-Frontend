@@ -11,6 +11,7 @@ import NewsEvents from "./components/NewsEvents";
 import NewsEventsPage from "./pages/NewsEventsPage";
 import Login from "./components/Login";
 import Register from "./components/Register";
+import DonationPage from "./pages/DonationPage"
 // import HolyBible from "./pages/ministries/HolyBible";
 // import Sermons from "./pages/ministries/Sermons";
 // import DeaconsClass from "./pages/ministries/DeaconsClass";
@@ -63,6 +64,7 @@ const App = () => {
           {/* ✅ Forms & Payments (new structure) */}
           <Route path="/forms" element={<Forms />} />
           <Route path="/payments" element={<Payments />} />
+          <Route path="/forms-payments/donation" element={<DonationPage />} />
 
           {/* Individual Form Pages */}
           <Route path="/forms/kids-summer-program" element={<KidsSummerProgram />} />

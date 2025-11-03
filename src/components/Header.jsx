@@ -7,7 +7,7 @@ export default function Header() {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // Smooth scroll handler
+  // Smooth scroll handler for in-page links
   const handleScrollClick = (e, targetId) => {
     e.preventDefault();
     setMenuOpen(false);

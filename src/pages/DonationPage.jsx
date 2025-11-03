@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FaCcVisa, FaCcMastercard, FaPaypal } from "react-icons/fa";
 import "../styles/donation.css";
 
-// Import images
+// images used for payment methods
 import ZelleLogo from "../assets/images/Zelle_logo.png";
 import CashAppLogo from "../assets/images/Cashapp_icon.png";
 import VenmoLogo from "../assets/images/Venmo_logo.png";

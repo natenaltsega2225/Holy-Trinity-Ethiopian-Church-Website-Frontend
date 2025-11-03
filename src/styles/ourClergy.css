@@ -1,0 +1,208 @@
+/* =======================
+   Page & General Styles
+======================= */
+.our-clergy-page {
+  min-height: 100vh;
+  background-color: var(--faith-background);
+  color: var(--faith-foreground);
+  font-family: var(--faith-font);
+  padding-bottom: 4rem;
+}
+
+.clergy-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* =======================
+   Header
+======================= */
+.clergy-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.clergy-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--faith-primary);
+  margin-bottom: 1rem;
+}
+
+.clergy-subtitle {
+  font-size: 1.125rem;
+  color: var(--faith-muted);
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* =======================
+   Hierarchy Cards
+======================= */
+.clergy-hierarchy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.clergy-leader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.clergy-card {
+  background-color: var(--faith-card);
+  box-shadow: var(--faith-shadow);
+  border-radius: 1rem;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+.clergy-card:hover {
+  transform: translateY(-5px);
+}
+
+.clergy-card-content {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.clergy-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--faith-primary);
+  margin-top: 0.5rem;
+}
+
+.clergy-title-text {
+  font-size: 1rem;
+  color: var(--faith-muted);
+}
+
+/* =======================
+   Image Wrappers & Images
+======================= */
+.clergy-img-wrapper,
+.clergy-img-wrapper-sm {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid var(--faith-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.clergy-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* =======================
+   Arrows
+======================= */
+.arrow-down {
+  color: var(--faith-accent);
+  width: 2rem;
+  height: 2rem;
+  margin: 1rem 0;
+}
+
+.arrow-row {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+/* =======================
+   Priests & Deacons Section
+======================= */
+.priests-section {
+  margin-top: 4rem;
+  text-align: center;
+}
+
+.priests-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--faith-primary);
+  margin-bottom: 1rem;
+}
+
+.priests-card {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.priests-img-wrapper {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid var(--faith-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.priests-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.priests-description {
+  color: var(--faith-muted);
+  font-size: 1rem;
+  line-height: 1.6;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* =======================
+   Responsive Grid for Deacons
+======================= */
+.clergy-deacons-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+  width: 100%;
+}
+/* Priests & Deacons Group */
+.priests-img-wrapper {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto 1.5rem auto;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: var(--faith-shadow);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--faith-card); /* optional background for spacing */
+  padding: 1rem; /* optional, adds space around image */
+}
+
+.priests-img {
+  width: 100%;
+  max-height: 500px; /* set maximum height to avoid cutting heads */
+  height: auto;
+  display: block;
+  object-fit: contain; /* ensures entire image fits without cropping */
+  border-radius: 0.75rem;
+}
+
+
+

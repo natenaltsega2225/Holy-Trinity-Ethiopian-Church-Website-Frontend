@@ -539,3 +539,7 @@
           .social-icon.contact .icon {
             color: #25d366;
           }
+
+          li{
+  list-style: none;
+          }

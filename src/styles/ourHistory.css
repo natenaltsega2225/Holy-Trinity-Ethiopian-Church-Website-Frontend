@@ -1,0 +1,151 @@
+/* Base Page Styling */
+.our-history-page {
+  min-height: 100vh;
+  background-color: var(--faith-background); /* match OurFaith */
+  color: var(--faith-foreground); /* match OurFaith font color */
+  font-family: var(--faith-font); /* match OurFaith font */
+}
+
+.history-main {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+
+.history-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Header */
+.history-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.history-title {
+  color: var(--faith-primary);
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.history-subtitle {
+  color: var(--faith-muted);
+  font-size: 1.125rem;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.75rem;
+}
+
+/* Timeline / Milestones */
+.history-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  margin-bottom: 5rem;
+}
+
+.history-card {
+  width: 100%;
+  max-width: 800px;
+  background-color: var(--faith-card);
+  border-radius: 0.75rem;
+  box-shadow: var(--faith-shadow);
+  transition: transform 0.3s;
+}
+
+.history-card:hover {
+  transform: translateY(-6px);
+}
+
+.history-card-content {
+  display: flex;
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+.history-icon-wrapper {
+  flex-shrink: 0;
+  width: 4rem;
+  height: 4rem;
+  background: var(--faith-accent);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.history-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--faith-accent-foreground);
+}
+
+.history-text {
+  flex: 1;
+}
+
+.history-year-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.history-year {
+  font-weight: 700;
+  color: var(--faith-accent);
+}
+
+.history-line {
+  height: 1px;
+  background-color: var(--faith-border);
+  flex: 1;
+}
+
+.history-milestone-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--faith-primary);
+  margin-bottom: 0.5rem;
+}
+
+.history-milestone-desc {
+  color: var(--faith-muted);
+  line-height: 1.5rem;
+}
+
+/* Additional Cards */
+.history-additional {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .history-additional {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.history-additional-card {
+  background-color: var(--faith-card);
+  border-radius: 0.75rem;
+  box-shadow: var(--faith-shadow);
+  padding: 2rem;
+}
+
+/* Animations */
+.animate-fade-in-up {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.6s forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

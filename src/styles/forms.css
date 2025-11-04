@@ -1,3 +1,9 @@
+
+/* Enable smooth scrolling for anchor links */
+html {
+  scroll-behavior: smooth;
+}
+
 .forms-section {
   padding: 70px 0;
   background: #faf9f7;

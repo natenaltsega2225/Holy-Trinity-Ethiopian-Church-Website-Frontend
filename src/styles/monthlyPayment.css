@@ -1,0 +1,204 @@
+:root {
+  --ab-blue-700: #133a74;
+  --ab-blue-800: #0f2d5c;
+  --ab-gold: #f2be42;
+  --ab-ring: #e7eef6;
+  --ab-ink: #0f2340;
+  --ab-muted: #5a6a86;
+  --ab-shadow: 0 18px 40px rgba(15, 45, 92, 0.15);
+}
+
+/* ===== Wrapper ===== */
+.monthly-wrap {
+  min-height: calc(100dvh - 56px);
+  display: grid;
+  place-items: center;
+  padding: 48px 16px;
+  background: 
+    radial-gradient(800px 400px at 10% 0%, rgba(19, 58, 116, 0.06), transparent 60%),
+    radial-gradient(800px 400px at 90% 100%, rgba(242, 190, 66, 0.08), transparent 60%),
+    #ffffff;
+}
+
+/* ===== Card ===== */
+.monthly-card {
+  width: 100%;
+  max-width: 520px;
+  background: #fff;
+  border: 1px solid var(--ab-ring);
+  border-radius: 22px;
+  padding: 28px 26px;
+  box-shadow: var(--ab-shadow);
+  box-sizing: border-box;
+}
+
+/* Center card on smaller screens */
+@media (max-width: 760px) {
+  .monthly-card {
+    margin: 0 16px;
+    padding: 24px 16px;
+  }
+}
+
+/* ===== Card Header ===== */
+.monthly-title {
+  margin: 0;
+  font-size: clamp(22px, 3.6vw, 30px);
+  color: var(--ab-blue-800);
+  font-weight: 800;
+  text-align: center;
+}
+
+.monthly-sub {
+  margin: 8px 0 18px;
+  color: var(--ab-muted);
+  text-align: center;
+}
+
+/* ===== Form ===== */
+.monthly-form {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Two-column layout */
+.monthly-grid-2 {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 760px) {
+  .monthly-grid-2 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Field styling */
+.monthly-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.monthly-field label {
+  font-weight: 700;
+  color: var(--ab-blue-800);
+  font-size: 14px;
+}
+
+.monthly-field input,
+.monthly-field select {
+  border: 1px solid var(--ab-ring);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 15px;
+  outline: none;
+  transition: 0.15s ease;
+}
+
+.monthly-field input:focus,
+.monthly-field select:focus {
+  border-color: #cdd9ef;
+  box-shadow: 0 0 0 4px rgba(19, 58, 116, 0.08);
+}
+
+/* ===== Modern Select Dropdown ===== */
+.monthly-field select {
+  appearance: none;
+  background: url("data:image/svg+xml;charset=US-ASCII,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%23334' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 12px center;
+  background-color: #fff;
+  background-size: 12px 8px;
+  cursor: pointer;
+}
+
+/* ===== Error ===== */
+.monthly-err {
+  color: #b41010;
+  font-size: 13px;
+}
+
+/* ===== Buttons ===== */
+.monthly-btn {
+  width: 100%;
+  border: none;
+  border-radius: 14px;
+  padding: 12px 16px;
+  background: linear-gradient(90deg, var(--ab-blue-800), var(--ab-blue-700));
+  color: #fff;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  transition: 0.15s ease;
+}
+
+.monthly-btn:hover {
+  filter: brightness(1.05);
+}
+
+/* ===== Info / Banner ===== */
+.monthly-banner {
+  margin: 6px 0 4px;
+  background: #fff4f4;
+  color: #9b2b2b;
+  border: 1px solid #f3c2c2;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* ===== Terms Section ===== */
+.monthly-terms {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.terms-readmore {
+  background: transparent;
+  border: none;
+  color: var(--ab-blue-800);
+  font-weight: 800;
+  text-align: left;
+  padding: 0;
+  cursor: pointer;
+}
+
+.terms-readmore:hover {
+  text-decoration: underline;
+}
+
+.terms-check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #334566;
+  font-size: 14px;
+}
+
+.terms-check input {
+  width: 18px;
+  height: 18px;
+}
+
+/* ===== Responsive Helpers ===== */
+@media (max-width: 480px) {
+  .monthly-title {
+    font-size: 20px;
+  }
+
+  .monthly-field input,
+  .monthly-field select {
+    font-size: 14px;
+    padding: 10px 12px;
+  }
+
+  .monthly-btn {
+    padding: 12px;
+    font-size: 15px;
+  }
+}

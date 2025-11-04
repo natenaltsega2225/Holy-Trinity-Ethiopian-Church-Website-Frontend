@@ -12,6 +12,7 @@ import NewsEventsPage from "./pages/NewsEventsPage";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import DonationPage from "./pages/DonationPage"
+import MonthlyPaymentPage from "./pages/MonthlyPaymentPage";
 // import HolyBible from "./pages/ministries/HolyBible";
 // import Sermons from "./pages/ministries/Sermons";
 // import DeaconsClass from "./pages/ministries/DeaconsClass";
@@ -65,6 +66,7 @@ const App = () => {
           <Route path="/forms" element={<Forms />} />
           <Route path="/payments" element={<Payments />} />
           <Route path="/forms-payments/donation" element={<DonationPage />} />
+          <Route path="/forms-payments/monthly-payment" element={<MonthlyPaymentPage />} />
 
           {/* Individual Form Pages */}
           <Route path="/forms/kids-summer-program" element={<KidsSummerProgram />} />

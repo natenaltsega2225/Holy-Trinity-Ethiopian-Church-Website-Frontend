@@ -54,15 +54,18 @@
 
 .auth-field{ display:flex; flex-direction:column; gap:8px; }
 .auth-field label{ font-weight:700; color:var(--ab-blue-800); }
-.auth-field input{
+.auth-field input,
+.auth-field select{
   border:1px solid var(--ab-ring);
   border-radius:12px;
   padding:12px 14px;
   font-size:15px;
   outline:none;
   transition:.15s ease;
+  background:#fff;
 }
-.auth-field input:focus{
+.auth-field input:focus,
+.auth-field select:focus{
   border-color:#cdd9ef;
   box-shadow:0 0 0 4px rgba(19,58,116,.08);
 }
@@ -100,6 +103,7 @@
   color:var(--ab-muted);
 }
 .auth-switch a{ color:var(--ab-blue-800); font-weight:700; }
+
 /* ===== Terms Modal ===== */
 .terms-overlay{
   position:fixed; inset:0; z-index:2000;
@@ -155,6 +159,7 @@
   display:flex; align-items:center; gap:10px; color:#334566; font-size:14px;
 }
 .terms-check input{ width:18px; height:18px; }
+
 /* Tabs above the card */
 .auth-tabs{
   display:flex; gap:8px; margin-bottom:6px;
@@ -221,4 +226,29 @@
   font-size:14px;
   margin-top:6px;
   text-align:center;
+}
+
+/* ===== Responsive Enhancements for Larger Screens ===== */
+@media (min-width:960px) {
+  .auth-card {
+    max-width: 860px; /* wider card for desktop */
+    padding: 40px 36px;
+  }
+
+  .auth-grid-2 {
+    gap: 24px;
+  }
+
+  /* full-width for key fields like baptism/membership type */
+  .auth-field:nth-child(11),
+  .auth-field:nth-child(12) {
+    grid-column: 1 / -1;
+  }
+
+  .auth-field label { white-space: normal; }
+
+  .auth-field select {
+    min-height: 46px;
+    font-size: 15px;
+  }
 }

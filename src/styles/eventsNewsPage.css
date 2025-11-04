@@ -1,47 +1,96 @@
-.news-page-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 30px 20px;
-  font-family: Arial, sans-serif;
-}
-
-.news-page-header {
-  text-align: center;
+/* ================== HERO INTRO ================== */
+.news-hero {
+  background: linear-gradient(135deg, #fdf6e3, #fff9f0);
+  border-radius: 20px;
+  padding: 60px 20px;
   margin-bottom: 40px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
 }
 
-.news-page-header h1 {
-  font-size: 2.5rem;
-  margin-bottom: 10px;
+.news-hero::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -30%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at center, rgba(166,124,0,0.12) 0%, transparent 70%);
+  transform: rotate(15deg);
 }
 
-.news-page-header p {
-  font-size: 1.1rem;
-  color: #555;
+.news-hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
-/* Horizontal card layout */
+.news-hero-title {
+  font-family: 'Georgia', serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: #133a74;
+  margin-bottom: 20px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.news-hero-text {
+  font-size: clamp(1.1rem, 2vw, 1.6rem);
+  color: #333;
+  line-height: 1.6;
+}
+
+.news-hero-text .highlight {
+  color: #a67c00;
+  font-weight: 700;
+  position: relative;
+}
+
+.news-hero-text .highlight::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 100%;
+  height: 4px;
+  background-color: #a67c00;
+  border-radius: 2px;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease-in-out;
+}
+
+.news-hero-text .highlight:hover::after {
+  transform: scaleX(1);
+}
+
+/* ================== EVENT / NEWS CARDS ================== */
 .news-cards-horizontal {
   display: flex;
   gap: 20px;
   overflow-x: auto;
   padding-bottom: 20px;
   scroll-behavior: smooth;
+  margin-bottom: 40px;
 }
 
 .news-card-horizontal {
   background: #fff;
   border: 1px solid #ddd;
-  border-radius: 10px;
+  border-radius: 12px;
   min-width: 250px;
   flex: 0 0 auto;
   padding: 20px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-  transition: transform 0.2s;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .news-card-horizontal:hover {
   transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
 }
 
 .news-card-main h4 {
@@ -53,6 +102,7 @@
 .news-card-main h3 {
   font-size: 1.3rem;
   margin-bottom: 10px;
+  color: #133a74;
 }
 
 .news-card-main p {
@@ -76,24 +126,7 @@
   background-color: #854f00;
 }
 
-/* Drop down details */
-.news-card-details {
-  margin-top: 10px;
-  border-top: 1px solid #eee;
-  padding-top: 10px;
-}
-
-.news-card-details ul {
-  list-style: disc;
-  padding-left: 20px;
-  margin: 0;
-}
-
-.news-card-details li {
-  margin-bottom: 5px;
-}
-
-/* Calendar styling */
+/* ================== CALENDAR ================== */
 .news-calendar-section {
   margin-top: 50px;
 }
@@ -102,10 +135,10 @@
   max-width: 600px;
   margin: 0 auto;
   border: 1px solid #ddd;
-  border-radius: 10px;
-  padding: 15px;
+  border-radius: 12px;
+  padding: 20px;
   background: #fff;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 3px 15px rgba(0,0,0,0.08);
 }
 
 .nv-cal-head {
@@ -117,6 +150,7 @@
 
 .nv-cal-title {
   font-weight: bold;
+  color: #133a74;
 }
 
 .nv-cal-nav {
@@ -135,6 +169,7 @@
 .nv-cal-dow {
   font-weight: bold;
   padding: 5px 0;
+  color: #516382;
 }
 
 .nv-cal-cell {
@@ -167,4 +202,100 @@
   background-color: #a67c00;
   border-radius: 50%;
   display: inline-block;
+}
+
+/* ================== FORMS PLACEHOLDER ================== */
+.forms-section {
+  padding: 50px 20px;
+  background: #faf9f7;
+  margin-top: 50px;
+}
+
+.forms-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.forms-title {
+  font-size: clamp(28px, 4vw, 36px);
+  font-weight: 800;
+  color: #133a74;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.forms-sub {
+  color: #3b4c6a;
+  font-size: clamp(14px, 2vw, 18px);
+  line-height: 1.7;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.forms-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+}
+
+.forms-card h3 {
+  font-size: 1.3rem;
+  color: #0f2d5c;
+  margin-bottom: 10px;
+}
+
+.forms-card label {
+  display: block;
+  margin: 8px 0 4px;
+  font-weight: 500;
+}
+
+.forms-card input,
+.forms-card select,
+.forms-card textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+}
+
+.forms-card button {
+  background-color: #a67c00;
+  color: #fff;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.forms-card button:hover {
+  background-color: #854f00;
+}
+
+/* ================== RESPONSIVE ================== */
+@media (max-width: 768px) {
+  .news-cards-horizontal {
+    flex-direction: column;
+  }
+
+  .news-card-horizontal {
+    min-width: 100%;
+  }
+
+  .news-hero {
+    padding: 40px 15px;
+  }
+
+  .news-hero-title {
+    font-size: 2rem;
+  }
+
+  .news-hero-text {
+    font-size: 1.2rem;
+  }
 }

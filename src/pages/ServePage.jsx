@@ -55,87 +55,64 @@ const opportunities = [
 export default function ServePage() {
   return (
     <div className="serve-page-container">
+      {/* Header Section */}
       <header className="page-header">
         <h1>Serving with Purpose</h1>
         <p>
-          By serving the church, you are directly participating in the work
-          the Lord has given to Holy Trinity Ethiopian Orthodox Tewahedo Church
-          through our mission and vision.
+          By serving the church, you are directly participating in the work the Lord has given to Holy Trinity Ethiopian Orthodox Tewahedo Church through our mission and vision.
         </p>
       </header>
 
+      {/* Main Layout */}
       <div className="serve-layout">
-        {/* Sidebar Filter Pane */}
+        {/* Sidebar Filters */}
         <aside className="filter-pane">
           <h3>Filter Opportunities</h3>
 
           <div className="filter-group">
             <h4>Ministry</h4>
-            <label>
-              <input type="checkbox" /> Worship
-            </label>
-            <label>
-              <input type="checkbox" /> Connections
-            </label>
+            <label><input type="checkbox" /> Worship</label>
+            <label><input type="checkbox" /> Connections</label>
           </div>
 
           <div className="filter-group">
             <h4>Membership Required</h4>
-            <label>
-              <input type="checkbox" /> Yes
-            </label>
-            <label>
-              <input type="checkbox" /> No
-            </label>
+            <label><input type="checkbox" /> Yes</label>
+            <label><input type="checkbox" /> No</label>
           </div>
 
           <div className="filter-group">
             <h4>Frequency</h4>
-            <label>
-              <input type="checkbox" /> Weekly
-            </label>
-            <label>
-              <input type="checkbox" /> Monthly
-            </label>
+            <label><input type="checkbox" /> Weekly</label>
+            <label><input type="checkbox" /> Monthly</label>
           </div>
 
           <button className="apply-filter-btn">Apply Filters</button>
         </aside>
 
-        {/* Opportunities List */}
+        {/* Opportunities Grid */}
         <section className="serve-list-section">
-          {opportunities.map((opportunity) => (
+          {opportunities.map(opportunity => (
             <div key={opportunity.id} className="serve-card">
               <h2 className="serve-opportunity-title">{opportunity.title}</h2>
-              <p className="serve-opportunity-description">
-                {opportunity.description}
-              </p>
+              <p className="serve-opportunity-description">{opportunity.description}</p>
 
               <ul className="serve-opportunity-details">
-                <li>
-                  <strong>Ministry:</strong> {opportunity.ministry}
-                </li>
-                <li>
-                  <strong>Membership:</strong> {opportunity.membership}
-                </li>
-                <li>
-                  <strong>Frequency:</strong> {opportunity.frequency}
-                </li>
-                <li>
-                  <strong>Age Requirement:</strong> {opportunity.ageRequirement}
-                </li>
+                <li><strong>Ministry:</strong> {opportunity.ministry}</li>
+                <li><strong>Membership:</strong> {opportunity.membership}</li>
+                <li><strong>Frequency:</strong> {opportunity.frequency}</li>
+                <li><strong>Age Requirement:</strong> {opportunity.ageRequirement}</li>
               </ul>
 
-              <button className="apply-btn">Apply To Volunteer</button>
+              <button className="apply-btn">Apply to Volunteer</button>
             </div>
           ))}
         </section>
       </div>
 
-      <div className="text-center mt-4">
-        <Link to="/serve" className="back-btn">
-          ← Back to Home Page
-        </Link>
+      {/* Back Button */}
+      <div className="text-center" style={{ marginTop: "40px" }}>
+        <Link to="/" className="back-btn">← Back to Home Page</Link>
       </div>
     </div>
   );

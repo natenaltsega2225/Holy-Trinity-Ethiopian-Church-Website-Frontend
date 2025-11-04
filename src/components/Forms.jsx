@@ -1,30 +1,26 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { FaUserFriends, FaChild, FaMapMarkedAlt } from "react-icons/fa";
-import "../styles/forms.css"; // file must be exactly `forms.css`
-
+import "../styles/forms.css";
 
 const formItems = [
   {
     title: "Church Membership",
-    desc:
-      "Join our parish family. Provide your household details so we can stay connected.",
-    to: "/forms-payments/church-membership-form",
+    desc: "Join our parish family. Provide your household details so we can stay connected.",
+    to: "/register",
     icon: <FaUserFriends size={40} color="#F2BE42" />,
   },
   {
-    title: "Kids Summer Program",
-    desc:
-      "Faith, friends, and fun. Register your child for summer classes, crafts, and fellowship.",
-    to: "/forms-payments/kids-summer-program",
-    icon: <FaChild size={40} color="#F2BE42" />,
+    title: "Kids Trips & Outings",
+    desc: "Faith-building adventures, t-shirt merch forms, and seasonal trips.",
+    to: "/news-events/details",
+    icon: <FaMapMarkedAlt size={40} color="#F2BE42" />,
   },
   {
-    title: "Ark Encounter",
-    desc:
-      "Reserve your spot for our parish trip. Learn, pray, and fellowship together.",
-    to: "/forms-payments/ark-encounter",
-    icon: <FaMapMarkedAlt size={40} color="#F2BE42" />,
+    title: "Kids Summer & Seasonal Classes",
+    desc: "Register your child for summer, fall, and other seasonal classes.",
+    to: "/news-events/details",
+    icon: <FaChild size={40} color="#F2BE42" />,
   },
 ];
 

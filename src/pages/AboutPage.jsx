@@ -17,13 +17,12 @@ const AboutPage = () => {
     { id: "clergy", ref: clergyRef },
   ];
 
-  // Scroll to section when a card is clicked
   const handleCardClick = (card) => {
     const section = sectionRefs.find((s) => s.id === card);
     section?.ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  // Update activeCard when scrolling
+  // Track scroll position
   useEffect(() => {
     const handleScroll = () => {
       const scrollPos = window.scrollY + window.innerHeight / 3;
@@ -43,34 +42,38 @@ const AboutPage = () => {
 
   return (
     <div className="about-container">
+
       <div className="about-header">
-        <h1>Who We Are</h1>
-        <p>Discover our faith, history, and clergy guiding our community.</p>
+        <h1 className="about-title">Who We Are</h1>
+        <p className="about-subtitle">
+          Discover our faith, history, and clergy guiding our community.
+        </p>
       </div>
 
-      {/* Cards */}
-      <div className="about-card-grid">
+      {/* Modern Segmented Selector */}
+      <div className="selector-bar">
         <button
-          className={activeCard === "faith" ? "about-card active" : "about-card"}
+          className={activeCard === "faith" ? "selector-item active" : "selector-item"}
           onClick={() => handleCardClick("faith")}
         >
           ✝️ Our Faith
         </button>
+
         <button
-          className={activeCard === "history" ? "about-card active" : "about-card"}
+          className={activeCard === "history" ? "selector-item active" : "selector-item"}
           onClick={() => handleCardClick("history")}
         >
           📜 Our History
         </button>
+
         <button
-          className={activeCard === "clergy" ? "about-card active" : "about-card"}
+          className={activeCard === "clergy" ? "selector-item active" : "selector-item"}
           onClick={() => handleCardClick("clergy")}
         >
           🙏 Clergy
         </button>
       </div>
 
-      {/* Sections */}
       <div ref={faithRef}><OurFaith /></div>
       <div ref={historyRef}><OurHistory /></div>
       <div ref={clergyRef}><OurClergy /></div>

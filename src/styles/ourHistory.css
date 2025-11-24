@@ -1,27 +1,31 @@
-/* Base Page Styling */
+/* =======================
+   Base Page Styling
+======================= */
 .our-history-page {
   min-height: 100vh;
-  background: linear-gradient(
-    180deg,
-    var(--faith-background) 0%,
-    rgba(0, 0, 0, 0.02) 100%
-  );
+
+  /* Solid parchment background */
+  background-color: #F1DAB2;
+
+  /* Wider horizontal spacing */
+  padding: 0 2.5rem;
+
   color: var(--faith-foreground);
   font-family: var(--faith-font);
-  padding: 0 1rem;
 }
 
-/* Container & Layout */
 .history-main {
   padding: clamp(3rem, 6vw, 6rem) 0;
 }
 
 .history-container {
-  max-width: 1200px;
+  max-width: 1200px; /* wider container */
   margin: 0 auto;
 }
 
-/* Header */
+/* =======================
+   Header
+======================= */
 .history-header {
   text-align: center;
   margin-bottom: clamp(2.5rem, 5vw, 4rem);
@@ -43,7 +47,9 @@
   line-height: 1.75;
 }
 
-/* Timeline / Milestones */
+/* =======================
+   Timeline / Milestones
+======================= */
 .history-timeline {
   display: flex;
   flex-direction: column;
@@ -51,7 +57,6 @@
   margin-bottom: clamp(3rem, 6vw, 5rem);
 }
 
-/* Card */
 .history-card {
   width: 100%;
   background: rgba(var(--faith-card-rgb, 255,255,255), 0.9);
@@ -66,7 +71,6 @@
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
 }
 
-/* Card Content Layout */
 .history-card-content {
   display: flex;
   flex-direction: column;
@@ -83,7 +87,6 @@
   }
 }
 
-/* Icon */
 .history-icon-wrapper {
   flex-shrink: 0;
   width: 4rem;
@@ -102,7 +105,6 @@
   color: var(--faith-accent-foreground);
 }
 
-/* Text */
 .history-text {
   flex: 1;
   display: flex;
@@ -141,28 +143,29 @@
   color: var(--faith-muted);
   line-height: 1.6;
   font-size: clamp(0.95rem, 1.8vw, 1.05rem);
-  max-width: 600px; /* keeps paragraphs readable */
+  max-width: 600px;
 }
 
-/* Additional Section */
+/* =======================
+   Additional Section - Centered Headings
+======================= */
 .history-additional {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 2rem;
-}
-
-@media (min-width: 768px) {
-  .history-additional {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  text-align: center;
+  margin-top: clamp(3rem, 5vw, 4rem);
 }
 
 .history-additional-card {
   background: rgba(var(--faith-card-rgb, 255,255,255), 0.95);
   border-radius: 1rem;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
-  padding: 2rem;
+  padding: clamp(2rem, 3vw, 3rem);
+  max-width: 900px;
+  margin: 0 auto;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
 }
 
 .history-additional-card:hover {
@@ -171,20 +174,22 @@
 }
 
 .history-additional-card h3 {
-  color: var(--faith-primary);
-  font-size: clamp(1.2rem, 2.2vw, 1.4rem);
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
   font-weight: 700;
-  margin-bottom: 1rem;
+  color: var(--faith-primary);
+  margin-bottom: 1.5rem;
 }
 
 .history-additional-card p {
+  font-size: clamp(1rem, 1.8vw, 1.125rem);
+  line-height: 1.8;
   color: var(--faith-muted);
-  line-height: 1.7;
-  font-size: clamp(0.95rem, 1.8vw, 1.05rem);
   margin-bottom: 1rem;
 }
 
-/* Animation */
+/* =======================
+   Animations
+======================= */
 .animate-fade-in-up {
   opacity: 0;
   transform: translateY(20px);
@@ -195,5 +200,14 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* =======================
+   Responsive Adjustments
+======================= */
+@media (min-width: 1024px) {
+  .our-history-page {
+    padding: 0 4rem; /* more horizontal space on large screens */
   }
 }

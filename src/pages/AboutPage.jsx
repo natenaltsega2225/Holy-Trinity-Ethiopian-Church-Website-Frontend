@@ -25,7 +25,7 @@ const AboutPage = () => {
     section?.ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  // Track scroll position
+  // Track scroll position i updated the about us page from 
   useEffect(() => {
     const handleScroll = () => {
       const scrollPos = window.scrollY + window.innerHeight / 3;

@@ -5,49 +5,32 @@ import "../styles/servePage.css";
 const opportunities = [
   {
     id: 1,
-    title: "Sunday School",
-    ministry: "Worship",
+    title: "Parking Attendant",
+    ministry: "Hospitality",
     description:
-      "Faith-forming classes for children and youth centered on the Holy Scriptures, the Synaxarium, and the life of the Church.",
-    membership: "Yes",
+      "Assist with directing cars, ensuring safety, and welcoming members as they arrive for service.",
+    membership: "No",
     frequency: "Weekly",
     ageRequirement: "18+",
   },
   {
     id: 2,
-    title: "Curriculum",
-    ministry: "Worship",
+    title: "Sunday School Teacher Assistant",
+    ministry: "Worship / Youth",
     description:
-      "Developing age-appropriate lessons based on the Ethiopian Orthodox Tewahedo calendar.",
+      "Support the Sunday School teacher by helping organize lessons, guiding children, and creating a nurturing learning environment.",
     membership: "Yes",
-    frequency: "Monthly",
-    ageRequirement: "16+",
+    frequency: "Weekly",
+    ageRequirement: "18+",
   },
   {
     id: 3,
-    title: "Connections Team",
-    ministry: "Connections",
-    description: "Welcome visitors and help new members feel at home.",
+    title: "Church Playground Cleanup",
+    ministry: "Facilities",
+    description:
+      "Help maintain a clean and safe environment by cleaning, organizing, and caring for the church playground.",
     membership: "No",
     frequency: "Monthly",
-    ageRequirement: "16+",
-  },
-  {
-    id: 4,
-    title: "Hospitality Team",
-    ministry: "Connections",
-    description: "Serve coffee, greet members, and create a welcoming environment on Sundays.",
-    membership: "No",
-    frequency: "Weekly",
-    ageRequirement: "16+",
-  },
-  {
-    id: 5,
-    title: "Choir",
-    ministry: "Worship",
-    description: "Lift up your voice in praise and help lead the congregation in worship.",
-    membership: "Yes",
-    frequency: "Weekly",
     ageRequirement: "18+",
   },
 ];
@@ -55,64 +38,94 @@ const opportunities = [
 export default function ServePage() {
   return (
     <div className="serve-page-container">
-      {/* Header Section */}
       <header className="page-header">
         <h1>Serving with Purpose</h1>
         <p>
-          By serving the church, you are directly participating in the work the Lord has given to Holy Trinity Ethiopian Orthodox Tewahedo Church through our mission and vision.
+          By serving the church, you are directly participating in the work
+          the Lord has given to Holy Trinity Ethiopian Orthodox Tewahedo Church
+          through our mission and vision.
         </p>
       </header>
 
-      {/* Main Layout */}
       <div className="serve-layout">
-        {/* Sidebar Filters */}
+        {/* Sidebar Filter Pane */}
         <aside className="filter-pane">
           <h3>Filter Opportunities</h3>
 
           <div className="filter-group">
             <h4>Ministry</h4>
-            <label><input type="checkbox" /> Worship</label>
-            <label><input type="checkbox" /> Connections</label>
+            <label>
+              <input type="checkbox" /> Hospitality
+            </label>
+            <label>
+              <input type="checkbox" /> Worship / Youth
+            </label>
+            <label>
+              <input type="checkbox" /> Facilities
+            </label>
           </div>
 
           <div className="filter-group">
             <h4>Membership Required</h4>
-            <label><input type="checkbox" /> Yes</label>
-            <label><input type="checkbox" /> No</label>
+            <label>
+              <input type="checkbox" /> Yes
+            </label>
+            <label>
+              <input type="checkbox" /> No
+            </label>
           </div>
 
           <div className="filter-group">
             <h4>Frequency</h4>
-            <label><input type="checkbox" /> Weekly</label>
-            <label><input type="checkbox" /> Monthly</label>
+            <label>
+              <input type="checkbox" /> Weekly
+            </label>
+            <label>
+              <input type="checkbox" /> Monthly
+            </label>
           </div>
 
           <button className="apply-filter-btn">Apply Filters</button>
         </aside>
 
-        {/* Opportunities Grid */}
+        {/* Opportunities List */}
         <section className="serve-list-section">
-          {opportunities.map(opportunity => (
+          {opportunities.map((opportunity) => (
             <div key={opportunity.id} className="serve-card">
-              <h2 className="serve-opportunity-title">{opportunity.title}</h2>
-              <p className="serve-opportunity-description">{opportunity.description}</p>
+              <h2 className="serve-opportunity-title">
+                {opportunity.title}
+              </h2>
+
+              <p className="serve-opportunity-description">
+                {opportunity.description}
+              </p>
 
               <ul className="serve-opportunity-details">
-                <li><strong>Ministry:</strong> {opportunity.ministry}</li>
-                <li><strong>Membership:</strong> {opportunity.membership}</li>
-                <li><strong>Frequency:</strong> {opportunity.frequency}</li>
-                <li><strong>Age Requirement:</strong> {opportunity.ageRequirement}</li>
+                <li>
+                  <strong>Ministry:</strong> {opportunity.ministry}
+                </li>
+                <li>
+                  <strong>Membership:</strong> {opportunity.membership}
+                </li>
+                <li>
+                  <strong>Frequency:</strong> {opportunity.frequency}
+                </li>
+                <li>
+                  <strong>Age Requirement:</strong>{" "}
+                  {opportunity.ageRequirement}
+                </li>
               </ul>
 
-              <button className="apply-btn">Apply to Volunteer</button>
+              <button className="apply-btn">Apply To Volunteer</button>
             </div>
           ))}
         </section>
       </div>
 
-      {/* Back Button */}
-      <div className="text-center" style={{ marginTop: "40px" }}>
-        <Link to="/" className="back-btn">← Back to Home Page</Link>
+      <div className="text-center mt-4">
+        <Link to="/serve" className="back-btn">
+          ← Back to Home Page
+        </Link>
       </div>
     </div>
   );

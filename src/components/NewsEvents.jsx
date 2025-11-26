@@ -1,85 +1,72 @@
+
+
 // src/components/NewsEvents.jsx
 import React from "react";
-import { Link } from "react-router-dom";
-import "../styles/news.css";
+import { useNavigate } from "react-router-dom";
+import "../styles/eventsNewsPage.css";
+
+const MODULES = [
+  {
+    id: "kids",
+    eyebrow: "LITURGICAL CYCLE",
+    title: "Kids Programs",
+    text: "Engaging programs designed to strengthen faith and build lasting friendships.",
+    cta: "See Kids Programs",
+  },
+  {
+    id: "holiday",
+    eyebrow: "LITURGICAL CYCLE",
+    title: "Holiday Activities",
+    text: "Learn the meaning of each fast and feast, with scripture references and practical guidance for participation.",
+    cta: "See Fasts & Feasts",
+  },
+  {
+    id: "trip",
+    eyebrow: "KIDS TRIPS & OUTINGS",
+    title: "Trips & Outings",
+    text: "Faith-building adventures and group outings that create lasting memories.",
+    cta: "Browse Events",
+  },
+  {
+    id: "news",
+    eyebrow: "STAY INFORMED",
+    title: "Church News",
+    text: "Announcements, updates, and important information from our church community.",
+    cta: "See Church News",
+  },
+];
 
 export default function NewsEvents() {
-  const newsCards = [
-    {
-      id: 1,
-      kicker: "Liturgical Cycle",
-      title: "Kids Programs",
-      description:
-        "Engaging programs designed to strengthen faith and build lasting friendships.",
-      link: "/news-events/kids-programs",
-      btnType: "outline",
-      btnText: "See Kids Programs",
-    },
-    {
-      id: 2,
-      kicker: "Liturgical Cycle",
-      title: "Holiday Activities",
-      description:
-        "Learn the meaning of each fast and feast, with scripture references and practical guidance for prayer and participation.",
-      link: "/news-events/fasts-feasts",
-      btnType: "outline",
-      btnText: "See Fasts & Feasts",
-    },
-    {
-      id: 3,
-      kicker: "Kids Trips & Outings",
-      title: "Trips & Outings",
-      description: "Faith-building adventures that create lasting memories.",
-      link: "/news-events/events",
-      btnType: "outline",
-      btnText: "Browse Events",
-    },
-    {
-      id: 4,
-      kicker: "Stay Informed",
-      title: "Church News",
-      description:
-        "Stay updated with the latest news and announcements from our church community.",
-      link: "/news-events/church-news",
-      btnType: "outline",
-      btnText: "See Church News",
-    },
-  ];
+  const navigate = useNavigate();
+
+  const goToCategory = (id) => {
+    navigate(`/news-events/${id}`);
+  };
 
   return (
-    <section id="news-events" className="nv-wrap">
-      <div className="nv-container">
-        {/* Page pill heading */}
-        <div className="nv-pillbar">
-          <h3 className="ht-h3">News &amp; Events</h3>
-        </div>
+    <section className="news-hero-wrap" id="news-events">
+      <header className="news-hero-header">
+        <h1>News &amp; Events</h1>
+        <p>
+          Explore kids programs, holiday activities, trips, and church news at
+          Holy Trinity Ethiopian Orthodox Tewahedo Church.
+        </p>
+      </header>
 
-        {/* Cards row */}
-        <div className="nv-grid">
-          {newsCards.map((card) => (
-            <article key={card.id} className="nv-card">
-              <div className="nv-card-kicker">{card.kicker}</div>
-              <h3 className="nv-card-title">{card.title}</h3>
-              <p className="nv-card-text">{card.description}</p>
-              <Link
-                to={card.link}
-                className={`nv-btn nv-btn-${card.btnType}`}
-              >
-                {card.btnText}
-              </Link>
-            </article>
-          ))}
-        </div>
-
-        {/* CTA for full page */}
-        <div
-          className="nv-fullpage-cta"
-          style={{ textAlign: "center", marginTop: "30px" }}
-        >
-          <Link to="/news-events/details" className="nv-btn nv-btn-primary">
-            View Full Events & News
-          </Link>
-        </div>
+      <div className="news-hero-cards">
+        {MODULES.map((m) => (
+          <button
+            key={m.id}
+            type="button"
+            className="news-hero-card"
+            onClick={() => goToCategory(m.id)}
+          >
+            <div className="news-hero-eyebrow">{m.eyebrow}</div>
+            <h2 className="news-hero-title">{m.title}</h2>
+            <p className="news-hero-text">{m.text}</p>
+            <span className="news-hero-btn">{m.cta}</span>
+          </button>
+        ))}
       </div>
     </section>
   );

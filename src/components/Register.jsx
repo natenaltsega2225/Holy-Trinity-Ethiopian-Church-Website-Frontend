@@ -1,13 +1,21 @@
-//src/components/Register.jsx
+
+// src/components/Register.jsx
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "../styles/auth.css";
+import api from "./api";
+import { useAuth, landingForRole } from "../hooks/useAuth";
 
 const initial = {
-  firstName: "",
-  lastName: "",
+  first_name: "",
+  last_name: "",
   email: "",
   phone: "",
+  address_line1: "",
+  address_line2: "",
+  city: "",
+  state: "",
+  zip: "",
   password: "",
   confirm: "",
   agree: false,
@@ -15,61 +23,51 @@ const initial = {
 
 export default function Register() {
   const [form, setForm] = useState(initial);
-  const [errors, setErrors] = useState({});
-  const [submitting, setSubmitting] = useState(false);
+  const [err, setErr] = useState("");
+  const [busy, setBusy] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
-  const navigate = useNavigate();
+  const nav = useNavigate();
+  const auth = useAuth();
 
-  const validators = {
-    firstName: (v) => (v.trim().length >= 2 ? "" : "Enter your first name."),
-    lastName: (v) => (v.trim().length >= 2 ? "" : "Enter your last name."),
-    email: (v) =>
-      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) ? "" : "Enter a valid email.",
-    phone: (v) =>
-      /^[0-9+()\-\s]{7,20}$/.test(v) ? "" : "Enter a valid phone number.",
-    password: (v) =>
-      v.length >= 6 ? "" : "Password must be at least 6 characters.",
-    confirm: (v) =>
-      v === form.password ? "" : "Password confirmation does not match.",
-    agree: (v) => (v ? "" : "You must agree to the terms to register."),
-  };
+  const upd = (k, v) => setForm((s) => ({ ...s, [k]: v }));
 
-  const onChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    const nextVal = type === "checkbox" ? checked : value;
-    setForm((f) => ({ ...f, [name]: nextVal }));
-    setErrors((er) => ({ ...er, [name]: validators[name](nextVal) }));
-  };
-
-  const validateAll = () => {
-    const next = {};
-    Object.keys(validators).forEach((k) => (next[k] = validators[k](form[k])));
-    setErrors(next);
-    return Object.values(next).every((x) => x === "");
-  };
-
-  const onSubmit = (e) => {
+  async function submit(e) {
     e.preventDefault();
-    if (!validateAll()) return;
+    setErr("");
 
-    setSubmitting(true);
+    if (form.password.length < 6) return setErr("Password must be at least 6 characters.");
+    if (form.password !== form.confirm) return setErr("Passwords do not match.");
+    if (!form.agree) return setErr("You must agree to the terms.");
 
-    // TODO: replace with real API call to Node/MySQL
-    setTimeout(() => {
-      localStorage.setItem(
-        "ht_user",
-        JSON.stringify({
-          firstName: form.firstName.trim(),
-          lastName: form.lastName.trim(),
-          email: form.email.trim(),
-          phone: form.phone.trim(),
-          agreedAt: new Date().toISOString(),
-        })
-      );
-      setSubmitting(false);
-      navigate("/");
-    }, 600);
-  };
+    setBusy(true);
+    try {
+      const payload = {
+        ...form,
+        username: form.email, // email-as-username
+      };
+
+      const { data } = await api.post("/auth/register", payload);
+      if (!data?.token) throw new Error("Invalid response from server.");
+
+      // Save to auth context + localStorage
+      auth?.setToken?.(data.token);
+      auth?.setUser?.(data.user || null);
+
+      // Convenience header
+      try {
+        api.defaults.headers.common.Authorization = `Bearer ${data.token}`;
+      } catch {}
+
+      // Send them to their dashboard (member by default)
+      const landing = landingForRole(data.user?.role || "member");
+      nav(landing, { replace: true });
+    } catch (e2) {
+      console.error("Register error:", e2);
+      setErr(e2.response?.data?.error || "Registration failed");
+    } finally {
+      setBusy(false);
+    }
+  }
 
   return (
     <div className="auth-wrap">
@@ -79,29 +77,31 @@ export default function Register() {
           Join our parish portal to receive updates and access member resources.
         </p>
 
-        <form className="auth-form" onSubmit={onSubmit} noValidate>
+        {err && (
+          <div className="auth-banner" role="alert">
+            {err}
+          </div>
+        )}
+
+        <form className="auth-form" onSubmit={submit} noValidate>
           <div className="auth-grid-2">
             <div className="auth-field">
               <label>First Name</label>
               <input
-                name="firstName"
-                value={form.firstName}
-                onChange={onChange}
+                value={form.first_name}
+                onChange={(e) => upd("first_name", e.target.value)}
                 autoComplete="given-name"
-                placeholder="e.g., Yohannes"
+                required
               />
-              {errors.firstName && <span className="auth-err">{errors.firstName}</span>}
             </div>
             <div className="auth-field">
               <label>Last Name</label>
               <input
-                name="lastName"
-                value={form.lastName}
-                onChange={onChange}
+                value={form.last_name}
+                onChange={(e) => upd("last_name", e.target.value)}
                 autoComplete="family-name"
-                placeholder="e.g., Tekle"
+                required
               />
-              {errors.lastName && <span className="auth-err">{errors.lastName}</span>}
             </div>
           </div>
 
@@ -109,25 +109,65 @@ export default function Register() {
             <div className="auth-field">
               <label>Email</label>
               <input
-                name="email"
-                value={form.email}
-                onChange={onChange}
                 type="email"
+                value={form.email}
+                onChange={(e) => upd("email", e.target.value)}
                 autoComplete="email"
                 placeholder="name@example.com"
+                required
               />
-              {errors.email && <span className="auth-err">{errors.email}</span>}
             </div>
             <div className="auth-field">
-              <label>Phone</label>
+              <label>Phone (optional)</label>
               <input
-                name="phone"
                 value={form.phone}
-                onChange={onChange}
+                onChange={(e) => upd("phone", e.target.value)}
                 inputMode="tel"
                 placeholder="+1 (615) 555-0123"
               />
-              {errors.phone && <span className="auth-err">{errors.phone}</span>}
+            </div>
+          </div>
+
+          <div className="auth-field">
+            <label>Address line 1</label>
+            <input
+              value={form.address_line1}
+              onChange={(e) => upd("address_line1", e.target.value)}
+              required
+            />
+          </div>
+          <div className="auth-field">
+            <label>Address line 2 (optional)</label>
+            <input
+              value={form.address_line2}
+              onChange={(e) => upd("address_line2", e.target.value)}
+            />
+          </div>
+
+          <div className="auth-grid-3">
+            <div className="auth-field">
+              <label>City</label>
+              <input
+                value={form.city}
+                onChange={(e) => upd("city", e.target.value)}
+                required
+              />
+            </div>
+            <div className="auth-field">
+              <label>State</label>
+              <input
+                value={form.state}
+                onChange={(e) => upd("state", e.target.value)}
+                required
+              />
+            </div>
+            <div className="auth-field">
+              <label>ZIP</label>
+              <input
+                value={form.zip}
+                onChange={(e) => upd("zip", e.target.value)}
+                required
+              />
             </div>
           </div>
 
@@ -135,26 +175,24 @@ export default function Register() {
             <div className="auth-field">
               <label>Password</label>
               <input
-                name="password"
-                value={form.password}
-                onChange={onChange}
                 type="password"
+                value={form.password}
+                onChange={(e) => upd("password", e.target.value)}
                 autoComplete="new-password"
                 placeholder="Create a password"
+                required
               />
-              {errors.password && <span className="auth-err">{errors.password}</span>}
             </div>
             <div className="auth-field">
               <label>Confirm Password</label>
               <input
-                name="confirm"
-                value={form.confirm}
-                onChange={onChange}
                 type="password"
+                value={form.confirm}
+                onChange={(e) => upd("confirm", e.target.value)}
                 autoComplete="new-password"
                 placeholder="Re-enter password"
+                required
               />
-              {errors.confirm && <span className="auth-err">{errors.confirm}</span>}
             </div>
           </div>
 
@@ -173,117 +211,116 @@ export default function Register() {
             <label className="terms-check">
               <input
                 type="checkbox"
-                name="agree"
                 checked={form.agree}
-                onChange={onChange}
+                onChange={(e) => upd("agree", e.target.checked)}
               />
               <span>I have read and agree to the Terms & Conditions.</span>
             </label>
-
-            {errors.agree && <div className="auth-err" style={{marginTop:6}}>{errors.agree}</div>}
           </div>
 
-          <button className="auth-btn" disabled={submitting || !form.agree}>
-            {submitting ? "Creating account…" : "Register"}
+          <button className="auth-btn" disabled={busy || !form.agree}>
+            {busy ? "Creating account…" : "Register"}
           </button>
 
           <p className="auth-switch">
-            Already have an account? <Link to="/login">Sign in</Link>
+            Already have an account?{" "}
+            <Link to="/login" className="auth-link">
+              Sign in
+            </Link>
           </p>
         </form>
       </div>
 
-      {/* ---- Terms Modal ---- */}
+      {/* Terms Modal */}
       {showTerms && (
         <div className="terms-overlay" role="dialog" aria-modal="true">
           <div className="terms-modal">
             <div className="terms-head">
               <h2>Membership Terms & Conditions</h2>
-              <button className="terms-close" onClick={() => setShowTerms(false)} aria-label="Close">✕</button>
+              <button
+                className="terms-close"
+                onClick={() => setShowTerms(false)}
+                aria-label="Close"
+              >
+                ✕
+              </button>
             </div>
 
-            <div className="terms-body">
-              <p><strong>Last Updated:</strong> February 2025</p>
+          <div className="terms-body">
+  <p>
+    <strong>Last Updated:</strong> February 2025
+  </p>
 
-              <h3>1. Introduction</h3>
-              <p>
-                Welcome to Holy Trinity Ethiopian Orthodox Tewahedo Church. By becoming a church member,
-                registering online, donating, or using this website, you agree to the following terms,
-                policies, and responsibilities. These terms are designed to protect both the Church and
-                its members in a respectful and Christ-centered manner.
-              </p>
+  <h3>1. Purpose of Membership</h3>
+  <p>
+    Membership at Holy Trinity Ethiopian Orthodox Tewahedo Church provides
+    spiritual support, participation in liturgical life, and access to
+    community programs, events, and services.
+  </p>
 
-              <h3>2. Membership Eligibility</h3>
-              <ul>
-                <li>18+ years of age or parental consent for minors;</li>
-                <li>Accept the faith and teachings of the Ethiopian Orthodox Tewahedo Church;</li>
-                <li>Complete the Membership Form; and</li>
-                <li>Agree to regular membership contributions.</li>
-              </ul>
+  <h3>2. Member Responsibilities</h3>
+  <ul>
+    <li>Participate in the spiritual and community life of the parish.</li>
+    <li>
+      Respect clergy, leaders, volunteers, and fellow parishioners in all
+      interactions.
+    </li>
+    <li>
+      Keep your contact information up to date so that we can reach you with
+      important announcements.
+    </li>
+  </ul>
 
-              <h3>3. Membership Contributions / Financial Obligations</h3>
-              <ul>
-                <li>Fees support operations, priest services, programs, and facilities.</li>
-                <li>Payments may be monthly, quarterly, or annually.</li>
-                <li>Donations are generally non-refundable; exceptions require leadership approval.</li>
-                <li>Members are responsible for any tax treatment (consult your tax advisor).</li>
-              </ul>
+  <h3>3. Financial Contributions</h3>
+  <p>
+    Members are encouraged to contribute according to their ability to support
+    the church&apos;s ministries and operating costs. The finance team may
+    establish recommended monthly, semi-annual, or annual plans.
+  </p>
 
-              <h3>4. Member Responsibilities</h3>
-              <ul>
-                <li>Uphold Orthodox faith and traditions; maintain respectful conduct.</li>
-                <li>Participate in liturgy and community life as able.</li>
-                <li>Care for church property and foster peace in the community.</li>
-                <li>Keep your contact details up to date.</li>
-              </ul>
+  <h3>4. Use of Information</h3>
+  <p>
+    Contact details you provide will only be used for parish communication,
+    ministry coordination, and required administrative purposes. We do not sell
+    your information.
+  </p>
 
-              <h3>5. Church Rights & Governance</h3>
-              <p>
-                The Church may accept, decline, or revoke membership for serious violations of Church teaching or
-                misconduct. Governance follows the Holy Synod, Archdiocese, and Church bylaws. Concerns should be
-                addressed respectfully through Church administration.
-              </p>
+  <h3>5. Code of Conduct</h3>
+  <p>
+    Members are expected to uphold Christian values and avoid behavior that
+    harms the peace, safety, or dignity of others in the community.
+  </p>
 
-              <h3>6. Privacy & Personal Information</h3>
-              <p>
-                Personal data is used only for church communications and records, not sold to third parties.
-                Members may request updates or removal by contacting the administration.
-              </p>
+  <h3>6. Changes to These Terms</h3>
+  <p>
+    These terms may be updated periodically by the parish council. When
+    changes occur, a notice will be posted and the &quot;Last Updated&quot;
+    date will be revised.
+  </p>
 
-              <h3>7. Website & Online Services</h3>
-              <p>
-                Do not misuse the website. Church photos, sermons, and materials are church property and may not be
-                redistributed without permission. The church is not responsible for temporary outages or external links.
-              </p>
+  <p>
+    If you have any questions about these terms, please contact the parish
+    council or clergy for clarification before completing your registration.
+  </p>
+</div>
 
-              <h3>8. Liability Disclaimer</h3>
-              <p>
-                The church is not responsible for personal injury, theft, or loss during events unless due to proven
-                negligence. Participation in trips or volunteer activities is at one’s own risk.
-              </p>
-
-              <h3>9. Cancellation or Withdrawal</h3>
-              <p>
-                Members may cancel membership at any time with written notice. Outstanding financial obligations should
-                be resolved prior to cancellation.
-              </p>
-
-              <h3>10. Agreement</h3>
-              <p>
-                By submitting the Membership Form, attending services, or supporting the church financially, you confirm
-                that you have read, understood, and agree to these terms.
-              </p>
-            </div>
 
             <div className="terms-actions">
               <button
                 type="button"
                 className="terms-accept"
-                onClick={() => { setForm((f)=>({...f, agree: true})); setShowTerms(false); }}
+                onClick={() => {
+                  upd("agree", true);
+                  setShowTerms(false);
+                }}
               >
                 ✓ I Agree & Close
               </button>
-              <button type="button" className="terms-cancel" onClick={() => setShowTerms(false)}>
+              <button
+                type="button"
+                className="terms-cancel"
+                onClick={() => setShowTerms(false)}
+              >
                 Close
               </button>
             </div>
@@ -293,3 +330,4 @@ export default function Register() {
     </div>
   );
 }
+

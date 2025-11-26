@@ -3,6 +3,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { FaPray, FaUsers, FaVideo, FaHandsHelping } from "react-icons/fa"; // example Lucid icons
 import "../styles/ministries.css"; // file must be exactly `ministries.css`
+import "../styles/auth.css";
 
 
 const items = [

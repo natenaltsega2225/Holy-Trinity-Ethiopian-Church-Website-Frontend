@@ -1,3 +1,4 @@
+//src/pages/FastsFeasts.jsx
 import React from "react";
 
 const FastsFeasts = () => (

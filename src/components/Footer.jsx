@@ -1,3 +1,4 @@
+//src/components/Footer.jsx
 import React from "react";
 import { MapPin, Phone, Mail, Facebook, Youtube, Instagram, MessageCircle } from "lucide-react";
 import "../styles/footer.css"; // file must be exactly `footer.css`

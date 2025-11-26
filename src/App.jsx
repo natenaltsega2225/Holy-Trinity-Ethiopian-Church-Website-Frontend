@@ -1,81 +1,364 @@
+
+
+// // src/App.jsx
+// import React from "react";
+// import { Routes, Route, Navigate } from "react-router-dom";
+
+// import Header from "./components/Header";
+// import Footer from "./components/Footer";
+
+// import Home from "./components/Home";
+// import AboutUs from "./components/AboutUs";
+// import Ministries from "./components/Ministries";
+// import NewsEvents from "./components/NewsEvents";   // hero page
+// import Login from "./components/Login";
+// import Register from "./components/Register";
+// import Forms from "./components/Forms";
+// import Payments from "./components/Payments";
+// import CheckoutPage from "./components/Checkout";
+// import NewsEventsPage from "./pages/NewsEventsPage"; // category detail page
+// import DonationPage from "./pages/DonationPage";
+// import AboutPage from "./pages/AboutPage";
+// import Serve from "./components/Serve";
+// import ServePage from "./pages/ServePage";
+// import KidsSummerProgram from "./pages/forms/KidsSummerProgram";
+// import ArkEncounter from "./pages/forms/ArkEncounter";
+// import ChurchMembershipForm from "./components/ChurchMembershipForm";
+// import PhotoAlbums from "./pages/more/PhotoAlbums";
+// import Resources from "./pages/more/Resources";
+// import ForgotPassword from "./pages/ForgotPassword";
+// import ResetPassword from "./pages/ResetPassword";
+
+// import AdminRoutes from "./components/AdminDashboard/AdminRoutes";
+// import FinanceRoutes from "./components/FinanceDashboard/FinanceRoutes";
+// import MemberRoutes from "./components/MembershipDashoard/MemberRoutes";
+
+// import ProtectedRoute from "./components/ProtectedRoute";
+
+// export default function App() {
+//   return (
+//     <div className="app-container">
+//       <Header />
+//       <main className="main-content">
+//         <Routes>
+//           {/* Public */}
+//           <Route path="/" element={<Home />} />
+//           <Route path="/about-us" element={<AboutUs />} />
+//           <Route path="/about-us/details" element={<AboutPage />} />
+//           <Route path="/ministries" element={<Ministries />} />
+
+//           {/* HERO: first screenshot */}
+//           <Route path="/news-events" element={<NewsEvents />} />
+
+//           {/* CATEGORY DETAIL: /news-events/kids, /news-events/holiday, etc. */}
+//           <Route path="/news-events/:category" element={<NewsEventsPage />} />
+
+//           <Route path="/serve" element={<Serve />} />
+//           <Route path="/serve-details" element={<ServePage />} />
+//           <Route path="/forms" element={<Forms />} />
+//           <Route path="/forms/kids-summer-program" element={<KidsSummerProgram />} />
+//           <Route path="/forms/ark-encounter" element={<ArkEncounter />} />
+//           <Route path="/forms/church-membership-form" element={<ChurchMembershipForm />} />
+//           <Route path="/forms-payments/donation" element={<DonationPage />} />
+//           <Route path="/payments" element={<Payments />} />
+//           <Route path="/checkout" element={<CheckoutPage />} />
+
+//           {/* Auth */}
+//           <Route path="/login" element={<Login />} />
+//           <Route path="/register" element={<Register />} />
+//           <Route path="/forgot-password" element={<ForgotPassword />} />
+//           <Route path="/reset-password" element={<ResetPassword />} />
+
+//           {/* Dashboards */}
+//           <Route
+//             path="/dash/admin/*"
+//             element={
+//               <ProtectedRoute roles={["admin"]}>
+//                 <AdminRoutes />
+//               </ProtectedRoute>
+//             }
+//           />
+//           <Route
+//             path="/dash/finance/*"
+//             element={
+//               <ProtectedRoute roles={["finance", "admin"]}>
+//                 <FinanceRoutes />
+//               </ProtectedRoute>
+//             }
+//           />
+//           <Route
+//             path="/dash/membership/*"
+//             element={
+//               <ProtectedRoute roles={[
+//                 "member",
+//                 "member_mgr",
+//                 "finance",
+//                 "admin",
+//               ]}>
+//                 <MemberRoutes />
+//               </ProtectedRoute>
+//             }
+//           />
+
+//           {/* fallback */}
+//           <Route path="*" element={<Navigate to="/" replace />} />
+//         </Routes>
+//       </main>
+//       <Footer />
+//     </div>
+//   );
+// }
+
+
+// src/App.jsx
+// import React from "react";
+// import { Routes, Route, Navigate } from "react-router-dom";
+
+// import Header from "./components/Header";
+// import Footer from "./components/Footer";
+
+// import Home from "./components/Home";
+// import AboutUs from "./components/AboutUs";
+// import Ministries from "./components/Ministries";
+// import NewsEvents from "./components/NewsEvents";   // hero page
+// import Login from "./components/Login";
+// import Register from "./components/Register";
+// import Forms from "./components/Forms";
+// import Payments from "./components/Payments";
+// import CheckoutPage from "./components/Checkout";
+// import NewsEventsPage from "./pages/NewsEventsPage"; // category detail page
+// import DonationPage from "./pages/DonationPage";
+// import AboutPage from "./pages/AboutPage";
+// import Serve from "./components/Serve";
+// import ServePage from "./pages/ServePage";
+// import KidsSummerProgram from "./pages/forms/KidsSummerProgram";
+// import ArkEncounter from "./pages/forms/ArkEncounter";
+// import ChurchMembershipForm from "./components/ChurchMembershipForm";
+// import PhotoAlbums from "./pages/more/PhotoAlbums";
+// import Resources from "./pages/more/Resources";
+// import ForgotPassword from "./pages/ForgotPassword";
+// import ResetPassword from "./pages/ResetPassword";
+
+// import AdminRoutes from "./components/AdminDashboard/AdminRoutes";
+// import FinanceRoutes from "./components/FinanceDashboard/FinanceRoutes";
+// import MemberRoutes from "./components/MembershipDashoard/MemberRoutes";
+
+// import ProtectedRoute from "./components/ProtectedRoute";
+
+// export default function App() {
+//   return (
+//     <div className="app-container">
+//       <Header />
+//       <main className="main-content">
+//         <Routes>
+//           {/* Public site pages */}
+//           <Route path="/" element={<Home />} />
+//           <Route path="/about-us" element={<AboutUs />} />
+//           <Route path="/about-us/details" element={<AboutPage />} />
+//           <Route path="/ministries" element={<Ministries />} />
+
+//           {/* News & Events */}
+//           {/* HERO: first screenshot */}
+//           <Route path="/news-events" element={<NewsEvents />} />
+//           {/* CATEGORY DETAIL: /news-events/kids, /news-events/holiday, etc. */}
+//           <Route path="/news-events/:category" element={<NewsEventsPage />} />
+
+//           {/* Serve */}
+//           <Route path="/serve" element={<Serve />} />
+//           <Route path="/serve-details" element={<ServePage />} />
+
+//           {/* Forms & Payments */}
+//           <Route path="/forms" element={<Forms />} />
+//           <Route
+//             path="/forms/kids-summer-program"
+//             element={<KidsSummerProgram />}
+//           />
+//           <Route path="/forms/ark-encounter" element={<ArkEncounter />} />
+//           <Route
+//             path="/forms/church-membership-form"
+//             element={<ChurchMembershipForm />}
+//           />
+
+//           {/* Public donation routes (no auth required) */}
+//           <Route path="/donate" element={<DonationPage />} />
+//           <Route
+//             path="/forms-payments/donation"
+//             element={<DonationPage />}
+//           />
+
+//           <Route path="/payments" element={<Payments />} />
+//           <Route path="/checkout" element={<CheckoutPage />} />
+
+//           {/* Extra content pages */}
+//           <Route path="/photo-albums" element={<PhotoAlbums />} />
+//           <Route path="/resources" element={<Resources />} />
+
+//           {/* Auth */}
+//           <Route path="/login" element={<Login />} />
+//           <Route path="/register" element={<Register />} />
+//           <Route path="/forgot-password" element={<ForgotPassword />} />
+//           <Route path="/reset-password" element={<ResetPassword />} />
+
+//           {/* Dashboards (protected) */}
+//           <Route
+//             path="/dash/admin/*"
+//             element={
+//               <ProtectedRoute roles={["admin"]}>
+//                 <AdminRoutes />
+//               </ProtectedRoute>
+//             }
+//           />
+//           <Route
+//             path="/dash/finance/*"
+//             element={
+//               <ProtectedRoute roles={["finance", "admin"]}>
+//                 <FinanceRoutes />
+//               </ProtectedRoute>
+//             }
+//           />
+//           <Route
+//             path="/dash/membership/*"
+//             element={
+//               <ProtectedRoute
+//                 roles={[
+//                   "member",
+//                   "member_mgr",
+//                   "finance",
+//                   "admin",
+//                 ]}
+//               >
+//                 <MemberRoutes />
+//               </ProtectedRoute>
+//             }
+//           />
+
+//           {/* Fallback */}
+//           <Route path="*" element={<Navigate to="/" replace />} />
+//         </Routes>
+//       </main>
+//       <Footer />
+//     </div>
+//   );
+// }
+
+
+// src/App.jsx
+// src/App.jsx
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-
-// PAGES / COMPONENTS
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import Ministries from "./components/Ministries";
+
 import Home from "./components/Home";
 import AboutUs from "./components/AboutUs";
-import NewsEvents from "./components/NewsEvents";
-import NewsEventsPage from "./pages/NewsEventsPage";
+import Ministries from "./components/Ministries";
+import NewsEvents from "./components/NewsEvents";   // section-style page
 import Login from "./components/Login";
 import Register from "./components/Register";
-import DonationPage from "./pages/DonationPage"
-// import HolyBible from "./pages/ministries/HolyBible";
-// import Sermons from "./pages/ministries/Sermons";
-// import DeaconsClass from "./pages/ministries/DeaconsClass";
-
-// ✅ New replacements
 import Forms from "./components/Forms";
 import Payments from "./components/Payments";
-
-import KidsSummerProgram from "./pages/forms/KidsSummerProgram";
-import ArkEncounter from "./pages/forms/ArkEncounter";
-import ChurchMembershipForm from "./components/ChurchMembershipForm";
-
+import CheckoutPage from "./components/Checkout";
+import NewsEventsPage from "./pages/NewsEventsPage";
+import DonationPage from "./pages/DonationPage";
 import AboutPage from "./pages/AboutPage";
 import Serve from "./components/Serve";
 import ServePage from "./pages/ServePage";
-
+import KidsSummerProgram from "./pages/forms/KidsSummerProgram";
+import ArkEncounter from "./pages/forms/ArkEncounter";
+import ChurchMembershipForm from "./components/ChurchMembershipForm";
 import PhotoAlbums from "./pages/more/PhotoAlbums";
 import Resources from "./pages/more/Resources";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
-const App = () => {
+import AdminRoutes from "./components/AdminDashboard/AdminRoutes";
+import FinanceRoutes from "./components/FinanceDashboard/FinanceRoutes";
+import MemberRoutes from "./components/MembershipDashoard/MemberRoutes";
+
+import ProtectedRoute from "./components/ProtectedRoute";
+
+export default function App() {
   return (
     <div className="app-container">
       <Header />
 
       <main className="main-content">
         <Routes>
-          {/* Home & About */}
+          {/* ----- PUBLIC SITE (no login needed) ----- */}
           <Route path="/" element={<Home />} />
-          <Route path="/about-us/details" element={<AboutPage />} />
           <Route path="/about-us" element={<AboutUs />} />
+          <Route path="/about-us/details" element={<AboutPage />} />
+          <Route path="/ministries" element={<Ministries />} />
 
-          {/* ✅ Serve Section + Dedicated Page */}
+          {/* News & Events public */}
+          <Route path="/news-events" element={<NewsEvents />} />
+          <Route path="/news-events/:category" element={<NewsEventsPage />} />
+
+          {/* Serve public */}
           <Route path="/serve" element={<Serve />} />
           <Route path="/serve-details" element={<ServePage />} />
 
-          {/* Login & Register */}
+          {/* Forms & payments public */}
+          <Route path="/forms" element={<Forms />} />
+          <Route
+            path="/forms/kids-summer-program"
+            element={<KidsSummerProgram />}
+          />
+          <Route path="/forms/ark-encounter" element={<ArkEncounter />} />
+          <Route
+            path="/forms/church-membership-form"
+            element={<ChurchMembershipForm />}
+          />
+
+          {/* Donation public (can donate without login) */}
+          <Route path="/donate" element={<DonationPage />} />
+          <Route
+            path="/forms-payments/donation"
+            element={<DonationPage />}
+          />
+
+          <Route path="/payments" element={<Payments />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
+
+          {/* Extra info pages */}
+          <Route path="/photo-albums" element={<PhotoAlbums />} />
+          <Route path="/resources" element={<Resources />} />
+
+          {/* ----- AUTH PAGES ----- */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
 
-          {/* Ministries */}
-          <Route path="/ministries" element={<Ministries />} />
-          {/* <Route path="/ministries/holy-bible" element={<HolyBible />} /> */}
-          {/* <Route path="/ministries/sermons" element={<Sermons />} /> */}
-          {/* <Route path="/ministries/deacons-class" element={<DeaconsClass />} /> */}
+          {/* ----- DASHBOARDS (login required) ----- */}
+          <Route
+            path="/dash/admin/*"
+            element={
+              <ProtectedRoute roles={["admin"]}>
+                <AdminRoutes />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dash/finance/*"
+            element={
+              <ProtectedRoute roles={["finance", "admin"]}>
+                <FinanceRoutes />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dash/membership/*"
+            element={
+              <ProtectedRoute
+                roles={["member", "member_mgr", "finance", "admin"]}
+              >
+                <MemberRoutes />
+              </ProtectedRoute>
+            }
+          />
 
-          {/* News & Events */}
-          <Route path="/news-events" element={<NewsEvents />} />
-          <Route path="/news-events/details" element={<NewsEventsPage />} />
-
-          {/* ✅ Forms & Payments (new structure) */}
-          <Route path="/forms" element={<Forms />} />
-          <Route path="/payments" element={<Payments />} />
-          <Route path="/forms-payments/donation" element={<DonationPage />} />
-
-          {/* Individual Form Pages */}
-          <Route path="/forms/kids-summer-program" element={<KidsSummerProgram />} />
-          <Route path="/forms/ark-encounter" element={<ArkEncounter />} />
-          <Route path="/forms/church-membership-form" element={<ChurchMembershipForm />} />
-
-          {/* More */}
-          <Route path="/more/photo-albums" element={<PhotoAlbums />} />
-          <Route path="/more/resources" element={<Resources />} />
-
-          {/* Catch-all */}
+          {/* Fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
@@ -83,6 +366,4 @@ const App = () => {
       <Footer />
     </div>
   );
-};
-
-export default App;
+}

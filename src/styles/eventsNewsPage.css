@@ -204,47 +204,49 @@
   display: inline-block;
 }
 
-/* ================== FORMS PLACEHOLDER ================== */
+/* ================== FORMS SECTION (HORIZONTAL SCROLL) ================== */
 .forms-section {
   padding: 50px 20px;
   background: #faf9f7;
   margin-top: 50px;
 }
 
-.forms-container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 0 15px;
+.forms-scroll-container {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding-bottom: 15px;
+  scroll-behavior: smooth;
 }
 
-.forms-title {
-  font-size: clamp(28px, 4vw, 36px);
-  font-weight: 800;
-  color: #133a74;
-  margin-bottom: 1rem;
-  text-align: center;
+/* Modern horizontal scrollbar */
+.forms-scroll-container::-webkit-scrollbar {
+  height: 8px;
+}
+.forms-scroll-container::-webkit-scrollbar-thumb {
+  background-color: #a67c00;
+  border-radius: 4px;
+}
+.forms-scroll-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
 }
 
-.forms-sub {
-  color: #3b4c6a;
-  font-size: clamp(14px, 2vw, 18px);
-  line-height: 1.7;
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
+/* Individual form cards */
 .forms-card {
+  flex: 0 0 380px; /* consistent width */
   background: #fff;
   border-radius: 16px;
   padding: 20px;
-  margin-bottom: 20px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+  min-height: 100%;
 }
 
-.forms-card h3 {
-  font-size: 1.3rem;
-  color: #0f2d5c;
-  margin-bottom: 10px;
+.forms-card h2,
+.forms-card h4 {
+  color: #133a74;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
 }
 
 .forms-card label {
@@ -297,5 +299,15 @@
 
   .news-hero-text {
     font-size: 1.2rem;
+  }
+
+  /* Stack forms vertically on smaller screens */
+  .forms-scroll-container {
+    flex-direction: column;
+    overflow-x: visible;
+  }
+
+  .forms-card {
+    flex: 1 1 100%;
   }
 }

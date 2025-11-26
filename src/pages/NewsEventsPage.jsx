@@ -74,17 +74,18 @@ export default function NewsEventsPage() {
 
   return (
     <div className="news-page-container">
+      {/* --- Hero Section --- */}
       <header className="news-page-header">
-       <section className="news-hero">
-  <div className="news-hero-content">
-    <h2 className="news-hero-title">Stay Updated with Our Community</h2>
-    <p className="news-hero-text">
-      Discover <span className="highlight">latest happenings</span>, explore the <span className="highlight">liturgical calendar</span>, 
-      and join <span className="highlight">church events</span> that bring us together.
-    </p>
-  </div>
-</section>
-
+        <section className="news-hero">
+          <div className="news-hero-content">
+            <h2 className="news-hero-title">Stay Updated with Our Community</h2>
+            <p className="news-hero-text">
+              Discover <span className="highlight">latest happenings</span>, explore the{" "}
+              <span className="highlight">liturgical calendar</span>, and join{" "}
+              <span className="highlight">church events</span> that bring us together.
+            </p>
+          </div>
+        </section>
       </header>
 
       {/* --- Calendar Section --- */}
@@ -113,7 +114,7 @@ export default function NewsEventsPage() {
         </div>
       </section>
 
-      {/* --- Cards Section --- */}
+      {/* --- News/Event Cards --- */}
       <section className="news-cards-horizontal">
         {newsItems.map((item) => (
           <div
@@ -151,68 +152,69 @@ export default function NewsEventsPage() {
         ))}
       </section>
 
-      {/* --- Forms Section (as before) --- */}
+      {/* --- Forms Section (Horizontal Scroll) --- */}
       <section className="forms-section">
-        {newsItems.map((item) => (
-          <div key={item.id} id={`${item.id}-form`} className="forms-container">
-            <h2 className="forms-title">{item.title} Registration Form</h2>
-            <p className="forms-sub">
-              Please fill out the form below to register for {item.title}.
-            </p>
-            <form className="forms-card">
-              {/* Inputs for parent and child details */}
-              <label>Parent First Name</label>
-              <input type="text" required />
-              <label>Parent Last Name</label>
-              <input type="text" required />
-              <label>Phone</label>
-              <input type="tel" required />
-              <label>Email</label>
-              <input type="email" required />
-              <label>Number of Children</label>
-              <select>
-                <option>Please select</option>
-                {[1,2,3,4].map(n => <option key={n}>{n}</option>)}
-              </select>
+        <div className="forms-scroll-container">
+          {newsItems.map((item) => (
+            <div key={item.id} id={`${item.id}-form`} className="forms-card">
+              <h2 className="forms-title">{item.title} Registration Form</h2>
+              <p className="forms-sub">
+                Please fill out the form below to register for {item.title}.
+              </p>
+              <form>
+                <label>Parent First Name</label>
+                <input type="text" required />
+                <label>Parent Last Name</label>
+                <input type="text" required />
+                <label>Phone</label>
+                <input type="tel" required />
+                <label>Email</label>
+                <input type="email" required />
+                <label>Number of Children</label>
+                <select>
+                  <option>Please select</option>
+                  {[1,2,3,4].map(n => <option key={n}>{n}</option>)}
+                </select>
 
-              <h4>First Child</h4>
-              <label>First Name</label>
-              <input type="text" required />
-              <label>Last Name</label>
-              <input type="text" required />
-              <label>Date of Birth</label>
-              <input type="date" required />
-              <label>Grade</label>
-              <select>
-                <option>Please select</option>
-                {["Pre-K","K","1","2","3","4","5"].map(g => <option key={g}>{g}</option>)}
-              </select>
+                <h4>First Child</h4>
+                <label>First Name</label>
+                <input type="text" required />
+                <label>Last Name</label>
+                <input type="text" required />
+                <label>Date of Birth</label>
+                <input type="date" required />
+                <label>Grade</label>
+                <select>
+                  <option>Please select</option>
+                  {["Pre-K","K","1","2","3","4","5"].map(g => <option key={g}>{g}</option>)}
+                </select>
 
-              <label>Payment Method Choice</label>
-              <select>
-                <option>Online</option>
-                <option>In Person (Cash)</option>
-              </select>
+                <label>Payment Method Choice</label>
+                <select>
+                  <option>Online</option>
+                  <option>In Person (Cash)</option>
+                </select>
 
-              <label>
-                <input type="checkbox" required /> I agree to Terms of Service
-              </label>
-              <label>
-                <input type="checkbox" required /> I consent to data storage (GDPR)
-              </label>
+                <label>
+                  <input type="checkbox" required /> I agree to Terms of Service
+                </label>
+                <label>
+                  <input type="checkbox" required /> I consent to data storage (GDPR)
+                </label>
 
-              <button type="submit" className="news-card-btn">SEND</button>
-              <button
-                type="button"
-                className="news-card-btn"
-                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-                style={{ marginTop: "10px", background: "#555" }}
-              >
-                Back to Top
-              </button>
-            </form>
-          </div>
-        ))}
+                <button type="submit" className="news-card-btn">SEND</button>
+                <button
+                  type="button"
+                  className="news-card-btn"
+                  onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                  style={{ marginTop: "10px", background: "#555" }}
+                >
+                  Back to Top
+                </button>
+              </form>
+            </div>
+          ))}
+        </div>
       </section>
     </div>
   );

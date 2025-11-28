@@ -11,25 +11,20 @@ import NewsEvents from "./components/NewsEvents";
 import NewsEventsPage from "./pages/NewsEventsPage";
 import Login from "./components/Login";
 import Register from "./components/Register";
-import DonationPage from "./pages/DonationPage"
+import DonationPage from "./pages/DonationPage";
 import MonthlyPaymentPage from "./pages/MonthlyPaymentPage";
-// import HolyBible from "./pages/ministries/HolyBible";
-// import Sermons from "./pages/ministries/Sermons";
-// import DeaconsClass from "./pages/ministries/DeaconsClass";
 
-// ✅ New replacements
 import Forms from "./components/Forms";
 import Payments from "./components/Payments";
 
-import KidsSummerProgram from "./pages/forms/KidsSummerProgram";
-import ArkEncounter from "./pages/forms/ArkEncounter";
-import ChurchMembershipForm from "./components/ChurchMembershipForm";
+import KidsSummerProgram from "./pages/KidsSummerProgram";
+import CurrentTripPage from "./pages/CurrentTripPage"; // Updated
 
 import AboutPage from "./pages/AboutPage";
 import Serve from "./components/Serve";
 import ServePage from "./pages/ServePage";
 
-import  MediaGallery from "./pages/Media&Resources/MediaGallery";
+import MediaGallery from "./pages/Media&Resources/MediaGallery";
 import Resources from "./pages/Media&Resources/Resources";
 
 const App = () => {
@@ -44,7 +39,7 @@ const App = () => {
           <Route path="/about-us/details" element={<AboutPage />} />
           <Route path="/about-us" element={<AboutUs />} />
 
-          {/* ✅ Serve Section + Dedicated Page */}
+          {/* Serve Section */}
           <Route path="/serve" element={<Serve />} />
           <Route path="/serve-details" element={<ServePage />} />
 
@@ -54,15 +49,13 @@ const App = () => {
 
           {/* Ministries */}
           <Route path="/ministries" element={<Ministries />} />
-          {/* <Route path="/ministries/holy-bible" element={<HolyBible />} /> */}
-          {/* <Route path="/ministries/sermons" element={<Sermons />} /> */}
-          {/* <Route path="/ministries/deacons-class" element={<DeaconsClass />} /> */}
 
           {/* News & Events */}
           <Route path="/news-events" element={<NewsEvents />} />
           <Route path="/news-events/details" element={<NewsEventsPage />} />
+          {/* <Route path="/news-events/:sectionId" element={<NewsEventsPage />} /> */}
 
-          {/* ✅ Forms & Payments (new structure) */}
+          {/* Forms & Payments */}
           <Route path="/forms" element={<Forms />} />
           <Route path="/payments" element={<Payments />} />
           <Route path="/forms-payments/donation" element={<DonationPage />} />
@@ -70,8 +63,12 @@ const App = () => {
 
           {/* Individual Form Pages */}
           <Route path="/forms/kids-summer-program" element={<KidsSummerProgram />} />
-          <Route path="/forms/ark-encounter" element={<ArkEncounter />} />
-          <Route path="/forms/church-membership-form" element={<ChurchMembershipForm />} />
+          <Route path="/forms/church-membership-form" element={<Forms />} />
+
+          {/* 🎯 Dynamic Trip Route */}
+          <Route path="/trip/current" element={<CurrentTripPage />} />
+
+
 
           {/* More */}
           <Route path="/more/media-gallery" element={<MediaGallery />} />

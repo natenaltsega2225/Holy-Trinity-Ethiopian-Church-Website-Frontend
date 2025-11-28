@@ -7,7 +7,7 @@ export default function NewsEvents() {
   const newsCards = [
     {
       id: 1,
-      kicker: "Liturgical Cycle",
+      kicker: "Programs",
       title: "Kids Programs",
       description:
         "Engaging programs designed to strengthen faith and build lasting friendships.",
@@ -17,65 +17,57 @@ export default function NewsEvents() {
     },
     {
       id: 2,
-      kicker: "Liturgical Cycle",
+      kicker: "Seasonal",
       title: "Holiday Activities",
       description:
-        "Learn the meaning of each fast and feast, with scripture references and practical guidance for prayer and participation.",
-      link: "/news-events/fasts-feasts",
+        "Fun and spiritually uplifting activities held during yearly holidays.",
+      link: "/news-events/holiday-activities",
       btnType: "outline",
-      btnText: "See Fasts & Feasts",
+      btnText: "See Holiday Activities",
     },
     {
       id: 3,
-      kicker: "Kids Trips & Outings",
+      kicker: "Trips & Outings",
       title: "Trips & Outings",
       description: "Faith-building adventures that create lasting memories.",
-      link: "/news-events/events",
+      link: "/news-events/trips-outings",
       btnType: "outline",
-      btnText: "Browse Events",
+      btnText: "Browse Trips",
     },
     {
       id: 4,
-      kicker: "Stay Informed",
-      title: "Church News",
+      kicker: "Church Announcements",
+      title: "Announcements",
       description:
-        "Stay updated with the latest news and announcements from our church community.",
-      link: "/news-events/church-news",
+        "Stay updated with the latest announcements from our church community.",
+      link: "/news-events/church-announcements",
       btnType: "outline",
-      btnText: "See Church News",
+      btnText: "See Announcements",
     },
   ];
 
   return (
     <section id="news-events" className="nv-wrap">
       <div className="nv-container">
-        {/* Page pill heading */}
         <div className="nv-pillbar">
           <h3 className="ht-h3">News &amp; Events</h3>
         </div>
 
-        {/* Cards row */}
         <div className="nv-grid">
           {newsCards.map((card) => (
             <article key={card.id} className="nv-card">
               <div className="nv-card-kicker">{card.kicker}</div>
               <h3 className="nv-card-title">{card.title}</h3>
               <p className="nv-card-text">{card.description}</p>
-              <Link
-                to={card.link}
-                className={`nv-btn nv-btn-${card.btnType}`}
-              >
+
+              <Link to={card.link} className={`nv-btn nv-btn-${card.btnType}`}>
                 {card.btnText}
               </Link>
             </article>
           ))}
         </div>
 
-        {/* CTA for full page */}
-        <div
-          className="nv-fullpage-cta"
-          style={{ textAlign: "center", marginTop: "30px" }}
-        >
+        <div className="nv-fullpage-cta" style={{ textAlign: "center", marginTop: "30px" }}>
           <Link to="/news-events/details" className="nv-btn nv-btn-primary">
             View Full Events & News
           </Link>

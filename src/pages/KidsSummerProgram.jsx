@@ -1,5 +1,5 @@
 import React from "react";
-import "../../styles/KidsSummerProgram.css";
+import "../styles/KidsSummerProgram.css";
 
 const KidsSummerProgram = () => {
   return (

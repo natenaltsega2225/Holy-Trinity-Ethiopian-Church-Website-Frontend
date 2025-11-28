@@ -1,10 +1,11 @@
-/* ================== HERO INTRO ================== */
+/* ========================= HERO INTRO ========================= */
+
 .news-hero {
   background: linear-gradient(135deg, #fdf6e3, #fff9f0);
   border-radius: 20px;
   padding: 60px 20px;
   margin-bottom: 40px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -17,7 +18,7 @@
   left: -30%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle at center, rgba(166,124,0,0.12) 0%, transparent 70%);
+  background: radial-gradient(circle at center, rgba(166, 124, 0, 0.12) 0%, transparent 70%);
   transform: rotate(15deg);
 }
 
@@ -34,7 +35,6 @@
   color: #133a74;
   margin-bottom: 20px;
   font-weight: 700;
-  letter-spacing: 0.5px;
 }
 
 .news-hero-text {
@@ -67,66 +67,10 @@
   transform: scaleX(1);
 }
 
-/* ================== EVENT / NEWS CARDS ================== */
-.news-cards-horizontal {
-  display: flex;
-  gap: 20px;
-  overflow-x: auto;
-  padding-bottom: 20px;
-  scroll-behavior: smooth;
-  margin-bottom: 40px;
-}
 
-.news-card-horizontal {
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  min-width: 250px;
-  flex: 0 0 auto;
-  padding: 20px;
-  box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
 
-.news-card-horizontal:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
-}
+/* ========================= CALENDAR ========================= */
 
-.news-card-main h4 {
-  color: #a67c00;
-  font-size: 0.85rem;
-  margin-bottom: 5px;
-}
-
-.news-card-main h3 {
-  font-size: 1.3rem;
-  margin-bottom: 10px;
-  color: #133a74;
-}
-
-.news-card-main p {
-  font-size: 0.95rem;
-  margin-bottom: 10px;
-  color: #333;
-}
-
-.news-card-btn {
-  background-color: #a67c00;
-  color: #fff;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: background 0.2s;
-}
-
-.news-card-btn:hover {
-  background-color: #854f00;
-}
-
-/* ================== CALENDAR ================== */
 .news-calendar-section {
   margin-top: 50px;
 }
@@ -178,10 +122,6 @@
   position: relative;
 }
 
-.nv-cal-muted {
-  color: #ccc;
-}
-
 .nv-cal-today {
   background-color: #a67c00;
   color: #fff;
@@ -201,113 +141,197 @@
   height: 12px;
   background-color: #a67c00;
   border-radius: 50%;
-  display: inline-block;
 }
 
-/* ================== FORMS SECTION (HORIZONTAL SCROLL) ================== */
-.forms-section {
-  padding: 50px 20px;
-  background: #faf9f7;
-  margin-top: 50px;
-}
 
-.forms-scroll-container {
-  display: flex;
-  gap: 20px;
-  overflow-x: auto;
-  padding-bottom: 15px;
-  scroll-behavior: smooth;
-}
 
-/* Modern horizontal scrollbar */
-.forms-scroll-container::-webkit-scrollbar {
-  height: 8px;
-}
-.forms-scroll-container::-webkit-scrollbar-thumb {
-  background-color: #a67c00;
-  border-radius: 4px;
-}
-.forms-scroll-container::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 4px;
-}
+/* ========================= NEWS / EVENT CARDS (RESPONSIVE GRID) ========================= */
 
-/* Individual form cards */
-.forms-card {
-  flex: 0 0 380px; /* consistent width */
-  background: #fff;
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.06);
-  min-height: 100%;
-}
-
-.forms-card h2,
-.forms-card h4 {
-  color: #133a74;
-  margin-bottom: 0.5rem;
-  font-weight: 700;
-}
-
-.forms-card label {
-  display: block;
-  margin: 8px 0 4px;
-  font-weight: 500;
-}
-
-.forms-card input,
-.forms-card select,
-.forms-card textarea {
+.news-cards-vertical {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  max-width: 1100px;
+  margin: 40px auto;
   width: 100%;
-  padding: 8px 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  margin-bottom: 10px;
+  padding: 0 20px;
 }
 
-.forms-card button {
-  background-color: #a67c00;
-  color: #fff;
-  padding: 10px 16px;
-  border: none;
-  border-radius: 6px;
+@media (min-width: 900px) {
+  .news-cards-vertical {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  .news-cards-vertical {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.news-card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer;
+}
+
+.news-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.10);
+}
+
+.news-card-category {
+  color: #a67c00;
+  font-size: 0.9rem;
+  margin-bottom: 5px;
   font-weight: 600;
 }
 
-.forms-card button:hover {
+.news-card-title {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: #133a74;
+  font-weight: 700;
+}
+
+.news-card-description {
+  color: #444;
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+.news-card-details {
+  margin-top: 12px;
+}
+
+.news-card-details ul {
+  padding-left: 20px;
+  margin: 0;
+}
+
+.news-card-details li {
+  margin-bottom: 6px;
+  color: #333;
+}
+
+
+
+/* ========================= SHARED BUTTON ========================= */
+
+.news-card-btn {
+  background-color: #a67c00;
+  color: #fff;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.news-card-btn:hover {
   background-color: #854f00;
 }
 
-/* ================== RESPONSIVE ================== */
+
+
+/* ========================= FORM SECTION (FULL-WIDTH) ========================= */
+
+.form-section {
+  background: #faf9f7;
+  padding: 60px 20px;
+  width: 100%;
+  margin-top: 60px;
+}
+
+.form-wrapper {
+  max-width: 850px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 35px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+  width: 100%;
+}
+
+.form-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #133a74;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.form-sub {
+  text-align: center;
+  color: #555;
+  margin-bottom: 25px;
+}
+
+/* Inputs */
+
+.form-wrapper form label {
+  display: block;
+  margin: 10px 0 5px;
+  color: #333;
+  font-weight: 600;
+}
+
+.form-wrapper input,
+.form-wrapper select,
+.form-wrapper textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-bottom: 15px;
+  font-size: 1rem;
+  background: #fafafa;
+}
+
+/* Child header */
+.form-wrapper h4 {
+  margin-top: 20px;
+  color: #133a74;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+/* Checkbox lines */
+.checkbox-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 5px 0;
+}
+
+.submit-btn {
+  width: 100%;
+  margin-top: 25px;
+  padding: 12px 0;
+  font-size: 1.05rem;
+  border-radius: 8px;
+}
+
+
+
+/* ========================= RESPONSIVE ========================= */
+
 @media (max-width: 768px) {
-  .news-cards-horizontal {
-    flex-direction: column;
+  .news-card {
+    padding: 20px;
   }
 
-  .news-card-horizontal {
-    min-width: 100%;
+  .form-wrapper {
+    padding: 20px;
   }
 
-  .news-hero {
-    padding: 40px 15px;
-  }
-
-  .news-hero-title {
-    font-size: 2rem;
-  }
-
-  .news-hero-text {
-    font-size: 1.2rem;
-  }
-
-  /* Stack forms vertically on smaller screens */
-  .forms-scroll-container {
-    flex-direction: column;
-    overflow-x: visible;
-  }
-
-  .forms-card {
-    flex: 1 1 100%;
+  .form-title {
+    font-size: 1.6rem;
   }
 }

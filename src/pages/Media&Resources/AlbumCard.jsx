@@ -1,5 +1,5 @@
 import React from "react";
-import "./MediaGallery.css";
+import "../../styles/MediaGallery.css";
 
 export default function AlbumCard({ title, description, coverImage, photoCount, onClick }) {
   return (

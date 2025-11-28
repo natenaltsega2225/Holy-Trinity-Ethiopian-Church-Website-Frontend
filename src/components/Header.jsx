@@ -27,6 +27,8 @@ export default function Header() {
     { label: "News & Events", scrollId: "news-events" },
     { label: "Forms", scrollId: "forms" },
     { label: "Payments", scrollId: "payments" },
+    // ✅ New Media & Resources tab
+    { label: "Media & Resources", scrollId: "media-resources" },
   ];
 
   const renderNavLinks = () =>

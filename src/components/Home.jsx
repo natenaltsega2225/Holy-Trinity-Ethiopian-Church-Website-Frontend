@@ -8,9 +8,11 @@ import Serve from "./Serve";
 import Forms from "./Forms";
 import Payments from "./Payments";
 import "../styles/home.css"; // file must be exactly `home.css`
-// import "../styles/About.css";
 import NewsEvents from "./NewsEvents";
 import GoogleMap from "./GoogleMap";
+
+// 👇 Import the new unified component
+import Media_Resources from "./Media_Resources";
 
 const Home = () => {
   const location = useLocation();
@@ -68,7 +70,11 @@ const Home = () => {
       <NewsEvents />
       <Forms />
       <Payments />
-      <GoogleMap/>
+
+      {/* ✅ New Media & Resources Section */}
+      <Media_Resources />
+
+      <GoogleMap />
     </>
   );
 };

@@ -1,0 +1,127 @@
+/* ===== Media & Resources Section ===== */
+.media-resources-section {
+  padding: 70px 0;
+  background: #f9f9f9;
+}
+
+/* Grid Layout */
+.media-resources-grid {
+  display: grid;
+  gap: 26px;
+  grid-template-columns: 1fr;
+  margin-top: 30px;
+}
+
+@media (min-width: 900px) {
+  .media-resources-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  .media-resources-grid {
+    gap: 32px;
+  }
+}
+
+.mr-card-link-wrapper {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+/* Card Wrapper */
+.mr-card {
+  background: #fff;
+  border: 1px solid #e7eef6;
+  border-radius: 16px;
+  overflow: hidden; /* keep gallery image clipped */
+  box-shadow: 0 6px 18px rgba(15, 45, 92, 0.08);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mr-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(15, 45, 92, 0.12);
+}
+
+/* ===== Gallery Image Card ===== */
+.mr-card-img img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+/* ===== Resources Icon Card ===== */
+.mr-card-img.icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f0f4f8;
+  height: 200px; /* same as gallery for alignment */
+  overflow: hidden;
+}
+
+.mr-icon-img {
+  max-width: 60%;  /* icon scales within container */
+  max-height: 60%;
+  object-fit: contain;
+  display: block;
+  transition: transform 0.25s ease;
+}
+
+.mr-card:hover .mr-icon-img {
+  transform: scale(1.08);
+}
+
+/* ===== Card Body ===== */
+.mr-card-body {
+  padding: 18px;
+}
+
+.mr-card-title {
+  margin: 0 0 10px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--blue-800);
+}
+
+.mr-card-text {
+  margin: 0 0 12px;
+  color: #516382;
+  line-height: 1.6;
+  font-size: 15px;
+}
+
+.mr-card-link {
+  font-weight: 700;
+  color: var(--blue-700);
+  font-size: 14px;
+}
+
+/* ===== Mobile Optimization ===== */
+@media (max-width: 480px) {
+  .mr-card-img img,
+  .mr-card-img.icon {
+    height: 150px; /* scale down images */
+  }
+
+  .mr-icon-img {
+    max-width: 50%;
+    max-height: 50%;
+  }
+
+  .mr-card-body {
+    padding: 14px;
+  }
+
+  .mr-card-title {
+    font-size: 18px;
+  }
+
+  .mr-card-text {
+    font-size: 14px;
+  }
+}

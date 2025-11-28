@@ -1,7 +1,15 @@
 import React, { useState } from "react";
-import "./MediaGallery.css";
+import "../../styles/MediaGallery.css";
 import AlbumCard from "./AlbumCard";
 import Lightbox from "./Lightbox";
+import graduationImage from "../../assets/images/grad_2024.jpg";
+import julyfeastImage from "../../assets/images/july_ feast_ of_Trinity.jpg";
+import sundaySchoolImage from "../../assets/images/sunday _school_youth.jpeg";
+import SilaseEt from "../../assets/images/silase_et.jpg";
+import KesisTadesse from "../../assets/images/Kesis_Tadesse.jpg";
+import KesisTesfa from "../../assets/images/Kesis_Tesfa.jpg";
+import KesisFanuel from "../../assets/images/Kesis_Fanuel.jpg";
+import PriestsDeaconsGroup from "../../assets/images/Priests_Deacons.jpg";
 
 export default function MediaGallery() {
   const [selectedAlbum, setSelectedAlbum] = useState(null);
@@ -13,44 +21,44 @@ export default function MediaGallery() {
       id: "clergy",
       title: "Clergy Photos",
       description: "Our dedicated clergy serving the Holy Trinity community",
-      coverImage: "/placeholder.svg",
+      coverImage: SilaseEt,
       photos: [
-        { url: "/placeholder.svg", caption: "Father Abraham leading Sunday service" },
-        { url: "/placeholder.svg", caption: "Deacon Michael during holy communion" },
-        { url: "/placeholder.svg", caption: "Clergy gathering for special ceremony" },
+        { url: KesisTadesse, caption: "our priest leading  Sunday service" },
+        { url: PriestsDeaconsGroup, caption: "Deacon Michael during holy communion" },
+        { url: KesisTesfa, caption: "Clergy gathering for special ceremony" },
       ],
     },
     {
       id: "graduation-2025",
       title: "Graduation – Class of 2025",
       description: "Celebrating our Sunday School graduates",
-      coverImage: "/placeholder.svg",
+      coverImage: graduationImage,
       photos: [
-        { url: "/placeholder.svg", caption: "Graduation ceremony" },
-        { url: "/placeholder.svg", caption: "Receiving certificates" },
-        { url: "/placeholder.svg", caption: "Family celebration moment" },
+        { url: graduationImage, caption: "Graduation ceremony" },
+        { url: graduationImage, caption: "Receiving certificates" },
+        { url: graduationImage, caption: "Family celebration moment" },
       ],
     },
     {
       id: "sunday-school-youth",
       title: "Sunday School Youth",
-      description: "Our vibrant youth learning and growing in faith",
-      coverImage: "/placeholder.svg",
+      description: "Our vibrant youth performing, learning, and growing in faith",
+      coverImage: sundaySchoolImage,
       photos: [
-        { url: "/placeholder.svg", caption: "Class in session" },
-        { url: "/placeholder.svg", caption: "Youth choir practice" },
-        { url: "/placeholder.svg", caption: "Bible study activity" },
+        { url: sundaySchoolImage, caption: "Class in session" },
+        { url: sundaySchoolImage, caption: "Youth choir practice" },
+        { url: sundaySchoolImage, caption: "Bible study activity" },
       ],
     },
     {
-      id: "st-gabriel-holiday",
-      title: "Adults Performing – St. Gabriel Holiday",
+      id: "holy-trinity-feast",
+      title: "Holy Trinity & St. Gabriel Feast Celebrations",
       description: "Annual celebration performances",
-      coverImage: "/placeholder.svg",
+      coverImage: julyfeastImage,
       photos: [
-        { url: "/placeholder.svg", caption: "Traditional dance performance" },
-        { url: "/placeholder.svg", caption: "Choir performing sacred hymns" },
-        { url: "/placeholder.svg", caption: "Community gathering" },
+        { url: julyfeastImage, caption: "Traditional dance performance" },
+        { url: julyfeastImage, caption: "Choir performing sacred hymns" },
+        { url: julyfeastImage, caption: "Community gathering" },
       ],
     },
   ];
@@ -63,13 +71,11 @@ export default function MediaGallery() {
 
   return (
     <div className="gallery-container">
-      {/* Header */}
       <div className="gallery-header">
         <h1>Media Gallery</h1>
         <p>Explore our cherished moments and celebrations as a faith community.</p>
       </div>
 
-      {/* Albums */}
       <div className="albums-grid">
         {albums.map((album) => (
           <AlbumCard
@@ -83,14 +89,13 @@ export default function MediaGallery() {
         ))}
       </div>
 
-      {/* Lightbox */}
       {selectedAlbum && (
         <Lightbox
           isOpen={lightboxOpen}
           onClose={() => setLightboxOpen(false)}
           photos={selectedAlbum.photos}
           currentIndex={currentPhotoIndex}
-          onNavigate={setCurrentPhotoIndex}
+          onNavigate={(index) => setCurrentPhotoIndex(index)}
           albumTitle={selectedAlbum.title}
         />
       )}

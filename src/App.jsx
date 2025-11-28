@@ -29,8 +29,8 @@ import AboutPage from "./pages/AboutPage";
 import Serve from "./components/Serve";
 import ServePage from "./pages/ServePage";
 
-import PhotoAlbums from "./pages/more/PhotoAlbums";
-import Resources from "./pages/more/Resources";
+import  MediaGallery from "./pages/Media&Resources/MediaGallery";
+import Resources from "./pages/Media&Resources/Resources";
 
 const App = () => {
   return (
@@ -74,7 +74,7 @@ const App = () => {
           <Route path="/forms/church-membership-form" element={<ChurchMembershipForm />} />
 
           {/* More */}
-          <Route path="/more/photo-albums" element={<PhotoAlbums />} />
+          <Route path="/more/media-gallery" element={<MediaGallery />} />
           <Route path="/more/resources" element={<Resources />} />
 
           {/* Catch-all */}

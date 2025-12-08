@@ -2,7 +2,7 @@
 // src/components/FinanceDashboard/Report.jsx
 import React, { useEffect, useState } from "react";
 import DashboardLayout from "../Shared/DashboardLayout";
-import api from "../components/api";
+import api from "../../components/api";
 
 const NAV = [
   { to: "/dash/finance", label: "Overview" },

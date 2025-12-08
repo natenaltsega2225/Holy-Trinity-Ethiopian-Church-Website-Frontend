@@ -1,46 +1,4 @@
 
-
-// // src/components/AdminDashboard/AdminRoutes.jsx
-// import React from "react";
-// import { Routes, Route, Navigate } from "react-router-dom";
-// import ProtectedRoute from "../ProtectedRoute";
-// import AdminLayout from "./AdminLayout";
-
-// import Overview from "./overview";
-// import MemberManagement from "./MemberManagement";
-// import MembershipPlans from "./MembershipPlans";
-// import Roles from "./Roles";
-// import AuditLogs from "./AuditLogs";
-// import SystemSettings from "./SystemSettings";
-// import NewsEventsAdmin from "./NewsEventsAdmin"; // 👈 new admin page
-
-// export default function AdminRoutes() {
-//   return (
-//     <Routes>
-//       <Route
-//         element={
-//           <ProtectedRoute roles={["admin"]}>
-//             <AdminLayout />
-//           </ProtectedRoute>
-//         }
-//       >
-//         <Route index element={<Overview />} />
-//         <Route path="members" element={<MemberManagement />} />
-//         <Route path="plans" element={<MembershipPlans />} />
-//         <Route path="news-events" element={<NewsEventsAdmin />} />
-//         <Route path="roles" element={<Roles />} />
-//         <Route path="audit" element={<AuditLogs />} />
-//         <Route path="settings" element={<SystemSettings />} />
-
-//         {/* unknown children → overview */}
-//         <Route path="*" element={<Navigate to="." replace />} />
-//       </Route>
-//     </Routes>
-//   );
-// }
-
-
-// src/components/AdminDashboard/AdminRoutes.jsx
 // src/components/AdminDashboard/AdminRoutes.jsx
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";

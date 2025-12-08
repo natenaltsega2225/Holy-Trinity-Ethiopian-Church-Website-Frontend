@@ -16,6 +16,7 @@ import "../styles/Home.css";
 const DonateStrip = () => (
   <section id="donate-section" className="ht-donate-strip">
     <div className="ht-container ht-donate-inner">
+
       <div className="ht-donate-text">
         <h3>Support Holy Trinity Ethiopian Orthodox Tewahedo Church</h3>
         <p>
@@ -29,6 +30,7 @@ const DonateStrip = () => (
         </Link>
       </div>
     </div>
+    
   </section>
 );
 

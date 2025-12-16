@@ -83,6 +83,7 @@ export default function Resources() {
     <div className="resources-container">
       {/* Header */}
       <header className="resources-header">
+       
         <h1>Resources</h1>
         <p>
           Access scripture, sermons, bulletins, and forms to support your spiritual journey.

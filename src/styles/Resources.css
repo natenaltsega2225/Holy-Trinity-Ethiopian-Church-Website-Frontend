@@ -15,7 +15,8 @@
 .resources-header h1 {
   font-size: 2.4rem;
   color: #2c3e50;
-  margin-bottom: 10px;
+  margin-bottom: 1px;
+  margin-top: 60px;
 }
 
 .resources-header p {
@@ -35,7 +36,7 @@
 .category-btn {
   padding: 8px 18px;
   border: 1px solid #ccc;
-  background: #fff;
+  background: #0c902d;
   border-radius: 6px;
   cursor: pointer;
   font-size: 0.95rem;
@@ -43,8 +44,8 @@
 }
 
 .category-btn:hover {
-  background: #e9f0ff;
-  border-color: #88aaff;
+  background: #453308;
+  border-color: #c4a910;
 }
 
 /* GRID */

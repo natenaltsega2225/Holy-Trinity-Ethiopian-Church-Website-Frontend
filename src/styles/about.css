@@ -98,3 +98,7 @@
   filter: brightness(1.05);
   transform: translateY(-2px);
 }
+
+.ht-container.ht-cta-inner p {
+ color: #fff;
+}

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../styles/servePage.css";
 
 const opportunities = [
@@ -36,6 +36,8 @@ const opportunities = [
 ];
 
 export default function ServePage() {
+  const navigate = useNavigate();
+
   return (
     <div className="serve-page-container">
       <header className="page-header">
@@ -116,14 +118,21 @@ export default function ServePage() {
                 </li>
               </ul>
 
-              <button className="apply-btn">Apply To Volunteer</button>
+              <button
+                className="apply-btn"
+                onClick={() =>
+                  navigate("/forms-page", { state: { formType: "volunteer" } })
+                }
+              >
+                Apply To Volunteer
+              </button>
             </div>
           ))}
         </section>
       </div>
 
       <div className="text-center mt-4">
-        <Link to="/serve" className="back-btn">
+        <Link to="/" className="back-btn">
           ← Back to Home Page
         </Link>
       </div>

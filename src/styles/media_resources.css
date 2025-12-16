@@ -4,41 +4,44 @@
   background: #f9f9f9;
 }
 
-/* Grid Layout */
-.media-resources-grid {
-  display: grid;
-  gap: 26px;
-  grid-template-columns: 1fr;
-  margin-top: 30px;
+.ht-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  text-align: center;
 }
 
-@media (min-width: 900px) {
-  .media-resources-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+.ht-h3 {
+  font-size: clamp(24px, 3vw, 36px);
+  font-weight: 800;
+  color: #133a74;
+  margin-bottom: 1rem;
 }
 
-@media (min-width: 1200px) {
-  .media-resources-grid {
-    gap: 32px;
-  }
+.ht-lead {
+  color: #3b4c6a;
+  font-size: clamp(14px, 2vw, 18px);
+  line-height: 1.7;
+  max-width: 850px;
+  margin: 0 auto 2rem;
 }
 
+/* ===== Slider Wrapper ===== */
 .mr-card-link-wrapper {
   text-decoration: none;
   color: inherit;
   display: block;
+  padding: 0 10px; /* spacing between cards inside slider */
 }
 
-/* Card Wrapper */
 .mr-card {
   background: #fff;
   border: 1px solid #e7eef6;
   border-radius: 16px;
-  overflow: hidden; /* keep gallery image clipped */
   box-shadow: 0 6px 18px rgba(15, 45, 92, 0.08);
-  cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  height: 100%;
+  display: flex;
 }
 
 .mr-card:hover {
@@ -46,39 +49,16 @@
   box-shadow: 0 10px 24px rgba(15, 45, 92, 0.12);
 }
 
-/* ===== Gallery Image Card ===== */
-.mr-card-img img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  display: block;
-}
-
-/* ===== Resources Icon Card ===== */
-.mr-card-img.icon {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #f0f4f8;
-  height: 200px; /* same as gallery for alignment */
-  overflow: hidden;
-}
-
-.mr-icon-img {
-  max-width: 60%;  /* icon scales within container */
-  max-height: 60%;
-  object-fit: contain;
-  display: block;
-  transition: transform 0.25s ease;
-}
-
-.mr-card:hover .mr-icon-img {
-  transform: scale(1.08);
-}
-
-/* ===== Card Body ===== */
 .mr-card-body {
   padding: 18px;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.mr-card-icon {
+  margin-bottom: 12px;
+  flex-shrink: 0;
 }
 
 .mr-card-title {
@@ -93,6 +73,7 @@
   color: #516382;
   line-height: 1.6;
   font-size: 15px;
+  flex-grow: 1; /* text takes more space */
 }
 
 .mr-card-link {
@@ -101,18 +82,27 @@
   font-size: 14px;
 }
 
-/* ===== Mobile Optimization ===== */
-@media (max-width: 480px) {
-  .mr-card-img img,
-  .mr-card-img.icon {
-    height: 150px; /* scale down images */
-  }
+/* ===== Slick Slider Overrides ===== */
+.slick-slide {
+  padding: 10px 0;
+}
 
-  .mr-icon-img {
-    max-width: 50%;
-    max-height: 50%;
-  }
+.slick-dots li button:before {
+  font-size: 10px;
+  color: #133a74;
+}
 
+.slick-dots li.slick-active button:before {
+  color: #f2be42; /* highlight active dot */
+}
+
+.slick-prev:before,
+.slick-next:before {
+  font-size: 24px;
+  color: #133a74;
+}
+
+@media (max-width: 600px) {
   .mr-card-body {
     padding: 14px;
   }

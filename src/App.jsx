@@ -23,6 +23,7 @@ import CurrentTripPage from "./pages/CurrentTripPage"; // Updated
 import AboutPage from "./pages/AboutPage";
 import Serve from "./components/Serve";
 import ServePage from "./pages/ServePage";
+import FormsPage from "./pages/FormsPage";
 
 import MediaGallery from "./pages/Media&Resources/MediaGallery";
 import Resources from "./pages/Media&Resources/Resources";
@@ -57,6 +58,7 @@ const App = () => {
 
           {/* Forms & Payments */}
           <Route path="/forms" element={<Forms />} />
+          <Route path="/forms-page" element={<FormsPage />} />
           <Route path="/payments" element={<Payments />} />
           <Route path="/forms-payments/donation" element={<DonationPage />} />
           <Route path="/forms-payments/monthly-payment" element={<MonthlyPaymentPage />} />

@@ -1,181 +1,117 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import "../styles/eventsNewsPage.css"; // Keep your CSS
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import "../styles/eventsNewsPage.css";
 
 export default function NewsEventsPage() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const [activeId, setActiveId] = useState(null);
-
-  const latestAnnouncement =
-    "Church announcements will appear here once connected to the backend API.";
-
-  const newsItems = [
-    {
-      id: "kids-summer-camps",
-      category: "Programs",
-      title: "Kids Summer Camps",
-      description: "Faith-centered fun activities during summer break.",
-      details: ["Weekly themed camps", "Bible lessons", "Arts & crafts", "Outdoor play"],
-    },
-    {
-      id: "holiday-activities",
-      category: "Seasonal",
-      title: "Holiday Activities",
-      description: "Special events during major church feasts and celebrations.",
-      details: ["Nativity celebration", "Easter activities", "Community volunteer day"],
-    },
-    {
-      id: "trip-outings",
-      category: "Trips & Outings",
-      title: "Trip Outings",
-      description: "Fun trips and outings for kids and youth groups.",
-      details: ["Annual picnic", "Museum learning trips", "Nature hikes"],
-      currentTrip: {
-        id: "current",
-        name: "Ark Encounter",
-      },
-    },
-    {
-      id: "church-announcements",
-      category: "Stay Informed",
-      title: "Church Announcements",
-      description: latestAnnouncement,
-      details: [],
-    },
-  ];
-
-  const toggleDetails = (id) => setActiveId(activeId === id ? null : id);
-
-  useEffect(() => {
-    const path = location.pathname.split("/news-events/")[1];
-    if (path) {
-      const el = document.getElementById("registration-form");
-      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  }, [location]);
 
   return (
-    <div className="news-page-container">
-      {/* Hero Section */}
-      <header className="news-page-header">
-        <section className="news-hero">
-          <div className="news-hero-content">
-            <h2 className="news-hero-title">Stay Updated with Our Community</h2>
-            <p className="news-hero-text">
-              Discover the <span className="highlight">latest happenings</span>,
-              explore <span className="highlight">upcoming events</span>, and stay
-              connected with our church family.
-            </p>
-          </div>
-        </section>
+    <section className="news-events-container">
+      {/* Intro Banner */}
+      <div className="news-intro-banner">
+        <h1 className="news-intro-title">Stay Updated with Our Community</h1>
+        <p className="news-intro-text">
+          Discover the latest happenings, explore upcoming events, and stay connected with our church family.
+        </p>
+      </div>
+
+      {/* Curriculum Header */}
+      <header className="news-events-header">
+        <h2 className="main-heading">Kids & Youth Education Curriculum – Fall 2025</h2>
+        <p>Explore our classes, trips, and announcements below.</p>
       </header>
 
-      {/* News/Event Cards */}
-      <section className="news-cards-vertical">
-        {newsItems.map((item) => (
-          <div key={item.id} className="news-card">
-            <h4 className="news-card-category">{item.category}</h4>
-            <h3 className="news-card-title">{item.title}</h3>
-            <p className="news-card-description">{item.description}</p>
-
-            {item.details.length > 0 && (
-              <>
-                <button
-                  className="news-card-btn"
-                  onClick={() => toggleDetails(item.id)}
-                >
-                  {activeId === item.id ? "Hide Details" : "View Details"}
-                </button>
-                {activeId === item.id && (
-                  <div className="news-card-details">
-                    <ul>
-                      {item.details.map((d, idx) => (
-                        <li key={idx}>{d}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </>
-            )}
-
-            {item.currentTrip && (
-              <button
-                className="news-card-btn"
-                style={{ marginTop: "10px" }}
-                onClick={() => navigate(`/trip/${item.currentTrip.id}`)}
-              >
-                View Trip Info: {item.currentTrip.name}
-              </button>
-            )}
-          </div>
-        ))}
-      </section>
-
-      {/* Unified Registration Form */}
-      <section id="registration-form" className="form-section">
-        <div className="form-wrapper">
-          <h2 className="form-title">Event Registration Form</h2>
-          <p className="form-sub">Please complete the form below to register.</p>
-
-          <form>
-            <label>Event Type</label>
-            <select required>
-              <option value="">Please select</option>
-              <option>Trip Outings</option>
-              <option>Holiday Activities</option>
-              <option>Kids Summer Camps</option>
-            </select>
-
-            <label>Parent First Name</label>
-            <input type="text" required />
-            <label>Parent Last Name</label>
-            <input type="text" required />
-            <label>Phone</label>
-            <input type="tel" required />
-            <label>Email</label>
-            <input type="email" required />
-
-            <label>Number of Children</label>
-            <select>
-              <option value="">Please select</option>
-              {[1, 2, 3, 4].map((n) => (
-                <option key={n}>{n}</option>
-              ))}
-            </select>
-
-            <h4>Child Information</h4>
-            <label>First Name</label>
-            <input type="text" required />
-            <label>Last Name</label>
-            <input type="text" required />
-            <label>Age Group</label>
-            <select required>
-              <option value="">Select age group</option>
-              <option>5–10</option>
-              <option>11–14</option>
-              <option>15–17</option>
-            </select>
-
-            <label>Payment Method</label>
-            <select>
-              <option>Online</option>
-              <option>In Person (Cash)</option>
-            </select>
-
-            <label className="checkbox-line">
-              <input type="checkbox" required /> I agree to the Terms of Service
-            </label>
-            <label className="checkbox-line">
-              <input type="checkbox" required /> I consent to data storage (GDPR)
-            </label>
-
-            <button type="submit" className="news-card-btn submit-btn">
-              SEND
+      {/* Education Programs */}
+      <div className="section">
+        <h2 className="section-title">Education Programs</h2>
+        <div className="ne-card-row">
+          <article className="ne-card">
+            <h3 className="ne-card-title">Genesis Bible Study (Elementary)</h3>
+            <p className="ne-card-desc">Exploration of Creation, Adam & Eve, Noah, Abraham...</p>
+            <button
+              className="ne-card-btn"
+              onClick={() => navigate("/forms-page", { state: { formType: "kidsProgram" } })}
+            >
+              Register Now
             </button>
-          </form>
+          </article>
+
+          <article className="ne-card">
+            <h3 className="ne-card-title">Book of Ruth (Middle/High School)</h3>
+            <p className="ne-card-desc">Learn about loyalty, faithfulness, virtue, and God’s providence...</p>
+            <button
+              className="ne-card-btn"
+              onClick={() => navigate("/forms-page", { state: { formType: "kidsProgram" } })}
+            >
+              Register Now
+            </button>
+          </article>
+
+          <article className="ne-card">
+            <h3 className="ne-card-title">Book of Tobit (Middle/High School)</h3>
+            <p className="ne-card-desc">Family, purity, prayer, angelic guidance, and God’s protection...</p>
+            <button
+              className="ne-card-btn"
+              onClick={() => navigate("/forms-page", { state: { formType: "kidsProgram" } })}
+            >
+              Register Now
+            </button>
+          </article>
         </div>
-      </section>
-    </div>
+      </div>
+
+      {/* Trips & Outings */}
+      <div className="section">
+        <h2 className="section-title">Trips & Outings</h2>
+        <div className="ne-card-row">
+          <article className="ne-card">
+            <h3 className="ne-card-title">Ark Encounter Trip</h3>
+            <p className="ne-card-desc">Join us for a faith-filled journey to the Ark Encounter.</p>
+            <div className="card-actions">
+              <button
+                className="ne-card-btn"
+                onClick={() => navigate("/trip/current")}
+              >
+                Check Trip Info
+              </button>
+              <button
+                className="ne-card-btn"
+                onClick={() => navigate("/forms-page", { state: { formType: "youthTrip" } })}
+              >
+                Register for Trip
+              </button>
+            </div>
+          </article>
+
+          <article className="ne-card">
+            <h3 className="ne-card-title">Annual Picnic</h3>
+            <p className="ne-card-desc">A joyful community gathering with food, games, and fellowship.</p>
+            <button
+              className="ne-card-btn"
+              onClick={() => navigate("/forms-page", { state: { formType: "youthTrip" } })}
+            >
+              Register for Trip
+            </button>
+          </article>
+        </div>
+      </div>
+
+      {/* Announcements */}
+      <div className="section">
+        <h2 className="section-title">Announcements</h2>
+        <div className="ne-card-row">
+          <article className="ne-card">
+            <h3 className="ne-card-title">Seasonal Programs</h3>
+            <p className="ne-card-desc">Stay tuned for upcoming events and parish updates.</p>
+            <button
+              className="ne-card-btn"
+              onClick={() => navigate("/home", { state: { formType: "membership" } })}
+            >
+              Learn More
+            </button>
+          </article>
+        </div>
+      </div>
+    </section>
   );
 }

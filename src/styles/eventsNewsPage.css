@@ -1,337 +1,142 @@
-/* ========================= HERO INTRO ========================= */
+/* ========================= PAGE CONTAINER ========================= */
+.news-events-container {
+  padding: 80px 20px 40px; /* top padding to avoid overlap with fixed nav */
+  background: #f9fafb;
+  min-height: 100vh;
+  font-family: system-ui, sans-serif;
+  color: #1f2937;
+}
 
-.news-hero {
+/* ========================= INTRO BANNER ========================= */
+.news-intro-banner {
   background: linear-gradient(135deg, #fdf6e3, #fff9f0);
-  border-radius: 20px;
-  padding: 60px 20px;
+  border-radius: 16px;
+  padding: 50px 20px;
   margin-bottom: 40px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
   text-align: center;
-  position: relative;
-  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
 }
 
-.news-hero::before {
-  content: "";
-  position: absolute;
-  top: -50%;
-  left: -30%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle at center, rgba(166, 124, 0, 0.12) 0%, transparent 70%);
-  transform: rotate(15deg);
-}
-
-.news-hero-content {
-  position: relative;
-  z-index: 1;
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-.news-hero-title {
-  font-family: 'Georgia', serif;
-  font-size: clamp(2rem, 4vw, 3rem);
+.news-intro-title {
+  font-size: clamp(2rem, 4vw, 2.8rem);
   color: #133a74;
-  margin-bottom: 20px;
   font-weight: 700;
+  margin-bottom: 12px;
 }
 
-.news-hero-text {
-  font-size: clamp(1.1rem, 2vw, 1.6rem);
-  color: #333;
-  line-height: 1.6;
-}
-
-.news-hero-text .highlight {
+.news-intro-text {
+  font-size: 1.2rem;
   color: #a67c00;
+  font-weight: 500;
+}
+
+/* ========================= HEADER ========================= */
+.news-events-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.main-heading {
+  font-size: 1.8rem;
+  color: #133a74;
   font-weight: 700;
-  position: relative;
+  margin-bottom: 8px;
 }
 
-.news-hero-text .highlight::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -4px;
-  width: 100%;
-  height: 4px;
-  background-color: #a67c00;
-  border-radius: 2px;
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.4s ease-in-out;
+.news-events-header p {
+  color: #555;
 }
 
-.news-hero-text .highlight:hover::after {
-  transform: scaleX(1);
+/* ========================= SECTION ========================= */
+.section {
+  margin-bottom: 50px;
 }
 
-
-
-/* ========================= CALENDAR ========================= */
-
-.news-calendar-section {
-  margin-top: 50px;
+.section-title {
+  margin-bottom: 20px;
+  color: #133a74;
+  font-size: 1.6rem;
+  font-weight: 700;
 }
 
-.nv-cal {
-  max-width: 600px;
-  margin: 0 auto;
-  border: 1px solid #ddd;
+/* ========================= CARD ROW ========================= */
+.ne-card-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+/* ========================= CARD ========================= */
+.ne-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
   border-radius: 12px;
   padding: 20px;
-  background: #fff;
-  box-shadow: 0 3px 15px rgba(0,0,0,0.08);
-}
-
-.nv-cal-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.nv-cal-title {
-  font-weight: bold;
-  color: #133a74;
-}
-
-.nv-cal-nav {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-}
-
-.nv-cal-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  text-align: center;
-}
-
-.nv-cal-dow {
-  font-weight: bold;
-  padding: 5px 0;
-  color: #516382;
-}
-
-.nv-cal-cell {
-  padding: 10px 0;
-  border: 1px solid #f0f0f0;
-  position: relative;
-}
-
-.nv-cal-today {
-  background-color: #a67c00;
-  color: #fff;
-  border-radius: 50%;
-}
-
-.nv-cal-legend {
-  margin-top: 10px;
-  font-size: 0.9rem;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.nv-cal-legend .dot.today {
-  width: 12px;
-  height: 12px;
-  background-color: #a67c00;
-  border-radius: 50%;
-}
-
-
-
-/* ========================= NEWS / EVENT CARDS (RESPONSIVE GRID) ========================= */
-
-.news-cards-vertical {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 25px;
-  max-width: 1100px;
-  margin: 40px auto;
-  width: 100%;
-  padding: 0 20px;
-}
-
-@media (min-width: 900px) {
-  .news-cards-vertical {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (min-width: 1200px) {
-  .news-cards-vertical {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-.news-card {
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  padding: 25px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  cursor: pointer;
+  display: flex;
+  flex-direction: column;
 }
 
-.news-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.10);
+.ne-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
 }
 
-.news-card-category {
-  color: #a67c00;
-  font-size: 0.9rem;
-  margin-bottom: 5px;
+.ne-card-title {
+  margin-bottom: 8px;
+  font-size: 1.15rem;
   font-weight: 600;
-}
-
-.news-card-title {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
   color: #133a74;
-  font-weight: 700;
 }
 
-.news-card-description {
-  color: #444;
-  margin-bottom: 15px;
-  font-size: 1rem;
+.ne-card-desc {
+  margin-bottom: 16px;
+  color: #374151;
+  line-height: 1.5;
 }
 
-.news-card-details {
+/* ========================= BUTTON ========================= */
+.ne-card-btn {
+  align-self: flex-start;
+  padding: 10px 10px;
+  background: #1e40af;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.ne-card-btn:hover {
+  background: #c1993d;
+}
+
+.ne-card-btn:active {
+  transform: scale(0.97);
+}
+
+/* ========================= CARD ACTIONS ========================= */
+.card-actions {
+  display: flex;
+  gap: 12px;              /* space between buttons */
+  flex-wrap: wrap;        /* stack on small screens */
   margin-top: 12px;
 }
 
-.news-card-details ul {
-  padding-left: 20px;
-  margin: 0;
-}
-
-.news-card-details li {
-  margin-bottom: 6px;
-  color: #333;
-}
-
-
-
-/* ========================= SHARED BUTTON ========================= */
-
-.news-card-btn {
-  background-color: #a67c00;
-  color: #fff;
-  border: none;
-  padding: 10px 14px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.95rem;
-  font-weight: 600;
-  transition: 0.2s;
-}
-
-.news-card-btn:hover {
-  background-color: #854f00;
-}
-
-
-
-/* ========================= FORM SECTION (FULL-WIDTH) ========================= */
-
-.form-section {
-  background: #faf9f7;
-  padding: 60px 20px;
-  width: 100%;
-  margin-top: 60px;
-}
-
-.form-wrapper {
-  max-width: 850px;
-  margin: 0 auto;
-  background: #fff;
-  padding: 35px;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.07);
-  width: 100%;
-}
-
-.form-title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #133a74;
-  margin-bottom: 10px;
+.card-actions .ne-card-btn {
+  flex: 1;                /* buttons share equal width */
   text-align: center;
 }
-
-.form-sub {
-  text-align: center;
-  color: #555;
-  margin-bottom: 25px;
-}
-
-/* Inputs */
-
-.form-wrapper form label {
-  display: block;
-  margin: 10px 0 5px;
-  color: #333;
-  font-weight: 600;
-}
-
-.form-wrapper input,
-.form-wrapper select,
-.form-wrapper textarea {
-  width: 100%;
-  padding: 10px 12px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  margin-bottom: 15px;
-  font-size: 1rem;
-  background: #fafafa;
-}
-
-/* Child header */
-.form-wrapper h4 {
-  margin-top: 20px;
-  color: #133a74;
-  font-weight: 700;
-  font-size: 1.2rem;
-}
-
-/* Checkbox lines */
-.checkbox-line {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 5px 0;
-}
-
-.submit-btn {
-  width: 100%;
-  margin-top: 25px;
-  padding: 12px 0;
-  font-size: 1.05rem;
-  border-radius: 8px;
-}
-
-
 
 /* ========================= RESPONSIVE ========================= */
-
-@media (max-width: 768px) {
-  .news-card {
-    padding: 20px;
+@media (max-width: 640px) {
+  .news-events-container {
+    padding-top: 96px; /* extra safety padding on small devices */
   }
 
-  .form-wrapper {
-    padding: 20px;
-  }
-
-  .form-title {
-    font-size: 1.6rem;
+  .ne-card-btn {
+    width: 100%; /* buttons stack full width on mobile */
   }
 }

@@ -5,7 +5,6 @@ import "../styles/CurrentTripPage.css";
 const CurrentTripPage = () => {
   const navigate = useNavigate();
 
-  // Static demo data for now
   const tripData = {
     id: "ark-encounter",
     name: "Ark Encounter",
@@ -23,28 +22,43 @@ const CurrentTripPage = () => {
   };
 
   return (
-    <div className="container">
-      <h1>{tripData.name}</h1>
-      <p><strong>Dates:</strong> {tripData.dates}</p>
-      <p><strong>Location:</strong> {tripData.location}</p>
-      <p><strong>Age Group:</strong> {tripData.ageGroup}</p>
-      <p><strong>Duration:</strong> {tripData.duration}</p>
+    <div className="trip-container">
+      <header className="trip-header">
+        <h1>{tripData.name}</h1>
+        <p className="trip-subtitle">
+          {tripData.dates} • {tripData.location}
+        </p>
+      </header>
 
-      <h3>Trip Highlights:</h3>
-      <ul>
-        {tripData.highlights.map((h, i) => (
-          <li key={i}>{h}</li>
-        ))}
-      </ul>
+      <section className="trip-details">
+        <p><strong>Age Group:</strong> {tripData.ageGroup}</p>
+        <p><strong>Duration:</strong> {tripData.duration}</p>
+        <p className="trip-price"><strong>Price:</strong> ${tripData.price} per child</p>
+      </section>
 
-      <p><strong>Price:</strong> ${tripData.price} per child</p>
+      <section className="trip-highlights">
+        <h3>Trip Highlights</h3>
+        <ul>
+          {tripData.highlights.map((h, i) => (
+            <li key={i}>{h}</li>
+          ))}
+        </ul>
+      </section>
 
-      <button
-        className="btn-primary"
-        onClick={() => navigate("/news-events/details")}
-      >
-        Register for Trip
-      </button>
+      <div className="trip-actions">
+        <button
+          className="btn-primary"
+          onClick={() => navigate("/forms-page", { state: { formType: "youthTrip" } })}
+        >
+          Register for Trip
+        </button>
+        <button
+          className="btn-secondary"
+          onClick={() => navigate("/news-events/details")}
+        >
+          Back to Events
+        </button>
+      </div>
     </div>
   );
 };

@@ -1,20 +1,28 @@
 // src/components/Media_Resources.jsx
 import React from "react";
-import Slider from "react-slick"; // remember to install react-slick + slick-carousel
+import Slider from "react-slick"; // npm install react-slick slick-carousel
 import { Link } from "react-router-dom";
 import "../styles/media_resources.css";
 import HarpIcon from "../assets/images/harp.png";
-import { FaImages, FaBookOpen, FaBoxOpen, FaExclamationTriangle} from "react-icons/fa";
+import {
+  FaImages,
+  FaBookOpen,
+  FaBoxOpen,
+  FaExclamationTriangle,
+  FaPrayingHands,
+  FaBuilding
+} from "react-icons/fa";
 
 export default function Media_Resources() {
   const settings = {
     dots: true,
     infinite: false,
     speed: 500,
-    slidesToShow: 3,
+    slidesToShow: 4,   // show 4 cards on desktop
     slidesToScroll: 1,
     responsive: [
-      { breakpoint: 1024, settings: { slidesToShow: 2 } },
+      { breakpoint: 1200, settings: { slidesToShow: 3 } },
+      { breakpoint: 900, settings: { slidesToShow: 2 } },
       { breakpoint: 600, settings: { slidesToShow: 1 } }
     ]
   };
@@ -37,25 +45,41 @@ export default function Media_Resources() {
     {
       title: "Lost & Found",
       desc: "Report missing items or check if something has been found during church events.",
-      to: "/more/lost-found",
+      to: "/forms-page",
       icon: <FaBoxOpen size={36} color="#2563eb" />,
       linkText: "Submit Report →"
     },
     {
       title: "Incident Report",
       desc: "Submit details about any safety or facility incidents to help us respond quickly.",
-      to: "/more/incident-report",
+      to: "/forms-page",
       icon: <FaExclamationTriangle size={36} color="#b91c1c" />,
       linkText: "Report Incident →"
     },
-   {
-  title: "Choir Registration",
-  desc: "Join our parish choir and participate in liturgical services through song and worship.",
-  to: "/forms-page",
-  state: { formType: "choir" },
-  icon: <img src={HarpIcon} alt="Harp Icon" style={{ width: 36, height: 36 }} />,
-  linkText: "Register for Choir →"
-}
+    {
+      title: "Choir Registration",
+      desc: "Join our parish choir and participate in liturgical services through song and worship.",
+      to: "/forms-page",
+      state: { formType: "choir" },
+      icon: <img src={HarpIcon} alt="Harp Icon" style={{ width: 36, height: 36 }} />,
+      linkText: "Register for Choir →"
+    },
+    {
+      title: "Prayer Request",
+      desc: "Submit your prayer intentions to be remembered during liturgical services.",
+      to: "/forms-page",
+      state: { formType: "prayerRequest" },
+      icon: <FaPrayingHands size={36} color="#0f2d5c" />,
+      linkText: "Submit Prayer →"
+    },
+    {
+      title: "Facility Use Request",
+      desc: "Request to use church halls or facilities for events and gatherings.",
+      to: "/forms-page",
+      state: { formType: "facilityUse" },
+      icon: <FaBuilding size={36} color="#3b4c6a" />,
+      linkText: "Request Facility →"
+    }
   ];
 
   return (

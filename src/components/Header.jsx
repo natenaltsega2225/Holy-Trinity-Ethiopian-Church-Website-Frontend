@@ -20,7 +20,7 @@ export default function Header() {
   };
 
   const navItems = [
-    { label: "HOME", to: "/" },
+    { label: "Home", to: "/" },
     { label: "About Us", scrollId: "about-us" },
     { label: "Ministries", scrollId: "ministries" },
     { label: "Serve", scrollId: "serve-section" },

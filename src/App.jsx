@@ -17,7 +17,7 @@ import MonthlyPaymentPage from "./pages/MonthlyPaymentPage";
 import Forms from "./components/Forms";
 import Payments from "./components/Payments";
 
-import KidsSummerProgram from "./pages/KidsSummerProgram";
+// import KidsSummerProgram from "./pages/KidsSummerProgram";
 import CurrentTripPage from "./pages/CurrentTripPage"; // Updated
 
 import AboutPage from "./pages/AboutPage";
@@ -64,7 +64,7 @@ const App = () => {
           <Route path="/forms-payments/monthly-payment" element={<MonthlyPaymentPage />} />
 
           {/* Individual Form Pages */}
-          <Route path="/forms/kids-summer-program" element={<KidsSummerProgram />} />
+          {/* <Route path="/forms/kids-summer-program" element={<KidsSummerProgram />} /> */}
           <Route path="/forms/church-membership-form" element={<Forms />} />
 
           {/* 🎯 Dynamic Trip Route */}

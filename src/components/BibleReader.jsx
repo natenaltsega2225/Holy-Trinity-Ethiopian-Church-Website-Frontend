@@ -1,3 +1,4 @@
+//src/components/BibleReader.jsx
 import React, { useState } from "react";
 import { Search, Volume2, AlignJustify, Settings } from "lucide-react";
 import './BibleReader.css';

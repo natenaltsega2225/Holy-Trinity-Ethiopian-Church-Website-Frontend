@@ -1,47 +1,64 @@
+
+// src/components/Payments.jsx
 import React from "react";
-import { NavLink } from "react-router-dom";
-import { FaHandHoldingHeart, FaCoins } from "react-icons/fa";
-import "../styles/payments.css"; // file must be exactly `payments.css`
-
-
-const paymentItems = [
-  {
-    title: "Donation",
-    desc:
-      "Support the work of the Church—liturgical needs, education, benevolence, and outreach. Your gift strengthens our community.",
-    to: "/forms-payments/donation",
-    icon: <FaHandHoldingHeart size={40} color="#F2BE42" />,
-  },
-  {
-    title: "Monthly Payment",
-    desc:
-      "Set up a recurring monthly contribution to sustain our parish operations and ministries throughout the year.",
-    to: "/forms-payments/monthly-payment",
-    icon: <FaCoins size={40} color="#F2BE42" />,
-  },
-];
+import { useNavigate } from "react-router-dom";
+import "../styles/payment.css";
 
 export default function Payments() {
+  const nav = useNavigate();
+
+  const goToCheckout = () => {
+    nav("/checkout");
+  };
+
   return (
-    <section id="payments" className="payments-section">
+    <section className="payments-wrap" id="payments">
       <div className="payments-container">
-        <header className="payments-head">
-          <h1 className="payments-title">Support Our Church</h1>
-          <p className="payments-sub">
-            Make a donation or payment to help sustain our services, ministries, and community outreach.
-          </p>
-        </header>
+        <h2 className="payments-title">Membership Dues & Online Giving</h2>
+        <p className="payments-sub">
+          Support Holy Trinity Ethiopian Orthodox Tewahedo Church through secure
+          online membership dues. Choose a plan that fits your family and complete
+          your contribution using Stripe&apos;s secure checkout.
+        </p>
 
         <div className="payments-cards">
-          {paymentItems.map((item) => (
-            <NavLink key={item.title} to={item.to} className="payments-card">
-              <div className="payments-card-icon">{item.icon}</div>
-              <h3 className="payments-card-title">{item.title}</h3>
-              <p className="payments-card-desc">{item.desc}</p>
-            </NavLink>
-          ))}
+          <div className="payments-card">
+            <div className="payments-card-icon" aria-hidden>
+              💳
+            </div>
+            <h3 className="payments-card-title">Membership Contributions</h3>
+            <p className="payments-card-desc">
+              Select from monthly, 6-month, or annual membership plans on the next
+              page. All payments are processed securely by Stripe.
+            </p>
+
+            <button
+              type="button"
+              className="cta-stripe"
+              onClick={goToCheckout}
+              style={{ marginTop: "1.25rem" }}
+            >
+              Choose Membership Plan
+            </button>
+          </div>
+
+          <div className="payments-card">
+            <div className="payments-card-icon" aria-hidden>
+              🕊️
+            </div>
+            <h3 className="payments-card-title">How Stripe Works</h3>
+            <p className="payments-card-desc">
+              You will be redirected to a secure Stripe checkout page to enter
+              your card or bank information. The church does <strong>not</strong>{" "}
+              store your card numbers in our database.
+            </p>
+            <p className="payments-card-desc" style={{ marginTop: "0.5rem" }}>
+              You&apos;ll receive an email receipt for every contribution.
+            </p>
+          </div>
         </div>
       </div>
     </section>
   );
 }
+

@@ -259,3 +259,154 @@ a{text-decoration:none;color:inherit}
   }
   .ht-section{ padding:48px 0; }
 }
+
+
+/* add near the top of styles/eventsNewsPage.css or a home css */
+/* --- Home News & Events summary --- */
+
+.home-news-section {
+  padding: 56px 16px 40px;
+  background: #f7f9fc;
+}
+
+.home-news-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.home-news-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.home-news-header h2 {
+  font-size: clamp(2.1rem, 3vw, 2.7rem);
+  margin-bottom: 6px;
+  color: #073574;
+  font-weight: 900;
+}
+
+.home-news-header p {
+  margin: 0;
+  color: #5a6a86;
+}
+
+.home-news-card-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+}
+
+@media (max-width: 960px) {
+  .home-news-card-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 640px) {
+  .home-news-card-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.home-news-card {
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 24px 22px 20px;
+  box-shadow: 0 18px 40px rgba(15, 45, 92, 0.06);
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.home-news-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 22px 45px rgba(15, 45, 92, 0.15);
+}
+
+.home-news-eyebrow {
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #9aa6bf;
+  margin-bottom: 10px;
+}
+
+.home-news-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #0f2d5c;
+  margin-bottom: 12px;
+}
+
+.home-news-body {
+  font-size: 0.96rem;
+  color: #4b5873;
+  margin-bottom: 18px;
+}
+
+.home-news-cta {
+  width: 100%;
+  border-radius: 999px;
+  border: 1px solid #e1e7f4;
+  padding: 10px 14px;
+  font-weight: 800;
+  background: #f7f9fc;
+  color: #0f2d5c;
+  cursor: pointer;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.home-news-cta:hover {
+  background: #ffcc4d;
+  box-shadow: 0 10px 25px rgba(245, 193, 59, 0.45);
+}
+
+/* .ht-donate-strip {
+  background: #0f2d5c;
+  color: #f9fafb;
+  padding: 28px 0;
+} */
+
+.ht-donate-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.ht-donate-text h3 {
+  margin: 0 0 4px;
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.ht-donate-text p {
+  margin: 0;
+  max-width: 520px;
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+.ht-donate-actions {
+  flex-shrink: 0;
+}
+
+.ht-btn-donate {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  border-radius: 999px;
+  background: #fbbf24;
+  color: #1f2933;
+  font-weight: 800;
+  border: none;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15);
+}
+
+.ht-btn-donate:hover {
+  background: #f59e0b;
+}

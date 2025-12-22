@@ -1,0 +1,4 @@
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:16px}
+.card{background:#fff;border:1px solid #e7eef9;border-radius:14px;padding:16px}
+.kpi{font-size:12px;color:#567}
+.num{font-size:20px;font-weight:700;margin-top:6px}

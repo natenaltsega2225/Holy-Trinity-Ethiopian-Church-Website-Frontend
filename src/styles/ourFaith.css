@@ -1,12 +1,21 @@
-/* src/styles/ourFaith.css */
-
+/* =======================
+   Section Container (Parchment Background)
+======================= */
 .section-container {
-  padding: 80px 20px;
-  max-width: 900px;
+  padding: 80px 2.5rem; /* wider horizontal padding */
+  max-width: 1200px;    /* increased width for large screens */
   margin: 0 auto;
+
+  /* Solid parchment background */
+  background-color: #F1DAB2;
+
   scroll-margin-top: 100px; /* offset for smooth scroll */
+  border-radius: 0.5rem;    /* slightly rounded corners */
 }
 
+/* =======================
+   Section Header
+======================= */
 .section-header {
   text-align: center;
   margin-bottom: 40px;
@@ -23,6 +32,9 @@
   color: #555;
 }
 
+/* =======================
+   Faith Content
+======================= */
 .faith-content h3 {
   font-size: 1.8rem;
   margin-top: 30px;
@@ -34,4 +46,13 @@
   line-height: 1.8;
   margin-bottom: 20px;
   color: #444;
+}
+
+/* =======================
+   Responsive Adjustments
+======================= */
+@media (min-width: 1024px) {
+  .section-container {
+    padding: 100px 4rem; /* more horizontal space on large screens */
+  }
 }

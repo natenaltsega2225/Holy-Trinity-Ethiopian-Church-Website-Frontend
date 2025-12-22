@@ -1,0 +1,139 @@
+/* Overall page container */
+.forms-page {
+  padding: 60px 20px;
+  background: #f9fafb;
+  min-height: 100vh;
+  font-family: system-ui, sans-serif;
+  color: #1f2937;
+}
+
+/* Main card */
+.forms-page-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.06);
+}
+
+/* Titles */
+.forms-page-title {
+  text-align: center;
+  color: #133a74;
+  margin-bottom: 24px;
+  font-size: 1.9rem;
+  font-weight: 700;
+}
+
+h2 {
+  margin-bottom: 20px;
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Selector */
+.form-selector {
+  margin-bottom: 32px;
+}
+
+.form-selector label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.form-selector select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 1rem;
+}
+
+/* Form layout */
+.church-form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+/* Inputs */
+.church-form input,
+.church-form select,
+.church-form textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 1rem;
+}
+
+.church-form input:focus,
+.church-form select:focus,
+.church-form textarea:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.2);
+  outline: none;
+}
+
+textarea {
+  min-height: 100px;
+}
+
+/* Labels */
+.church-form label {
+  font-weight: 600;
+  color: #374151;
+}
+
+/* Checkbox rows */
+.checkbox-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.95rem;
+}
+
+/* Fieldsets */
+fieldset {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+legend {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+/* Buttons */
+button {
+  margin-top: 20px;
+  padding: 14px;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #1e40af;
+}
+
+/* Responsive (tablet & desktop) */
+@media (min-width: 768px) {
+  .church-form {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .church-form textarea,
+  .church-form fieldset,
+  .church-form button {
+    grid-column: span 2;
+  }
+}

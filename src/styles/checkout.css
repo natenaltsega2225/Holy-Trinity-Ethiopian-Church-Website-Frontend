@@ -1,0 +1,294 @@
+/* ================== Tokens ================== */
+
+:root {
+  --ck-blue-900: #0c2c5e;
+  --ck-blue-800: #123a78;
+  --ck-blue-700: #1e4b8e;
+  --ck-blue-soft: #f5f7ff;
+  --ck-gold: #f2be42;
+  --ck-ink: #0f2340;
+  --ck-muted: #607191;
+  --ck-border: #dee5f4;
+  --ck-bg: #f6f9ff;
+  --ck-card: #ffffff;
+  --ck-shadow-soft: 0 18px 40px rgba(18, 58, 120, 0.12);
+}
+
+/* ================== Layout ================== */
+
+.ck-page {
+  min-height: calc(100vh - 56px);
+  padding: 34px 16px 64px;
+  background:
+    radial-gradient(900px 520px at 0% 0%, rgba(18, 58, 120, 0.08), transparent 60%),
+    radial-gradient(900px 520px at 100% 100%, rgba(242, 190, 66, 0.12), transparent 60%),
+    var(--ck-bg);
+  color: var(--ck-ink);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Arial, sans-serif;
+}
+
+.ck-shell {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+/* ================== Header ================== */
+
+.ck-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.ck-back {
+  border: 1px solid var(--ck-border);
+  background: #fff;
+  color: #3b4c6f;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.ck-back:hover {
+  background: #f8fbff;
+  box-shadow: 0 6px 16px rgba(18, 58, 120, 0.18);
+  transform: translateY(-1px);
+}
+
+.ck-back:active {
+  box-shadow: 0 3px 8px rgba(18, 58, 120, 0.18);
+  transform: translateY(0);
+}
+
+.ck-eyebrow {
+  margin: 0 0 4px;
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ck-muted);
+  font-weight: 700;
+}
+
+.ck-title {
+  margin: 0;
+  font-size: clamp(22px, 3.1vw, 28px);
+  font-weight: 900;
+  color: var(--ck-blue-900);
+}
+
+.ck-subtitle {
+  margin: 6px 0 0;
+  font-size: 0.92rem;
+  color: var(--ck-muted);
+  max-width: 640px;
+  line-height: 1.6;
+}
+
+/* ================== Main Card ================== */
+
+.ck-main {
+  background: var(--ck-card);
+  border-radius: 20px;
+  border: 1px solid var(--ck-border);
+  box-shadow: var(--ck-shadow-soft);
+  padding: 22px 22px 18px;
+}
+
+@media (max-width: 600px) {
+  .ck-main {
+    padding: 18px 14px 16px;
+  }
+}
+
+.ck-section-title {
+  margin: 0 0 10px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--ck-blue-800);
+}
+
+/* ================== Loading / Errors ================== */
+
+.ck-loading {
+  font-size: 0.95rem;
+  color: var(--ck-muted);
+}
+
+.ck-banner {
+  margin-bottom: 12px;
+  background: #fff2f2;
+  border-radius: 10px;
+  border: 1px solid #f3c6c6;
+  padding: 10px 12px;
+  font-size: 0.9rem;
+  color: #8b2121;
+}
+
+/* ================== Plan Grid ================== */
+
+.ck-plan-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+@media (min-width: 768px) {
+  .ck-plan-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Plan card button */
+.ck-plan-card {
+  text-align: left;
+  border-radius: 16px;
+  border: 1px solid var(--ck-border);
+  background: #f7f9ff;
+  cursor: pointer;
+  padding: 12px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease,
+    background 0.18s ease, transform 0.18s ease;
+}
+
+.ck-plan-card:hover {
+  border-color: rgba(18, 58, 120, 0.4);
+  box-shadow: 0 10px 24px rgba(18, 58, 120, 0.18);
+  background: #eef3ff;
+  transform: translateY(-2px);
+}
+
+.ck-plan-card--active {
+  border-color: var(--ck-blue-800);
+  box-shadow: 0 14px 30px rgba(18, 58, 120, 0.25);
+  background: radial-gradient(circle at top left, rgba(242, 190, 66, 0.2), #f7f9ff);
+}
+
+/* Head (title + pill) */
+.ck-plan-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.ck-plan-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--ck-blue-900);
+}
+
+/* Small pill */
+.ck-pill {
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(18, 58, 120, 0.08);
+  color: var(--ck-blue-800);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Body (price + note) */
+.ck-plan-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ck-plan-amount {
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: var(--ck-blue-800);
+}
+
+.ck-plan-sub {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ck-muted);
+}
+
+.ck-plan-note {
+  margin: 4px 0 0;
+  font-size: 0.8rem;
+  color: var(--ck-muted);
+  line-height: 1.5;
+}
+
+/* ================== Footer Row ================== */
+
+.ck-footer-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.ck-total-chip {
+  flex: 1;
+  min-width: 180px;
+  font-size: 0.9rem;
+  background: var(--ck-blue-soft);
+  border-radius: 999px;
+  padding: 8px 12px;
+  color: var(--ck-ink);
+}
+
+/* CTA button */
+.ck-cta {
+  border: none;
+  border-radius: 999px;
+  padding: 11px 20px;
+  font-size: 0.9rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, var(--ck-blue-800), var(--ck-blue-700));
+  color: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 14px 26px rgba(18, 58, 120, 0.28);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+}
+
+.ck-cta:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+  box-shadow: 0 18px 34px rgba(18, 58, 120, 0.32);
+}
+
+.ck-cta:active {
+  transform: translateY(0);
+  box-shadow: 0 10px 20px rgba(18, 58, 120, 0.26);
+}
+
+.ck-cta:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* ================== Footnote ================== */
+
+.ck-footnote {
+  margin: 10px 2px 2px;
+  font-size: 0.82rem;
+  color: var(--ck-muted);
+}

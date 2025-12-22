@@ -1,202 +1,253 @@
+
 // src/pages/NewsEventsPage.jsx
-import React, { useState, useMemo } from "react";
-import "../styles/eventsNewsPage.css"; // new CSS file
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import api from "../components/api";
+import "../styles/eventsNewsPage.css";
 
-export default function NewsEventsPage() {
-  const [activeId, setActiveId] = useState(null);
+const CAT_INFO = {
+  kids: {
+    id: "kids",
+    label: "Kids Programs",
+    eyebrow: "Kids & Youth",
+    description:
+      "Browse upcoming and recent kids programs, classes, and faith-building activities.",
+  },
+  holiday: {
+    id: "holiday",
+    label: "Holiday Activities",
+    eyebrow: "Liturgical Cycle",
+    description:
+      "Feasts, fasts, and special celebrations throughout the liturgical year.",
+  },
+  trip: {
+    id: "trip",
+    label: "Trips & Outings",
+    eyebrow: "Trips & Retreats",
+    description:
+      "Retreats, picnics, trips, and group outings that create lasting memories.",
+  },
+  news: {
+    id: "news",
+    label: "Church News",
+    eyebrow: "Stay Informed",
+    description:
+      "Announcements, updates, and important information from our parish.",
+  },
+};
 
-  const newsItems = [
-    {
-      id: 1,
-      category: "Liturgical Cycle",
-      title: "Kids Programs",
-      description:
-        "Engaging programs designed to strengthen faith and build lasting friendships.",
-      details: [
-        "Sunday Deacons Class",
-        "Bible Study for Children",
-        "Weekly Choir Practice",
-        "Monthly Outreach Activities",
-      ],
-    },
-    {
-      id: 2,
-      category: "Liturgical Cycle",
-      title: "Holiday Activities",
-      description:
-        "Learn the meaning of each fast and feast, with scripture references and practical guidance for prayer and participation.",
-      details: [
-        "Fast of the Apostles",
-        "Great Lent",
-        "Nativity Fast",
-        "Feast of Timkat",
-        "Good Friday Observances",
-      ],
-    },
-    {
-      id: 3,
-      category: "Kids Trips & Outings",
-      title: "Trips & Outings",
-      description: "Faith-building adventures that create lasting memories.",
-      details: [
-        "Annual Church Picnic",
-        "Educational Museum Trips",
-        "Community Service Outings",
-        "Youth Camping Retreats",
-      ],
-    },
-    {
-      id: 4,
-      category: "Stay Informed",
-      title: "Church News",
-      description:
-        "Stay updated with the latest news and announcements from our church community.",
-      details: [
-        "Upcoming Sermons Schedule",
-        "Volunteer Opportunities",
-        "New Initiatives & Programs",
-        "Community Announcements",
-      ],
-    },
-  ];
+function formatTime(t) {
+  if (!t) return "";
+  const [hStr, mStr] = t.split(":");
+  let h = Number(hStr || 0);
+  const m = (mStr || "00").padStart(2, "0");
+  const ampm = h >= 12 ? "PM" : "AM";
+  if (h === 0) h = 12;
+  else if (h > 12) h -= 12;
+  return `${h}:${m} ${ampm}`;
+}
 
-  const toggleDetails = (id) => {
-    setActiveId(activeId === id ? null : id);
+function formatDate(row) {
+  if (!row.start_date && !row.end_date) return "";
+
+  const start = row.start_date
+    ? new Date(row.start_date).toLocaleDateString(undefined, {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      })
+    : null;
+
+  const end = row.end_date
+    ? new Date(row.end_date).toLocaleDateString(undefined, {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      })
+    : null;
+
+  if (start && end && start !== end) return `${start} – ${end}`;
+  return start || end || "";
+}
+
+export default function NewsEventsCategory() {
+  const { category } = useParams();
+  const nav = useNavigate();
+
+  const cat = CAT_INFO[category] || {
+    label: "Events",
+    eyebrow: "Events & News",
+    description: "Browse upcoming and recent items.",
   };
 
-  // --- Calendar Component ---
-  function MonthCalendar({ initialDate = new Date() }) {
-    const [cursor, setCursor] = useState(
-      new Date(initialDate.getFullYear(), initialDate.getMonth(), 1)
-    );
+  const [rows, setRows] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState("");
+  const [expanded, setExpanded] = useState({}); // for "Read more"
 
-    const todayKey = useMemo(() => {
-      const t = new Date();
-      return `${t.getFullYear()}-${t.getMonth()}-${t.getDate()}`;
-    }, []);
-
-    const grid = useMemo(() => {
-      const y = cursor.getFullYear();
-      const m = cursor.getMonth();
-      const first = new Date(y, m, 1);
-      const startWeekday = (first.getDay() + 6) % 7;
-      const daysInMonth = new Date(y, m + 1, 0).getDate();
-      const cells = [];
-      const prevDays = new Date(y, m, 0).getDate();
-
-      for (let i = 0; i < startWeekday; i++) {
-        const d = prevDays - startWeekday + i + 1;
-        cells.push({ type: "prev", date: new Date(y, m - 1, d) });
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      setErr("");
+      try {
+        const { data } = await api.get("/news-events", {
+          params: { category },
+        });
+        setRows(data.rows || []);
+      } catch (e) {
+        console.error(e);
+        setErr("Could not load events for this category.");
+      } finally {
+        setLoading(false);
       }
-      for (let d = 1; d <= daysInMonth; d++) {
-        cells.push({ type: "cur", date: new Date(y, m, d) });
-      }
-      while (cells.length % 7 !== 0 || cells.length < 42) {
-        const nextIdx = cells.length - (startWeekday + daysInMonth) + 1;
-        cells.push({ type: "next", date: new Date(y, m + 1, nextIdx) });
-      }
-      return cells;
-    }, [cursor]);
+    })();
+  }, [category]);
 
-    const monthLabel = cursor.toLocaleString(undefined, {
-      month: "long",
-      year: "numeric",
-    });
-
-    return (
-      <div className="nv-cal">
-        <div className="nv-cal-head">
-          <button
-            className="nv-cal-nav"
-            onClick={() =>
-              setCursor(new Date(cursor.getFullYear(), cursor.getMonth() - 1, 1))
-            }
-          >
-            ‹
-          </button>
-          <div className="nv-cal-title">{monthLabel}</div>
-          <button
-            className="nv-cal-nav"
-            onClick={() =>
-              setCursor(new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1))
-            }
-          >
-            ›
-          </button>
-        </div>
-        <div className="nv-cal-grid">
-          {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d) => (
-            <div key={d} className="nv-cal-dow">
-              {d}
-            </div>
-          ))}
-          {grid.map((cell, idx) => {
-            const k = `${cell.date.getFullYear()}-${cell.date.getMonth()}-${cell.date.getDate()}`;
-            const isToday = k === todayKey && cell.type === "cur";
-            return (
-              <div
-                key={idx}
-                className={`nv-cal-cell ${
-                  cell.type !== "cur" ? "nv-cal-muted" : ""
-                } ${isToday ? "nv-cal-today" : ""}`}
-              >
-                <span>{cell.date.getDate()}</span>
-              </div>
-            );
-          })}
-        </div>
-        <div className="nv-cal-legend">
-          <span className="dot today" /> Today
-        </div>
-      </div>
-    );
-  }
+  const toggleExpanded = (id) => {
+    setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
 
   return (
-    <div className="news-page-container">
-        <br />
-      <header className="news-page-header">
-        <h1>News & Events</h1>
-        <p>
-          Stay updated with the latest happenings, liturgical calendar, and
-          community events of our church.
-        </p>
-      </header>
+    <div className="cat-page-wrap">
+      <div className="cat-page-header">
+        <div>
+          <div className="cat-eyebrow">{cat.eyebrow}</div>
+          <h1>{cat.label}</h1>
+          <p>{cat.description}</p>
+        </div>
+        <button
+          type="button"
+          className="cat-back-btn"
+          onClick={() => nav("/news-events")}
+        >
+          ← Back to News &amp; Events
+        </button>
+      </div>
 
-      {/* --- Horizontal Cards --- */}
-      <section className="news-cards-horizontal">
-        {newsItems.map((item) => (
-          <div key={item.id} className="news-card-horizontal">
-            <div className="news-card-main">
-              <h4 className="news-card-category">{item.category}</h4>
-              <h3 className="news-card-title">{item.title}</h3>
-              <p className="news-card-description">{item.description}</p>
-              <button
-                className="news-card-btn"
-                onClick={() => toggleDetails(item.id)}
-              >
-                {activeId === item.id ? "Hide Details" : "View Details"}
-              </button>
-            </div>
+      {err && <div className="cat-error">{err}</div>}
+      {loading && <div className="cat-loading">Loading items…</div>}
+      {!loading && !rows.length && (
+        <div className="cat-empty">No items posted yet for this category.</div>
+      )}
 
-            {activeId === item.id && (
-              <div className="news-card-details">
-                <ul>
-                  {item.details.map((detail, idx) => (
-                    <li key={idx}>{detail}</li>
-                  ))}
-                </ul>
+      <div className="cat-events-list">
+        {rows.map((row) => {
+          const flyerUrl = row.flyer_image_url || row.flyer_url || "";
+          const pdfUrl = row.program_pdf_url || row.pdf_url || "";
+          const pdfTitle = row.pdf_title || "Program / flyer PDF";
+
+          const showDetails = !!expanded[row.id];
+
+          return (
+            <article key={row.id} className="cat-event-card">
+              {/* LEFT: large banner image (with placeholder if missing) */}
+              <div className="cat-event-media">
+                {flyerUrl ? (
+                  <img
+                    src={flyerUrl}
+                    alt={row.title || cat.label}
+                    className="cat-event-img"
+                  />
+                ) : (
+                  <div className="cat-event-img placeholder">
+                    <div className="cat-ph-title">{cat.label}</div>
+                    <div className="cat-ph-sub">Program banner / flyer</div>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        ))}
-      </section>
 
-      {/* --- Calendar at Bottom --- */}
-      <section className="news-calendar-section">
-        <h2>Liturgical Calendar</h2>
-        <MonthCalendar />
-      </section>
+              {/* RIGHT: title, date, PDF list, text content */}
+              <div className="cat-event-body">
+                <header className="cat-event-header">
+                  <div className="cat-event-header-main">
+                    <h2>{row.title || "Untitled event"}</h2>
+                    {row.location && (
+                      <div className="cat-event-location">{row.location}</div>
+                    )}
+                    {formatDate(row) && (
+                      <div className="cat-event-date">
+                        {formatDate(row)}
+                        {row.start_time && (
+                          <> · {formatTime(row.start_time)}</>
+                        )}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* PDF resources card – behaves like a list header */}
+                  <div className="cat-pdf-resources">
+                    <div className="cat-pdf-heading">PDF RESOURCES</div>
+                    {pdfUrl ? (
+                      <button
+                        type="button"
+                        className="cat-pdf-card"
+                        onClick={() =>
+                          window.open(pdfUrl, "_blank", "noopener")
+                        }
+                      >
+                        <div className="cat-pdf-icon">📄</div>
+                        <div className="cat-pdf-text">
+                          <div className="cat-pdf-title">{pdfTitle}</div>
+                          <div className="cat-pdf-sub">
+                            Click to read, print, or download.
+                          </div>
+                        </div>
+                      </button>
+                    ) : (
+                      <div className="cat-pdf-card cat-pdf-card-disabled">
+                        <div className="cat-pdf-icon">📄</div>
+                        <div className="cat-pdf-text">
+                          <div className="cat-pdf-title">No PDF attached</div>
+                          <div className="cat-pdf-sub">
+                            PDF resources will appear here once added.
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </header>
+
+                {/* Read-more content (summary + full description) */}
+                {showDetails && (
+                  <div className="cat-event-text">
+                    {row.summary && (
+                      <div
+                        className="cat-event-summary"
+                        dangerouslySetInnerHTML={{ __html: row.summary }}
+                      />
+                    )}
+
+                    {row.body_html && (
+                      <div
+                        className="cat-event-bodyhtml"
+                        dangerouslySetInnerHTML={{ __html: row.body_html }}
+                      />
+                    )}
+                  </div>
+                )}
+
+                <footer className="cat-event-footer">
+                  <button
+                    type="button"
+                    className="cat-readmore-btn"
+                    onClick={() => toggleExpanded(row.id)}
+                  >
+                    {showDetails
+                      ? "Hide details"
+                      : "Read more about this program"}
+                  </button>
+
+                  {!pdfUrl && (
+                    <span className="cat-event-note">
+                      No PDF resources have been attached yet.
+                    </span>
+                  )}
+                </footer>
+              </div>
+            </article>
+          );
+        })}
+      </div>
     </div>
   );
 }

@@ -1,0 +1,132 @@
+/* Container */
+.gallery-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+/* Header */
+.gallery-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.gallery-header h1 {
+  font-size: 2.4rem;
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+.gallery-header p {
+  color: #555;
+  font-size: 1.1rem;
+}
+
+/* Album Grid */
+.albums-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+/* Album Card */
+.album-card {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.album-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+}
+
+.album-cover {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.album-info {
+  padding: 15px;
+}
+
+.album-info h3 {
+  margin-bottom: 8px;
+  font-size: 1.2rem;
+  color: #2c3e50;
+}
+
+.album-info p {
+  font-size: 0.95rem;
+  color: #444;
+  margin-bottom: 12px;
+}
+
+.photo-count {
+  font-size: 0.85rem;
+  color: #777;
+}
+
+/* Lightbox */
+.lightbox-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5000;
+}
+
+.lightbox-content {
+  background: #fff;
+  padding: 20px;
+  max-width: 700px;
+  width: 95%;
+  border-radius: 8px;
+  text-align: center;
+  position: relative;
+}
+
+.lightbox-title {
+  margin-bottom: 15px;
+}
+
+.lightbox-image {
+  max-width: 100%;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.lightbox-caption {
+  color: #555;
+  margin-bottom: 15px;
+}
+
+.lightbox-controls button {
+  padding: 8px 16px;
+  margin: 0 10px;
+  background: #0066cc;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.lightbox-close {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #333;
+  cursor: pointer;
+}

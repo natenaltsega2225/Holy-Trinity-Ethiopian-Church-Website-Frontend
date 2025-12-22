@@ -9,29 +9,29 @@ const OurHistory = () => {
       title: "Ancient Origins",
       description:
         "The Ethiopian Orthodox Tewahedo Church traces its roots to the conversion of the Ethiopian eunuch by Philip the Apostle, as recorded in Acts 8:26-40.",
-      icon: BookOpen
+      icon: BookOpen,
     },
     {
       year: "4th Century",
       title: "Christianity Declared",
       description:
         "King Ezana of Axum declared Christianity as the official religion of Ethiopia, making it one of the oldest Christian nations in the world.",
-      icon: Church
+      icon: Church,
     },
     {
       year: "1959",
       title: "Autocephaly Granted",
       description:
         "The Ethiopian Orthodox Tewahedo Church was granted autocephaly by the Coptic Orthodox Church of Alexandria.",
-      icon: Calendar
+      icon: Calendar,
     },
     {
       year: "Present Day",
       title: "Holy Trinity Established",
       description:
         "Holy Trinity Ethiopian Orthodox Tewahedo Church was established to serve the growing Ethiopian Orthodox community in our local area.",
-      icon: Users
-    }
+      icon: Users,
+    },
   ];
 
   return (
@@ -42,17 +42,21 @@ const OurHistory = () => {
           <div className="history-header animate-fade-in-up">
             <h1 className="history-title">Our Sacred History</h1>
             <p className="history-subtitle">
-              The Ethiopian Orthodox Tewahedo Church is one of the oldest Christian churches in the world, 
+              The Ethiopian Orthodox Tewahedo Church is one of the oldest Christian churches in the world,
               with a rich heritage spanning nearly two millennia. Our local community continues this sacred tradition.
             </p>
           </div>
 
-          {/* Timeline */}
+          {/* Timeline / Milestones */}
           <div className="history-timeline">
             {milestones.map((milestone, index) => {
               const Icon = milestone.icon;
               return (
-                <div key={index} className="history-milestone animate-fade-in-up" style={{ animationDelay: `${index * 0.1}s` }}>
+                <div
+                  key={index}
+                  className="history-milestone animate-fade-in-up"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
                   <div className="history-card">
                     <div className="history-card-content">
                       <div className="history-icon-wrapper">
@@ -73,36 +77,32 @@ const OurHistory = () => {
             })}
           </div>
 
-          {/* Additional Content */}
-          <div className="history-additional grid">
+          {/* Additional Content: Centered, Large Screen Friendly */}
+          <div className="history-additional">
             <div className="history-additional-card animate-fade-in-up">
-              <div className="history-card-content">
-                <h3>Our Local Community</h3>
-                <p>
-                  Holy Trinity Ethiopian Orthodox Tewahedo Church was established to serve the growing 
-                  Ethiopian Orthodox community in our area. We are committed to preserving the ancient 
-                  traditions while welcoming all who seek spiritual growth.
-                </p>
-                <p>
-                  Our church serves as a spiritual home for families and individuals, providing worship 
-                  services, religious education, and community support in the Orthodox tradition.
-                </p>
-              </div>
+              <h3>Our Local Community</h3>
+              <p>
+                Holy Trinity Ethiopian Orthodox Tewahedo Church was established to serve the growing
+                Ethiopian Orthodox community in our area. We are committed to preserving the ancient
+                traditions while welcoming all who seek spiritual growth.
+              </p>
+              <p>
+                Our church serves as a spiritual home for families and individuals, providing worship
+                services, religious education, and community support in the Orthodox tradition.
+              </p>
             </div>
 
             <div className="history-additional-card animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-              <div className="history-card-content">
-                <h3>Our Mission</h3>
-                <p>
-                  We are dedicated to maintaining the spiritual, cultural, and liturgical heritage of 
-                  the Ethiopian Orthodox Tewahedo Church. Through worship, education, and fellowship, 
-                  we strengthen our community's faith.
-                </p>
-                <p>
-                  Our mission is to provide a welcoming environment where all can experience the beauty 
-                  of Orthodox Christianity and grow in their relationship with God.
-                </p>
-              </div>
+              <h3>Our Mission</h3>
+              <p>
+                We are dedicated to maintaining the spiritual, cultural, and liturgical heritage of
+                the Ethiopian Orthodox Tewahedo Church. Through worship, education, and fellowship,
+                we strengthen our community's faith.
+              </p>
+              <p>
+                Our mission is to provide a welcoming environment where all can experience the beauty
+                of Orthodox Christianity and grow in their relationship with God.
+              </p>
             </div>
           </div>
         </div>

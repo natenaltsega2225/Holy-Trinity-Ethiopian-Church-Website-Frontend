@@ -1,3 +1,4 @@
+//src/pages/ServePage.jsx
 import React from "react";
 import { Link } from "react-router-dom";
 import "../styles/servePage.css";
@@ -5,32 +6,49 @@ import "../styles/servePage.css";
 const opportunities = [
   {
     id: 1,
-    title: "Parking Attendant",
-    ministry: "Hospitality",
+    title: "Sunday School",
+    ministry: "Worship",
     description:
-      "Assist with directing cars, ensuring safety, and welcoming members as they arrive for service.",
-    membership: "No",
-    frequency: "Weekly",
-    ageRequirement: "18+",
-  },
-  {
-    id: 2,
-    title: "Sunday School Teacher Assistant",
-    ministry: "Worship / Youth",
-    description:
-      "Support the Sunday School teacher by helping organize lessons, guiding children, and creating a nurturing learning environment.",
+      "Faith-forming classes for children and youth centered on the Holy Scriptures, the Synaxarium, and the life of the Church.",
     membership: "Yes",
     frequency: "Weekly",
     ageRequirement: "18+",
   },
   {
-    id: 3,
-    title: "Church Playground Cleanup",
-    ministry: "Facilities",
+    id: 2,
+    title: "Curriculum",
+    ministry: "Worship",
     description:
-      "Help maintain a clean and safe environment by cleaning, organizing, and caring for the church playground.",
+      "Developing age-appropriate lessons based on the Ethiopian Orthodox Tewahedo calendar.",
+    membership: "Yes",
+    frequency: "Monthly",
+    ageRequirement: "16+",
+  },
+  {
+    id: 3,
+    title: "Connections Team",
+    ministry: "Connections",
+    description: "Welcome visitors and help new members feel at home.",
     membership: "No",
     frequency: "Monthly",
+    ageRequirement: "16+",
+  },
+  {
+    id: 4,
+    title: "Hospitality Team",
+    ministry: "Connections",
+    description: "Serve coffee, greet members, and create a welcoming environment on Sundays.",
+    membership: "No",
+    frequency: "Weekly",
+    ageRequirement: "16+",
+  },
+  {
+    id: 5,
+    title: "Choir",
+    ministry: "Worship",
+    description: "Lift up your voice in praise and help lead the congregation in worship.",
+    membership: "Yes",
+    frequency: "Weekly",
     ageRequirement: "18+",
   },
 ];
@@ -55,13 +73,10 @@ export default function ServePage() {
           <div className="filter-group">
             <h4>Ministry</h4>
             <label>
-              <input type="checkbox" /> Hospitality
+              <input type="checkbox" /> Worship
             </label>
             <label>
-              <input type="checkbox" /> Worship / Youth
-            </label>
-            <label>
-              <input type="checkbox" /> Facilities
+              <input type="checkbox" /> Connections
             </label>
           </div>
 
@@ -92,10 +107,7 @@ export default function ServePage() {
         <section className="serve-list-section">
           {opportunities.map((opportunity) => (
             <div key={opportunity.id} className="serve-card">
-              <h2 className="serve-opportunity-title">
-                {opportunity.title}
-              </h2>
-
+              <h2 className="serve-opportunity-title">{opportunity.title}</h2>
               <p className="serve-opportunity-description">
                 {opportunity.description}
               </p>
@@ -111,8 +123,7 @@ export default function ServePage() {
                   <strong>Frequency:</strong> {opportunity.frequency}
                 </li>
                 <li>
-                  <strong>Age Requirement:</strong>{" "}
-                  {opportunity.ageRequirement}
+                  <strong>Age Requirement:</strong> {opportunity.ageRequirement}
                 </li>
               </ul>
 

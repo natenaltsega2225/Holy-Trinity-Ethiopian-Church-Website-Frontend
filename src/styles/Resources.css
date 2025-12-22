@@ -1,0 +1,118 @@
+/* ===== Media & Resources Section ===== */
+.media-resources-section {
+  padding: 70px 0;
+  background: #f9f9f9;
+}
+
+.ht-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  text-align: center;
+}
+
+.ht-h3 {
+  font-size: clamp(24px, 3vw, 36px);
+  font-weight: 800;
+  color: #133a74;
+  margin-bottom: 1rem;
+}
+
+.ht-lead {
+  color: #3b4c6a;
+  font-size: clamp(14px, 2vw, 18px);
+  line-height: 1.7;
+  max-width: 850px;
+  margin: 0 auto 2rem;
+}
+
+/* ===== Card Styling ===== */
+.mr-card-link-wrapper {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  padding: 0 10px; /* spacing inside slider */
+}
+
+.mr-card {
+  background: #fff;
+  border: 1px solid #e7eef6;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(15, 45, 92, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  height: 100%;
+  display: flex;
+}
+
+.mr-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(15, 45, 92, 0.12);
+}
+
+.mr-card-body {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.mr-card-icon {
+  margin-bottom: 12px;
+  flex-shrink: 0;
+}
+
+.mr-card-title {
+  margin: 0 0 10px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--blue-800);
+}
+
+.mr-card-text {
+  margin: 0 0 12px;
+  color: #516382;
+  line-height: 1.6;
+  font-size: 15px;
+  flex-grow: 1; /* text takes more space */
+}
+
+.mr-card-link {
+  font-weight: 700;
+  color: var(--blue-700);
+  font-size: 14px;
+}
+
+/* ===== Slick Slider Overrides ===== */
+.slick-slide {
+  padding: 10px 0;
+}
+
+.slick-dots li button:before {
+  font-size: 10px;
+  color: #133a74;
+}
+
+.slick-dots li.slick-active button:before {
+  color: #f2be42; /* highlight active dot */
+}
+
+.slick-prev:before,
+.slick-next:before {
+  font-size: 24px;
+  color: #133a74;
+}
+
+/* ===== Mobile Optimization ===== */
+@media (max-width: 600px) {
+  .mr-card-body {
+    padding: 14px;
+  }
+
+  .mr-card-title {
+    font-size: 18px;
+  }
+
+  .mr-card-text {
+    font-size: 14px;
+  }
+}

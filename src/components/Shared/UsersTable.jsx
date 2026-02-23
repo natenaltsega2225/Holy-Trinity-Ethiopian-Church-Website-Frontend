@@ -1,4 +1,5 @@
 
+
 // // src/components/Shared/UsersTable.jsx
 // import React, { useEffect, useMemo, useState } from "react";
 // import api from "../api";
@@ -28,7 +29,7 @@
 // }
 
 // export default function UsersTable({
-//   endpoint = "/members",      // => GET /api/members
+//   endpoint = "/members", // => GET /api/members
 //   canCreate = false,
 //   canEditRole = false,
 //   canDelete = false,
@@ -49,11 +50,11 @@
 //   const [form, setForm] = useState(blank);
 //   const [err, setErr] = useState("");
 
-//   // top-right 3-dots menu state
-//   const [actionsOpen, setActionsOpen] = useState(false);
+//   // which row's 3-dot menu is open
+//   const [menuRow, setMenuRow] = useState(null);
 
 //   const canReallyCreate = canCreate && isAdmin;
-//   const canReallyEdit   = isAdmin;
+//   const canReallyEdit = isAdmin;
 //   const canReallyDelete = canDelete && isAdmin;
 
 //   async function load() {
@@ -63,7 +64,6 @@
 //     setRows(data.rows || []);
 //     setTotal(data.total || 0);
 //   }
-
 //   useEffect(() => {
 //     load();
 //     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -74,6 +74,7 @@
 //     setEditId(null);
 //     setForm(blank);
 //     setErr("");
+//     setMenuRow(null);
 //     setShowModal(true);
 //   }
 
@@ -82,30 +83,8 @@
 //     setEditId(r.id);
 //     setForm({
 //       first_name: r.first_name || "",
-//       last_name:  r.last_name  || "",
-//       email:      r.email      || "",
-//       phone:      r.phone      || "",
-//       address_line1: r.address_line1 || "",
-//       address_line2: r.address_line2 || "",
-//       city: r.city || "",
-//       state: r.state || "",
-//       zip: r.zip || "",
-//       role: r.role || "member",
-//       password: "",
-//     });
-//     setErr("");
-//     setShowModal(true);
-//   }
-
-//   // Copy an existing row into a new "Create Member" form
-//   function copyFrom(r) {
-//     if (!canReallyCreate) return;
-//     setEditId(null); // new record
-//     setForm({
-//       first_name: r.first_name || "",
 //       last_name: r.last_name || "",
-//       // email must be unique – leave empty so admin fills it
-//       email: "",
+//       email: r.email || "",
 //       phone: r.phone || "",
 //       address_line1: r.address_line1 || "",
 //       address_line2: r.address_line2 || "",
@@ -116,6 +95,29 @@
 //       password: "",
 //     });
 //     setErr("");
+//     setMenuRow(null);
+//     setShowModal(true);
+//   }
+
+//   // Copy an existing row into a "Create Member" form
+//   function copyToNew(r) {
+//     if (!canReallyCreate) return;
+//     setEditId(null); // creating, not editing
+//     setForm({
+//       first_name: r.first_name || "",
+//       last_name: r.last_name || "",
+//       email: "", // force admin to enter a new unique email
+//       phone: r.phone || "",
+//       address_line1: r.address_line1 || "",
+//       address_line2: r.address_line2 || "",
+//       city: r.city || "",
+//       state: r.state || "",
+//       zip: r.zip || "",
+//       role: r.role || "member",
+//       password: "",
+//     });
+//     setErr("");
+//     setMenuRow(null);
 //     setShowModal(true);
 //   }
 
@@ -135,6 +137,7 @@
 //         await api.post(`/members`, form);
 //       }
 //       setShowModal(false);
+//       setMenuRow(null);
 //       load();
 //     } catch (e2) {
 //       setErr(e2.response?.data?.error || "Save failed");
@@ -146,77 +149,11 @@
 //     if (!window.confirm("Delete this member?")) return;
 //     try {
 //       await api.delete(`/members/${id}`);
+//       setMenuRow(null);
 //       load();
 //     } catch (e2) {
 //       alert(e2.response?.data?.error || "Delete failed");
 //     }
-//   }
-
-//   // Export helpers – simple CSV export under different names
-//   function exportCSV(filename) {
-//     if (!rows.length) return;
-
-//     const header = [
-//       "First Name",
-//       "Last Name",
-//       "Email",
-//       "Phone",
-//       "Address1",
-//       "Address2",
-//       "City",
-//       "State",
-//       "ZIP",
-//       "Role",
-//       "Paid Status",
-//       "Cadence Months",
-//     ];
-
-//     const body = rows.map((r) => [
-//       r.first_name || "",
-//       r.last_name || "",
-//       r.email || "",
-//       r.phone || "",
-//       r.address_line1 || "",
-//       r.address_line2 || "",
-//       r.city || "",
-//       r.state || "",
-//       r.zip || "",
-//       r.role || "",
-//       r.paid_status || "",
-//       r.cadence_months ?? "",
-//     ]);
-
-//     const lines = [header, ...body].map((cols) =>
-//       cols
-//         .map((c) => {
-//           const v = String(c ?? "");
-//           return /[",\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v;
-//         })
-//         .join(",")
-//     );
-
-//     const csv = lines.join("\r\n");
-//     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-//     const url = URL.createObjectURL(blob);
-//     const a = document.createElement("a");
-//     a.href = url;
-//     a.download = filename;
-//     document.body.appendChild(a);
-//     a.click();
-//     document.body.removeChild(a);
-//     URL.revokeObjectURL(url);
-//   }
-
-//   function handleExport(kind) {
-//     if (!rows.length) return;
-//     if (kind === "excel") {
-//       exportCSV("members-excel.csv");
-//     } else if (kind === "spreadsheet") {
-//       exportCSV("members-spreadsheet.csv");
-//     } else if (kind === "document") {
-//       exportCSV("members-document.csv");
-//     }
-//     setActionsOpen(false);
 //   }
 
 //   const pages = useMemo(
@@ -226,102 +163,25 @@
 
 //   return (
 //     <>
-//       {/* Search + toolbar */}
 //       <div className="card" style={{ marginBottom: 12 }}>
-//         <div className="table-toolbar">
+//         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
 //           <input
-//             className="table-search"
 //             placeholder="Search name/email/phone/city/state/zip…"
 //             value={search}
 //             onChange={(e) => {
 //               setPage(1);
 //               setSearch(e.target.value);
 //             }}
+//             style={{ flex: "1 1 280px" }}
 //           />
-
-//           <div className="table-toolbar-right">
-//             {canReallyCreate && (
-//               <button className="btn btn-primary" onClick={openCreate}>
-//                 + New Member
-//               </button>
-//             )}
-
-//             {/* 3-dots menu (I want to...) – admin only */}
-//             {isAdmin && (
-//               <div className="actions-menu-wrapper">
-//                 <button
-//                   type="button"
-//                   className="icon-btn menu-trigger"
-//                   onClick={() => setActionsOpen((o) => !o)}
-//                   aria-haspopup="true"
-//                   aria-expanded={actionsOpen}
-//                   title="More actions"
-//                 >
-//                   ⋮
-//                 </button>
-
-//                 {actionsOpen && (
-//                   <div className="actions-menu" role="menu">
-//                     <div className="actions-menu-header">I want to…</div>
-
-//                     {canReallyCreate && (
-//                       <button
-//                         type="button"
-//                         className="actions-menu-item"
-//                         onClick={() => {
-//                           setActionsOpen(false);
-//                           openCreate();
-//                         }}
-//                       >
-//                         Add Row
-//                       </button>
-//                     )}
-
-//                     <button
-//                       type="button"
-//                       className="actions-menu-item"
-//                       onClick={() => {
-//                         // Placeholder – hook up custom saved views if you like
-//                         setActionsOpen(false);
-//                         window.alert("Views feature coming soon.");
-//                       }}
-//                     >
-//                       Views
-//                     </button>
-
-//                     <div className="actions-menu-divider" />
-
-//                     <div className="actions-menu-subtitle">Export</div>
-//                     <button
-//                       type="button"
-//                       className="actions-menu-item"
-//                       onClick={() => handleExport("excel")}
-//                     >
-//                       Excel
-//                     </button>
-//                     <button
-//                       type="button"
-//                       className="actions-menu-item"
-//                       onClick={() => handleExport("spreadsheet")}
-//                     >
-//                       Spreadsheet
-//                     </button>
-//                     <button
-//                       type="button"
-//                       className="actions-menu-item"
-//                       onClick={() => handleExport("document")}
-//                     >
-//                       Document
-//                     </button>
-//                   </div>
-//                 )}
-//               </div>
-//             )}
-//           </div>
+//           {canReallyCreate && (
+//             <button onClick={openCreate} className="btn btn-primary">
+//               + New Member
+//             </button>
+//           )}
 //         </div>
 //       </div>
 
-//       {/* Table */}
 //       <div className="card" style={{ overflowX: "auto" }}>
 //         <table className="table">
 //           <thead>
@@ -333,7 +193,7 @@
 //               <th>Role</th>
 //               <th>Billing Cadence</th>
 //               <th>Paid</th>
-//               {isAdmin && <th style={{ width: 140 }} />}
+//               {isAdmin && <th style={{ width: 64 }} />}
 //             </tr>
 //           </thead>
 //           <tbody>
@@ -364,43 +224,54 @@
 
 //                 {isAdmin && (
 //                   <td className="actions">
-//                     <div className="row-actions">
-//                       <button
-//                         type="button"
-//                         className="icon-btn"
-//                         title="Edit member"
-//                         onClick={() => openEdit(r)}
-//                       >
-//                         ✏️
-//                       </button>
+//                     {/* 3-dot menu trigger */}
+//                     <button
+//                       type="button"
+//                       className="row-menu-btn"
+//                       aria-haspopup="menu"
+//                       aria-expanded={menuRow === r.id}
+//                       onClick={(e) => {
+//                         e.stopPropagation();
+//                         setMenuRow((curr) => (curr === r.id ? null : r.id));
+//                       }}
+//                     >
+//                       ⋮
+//                     </button>
 
-//                       {canReallyCreate && (
+//                     {menuRow === r.id && (
+//                       <div className="row-menu" role="menu">
 //                         <button
 //                           type="button"
-//                           className="icon-btn"
-//                           title="Copy row"
-//                           onClick={() => copyFrom(r)}
+//                           onClick={() => openEdit(r)}
+//                           role="menuitem"
 //                         >
-//                           📄
+//                           Edit member
 //                         </button>
-//                       )}
-
-//                       {canReallyDelete && (
-//                         <button
-//                           type="button"
-//                           className="icon-btn danger"
-//                           title="Delete member"
-//                           onClick={() => remove(r.id)}
-//                         >
-//                           ✕
-//                         </button>
-//                       )}
-//                     </div>
+//                         {canReallyCreate && (
+//                           <button
+//                             type="button"
+//                             onClick={() => copyToNew(r)}
+//                             role="menuitem"
+//                           >
+//                             Copy row to new member
+//                           </button>
+//                         )}
+//                         {canReallyDelete && (
+//                           <button
+//                             type="button"
+//                             className="danger"
+//                             onClick={() => remove(r.id)}
+//                             role="menuitem"
+//                           >
+//                             Delete member
+//                           </button>
+//                         )}
+//                       </div>
+//                     )}
 //                   </td>
 //                 )}
 //               </tr>
 //             ))}
-
 //             {!rows.length && (
 //               <tr>
 //                 <td
@@ -414,13 +285,19 @@
 //           </tbody>
 //         </table>
 
-//         {/* simple pager */}
 //         {pages > 1 && (
-//           <div className="table-pager">
+//           <div
+//             style={{
+//               display: "flex",
+//               justifyContent: "flex-end",
+//               gap: 8,
+//               paddingTop: 10,
+//             }}
+//           >
 //             <button disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>
 //               Prev
 //             </button>
-//             <div className="table-pager-info">
+//             <div style={{ alignSelf: "center" }}>
 //               Page {page} / {pages}
 //             </div>
 //             <button
@@ -433,16 +310,17 @@
 //         )}
 //       </div>
 
-//       {/* Create/Edit Modal */}
-
 //       {showModal && (
 //         <div className="terms-overlay" role="dialog" aria-modal="true">
-//           <div className="terms-modal" style={{ maxWidth: 720 }}>
+//           <div className="terms-modal" style={{ maxWidth: 720, maxHeight: "90vh" }}>
 //             <div className="terms-head">
 //               <h2>{editId ? "Edit Member" : "Create Member"}</h2>
 //               <button
 //                 className="terms-close"
-//                 onClick={() => setShowModal(false)}
+//                 onClick={() => {
+//                   setShowModal(false);
+//                   setMenuRow(null);
+//                 }}
 //                 aria-label="Close"
 //               >
 //                 ✕
@@ -562,7 +440,7 @@
 //                   >
 //                     <option value="member">member</option>
 //                     <option value="finance">finance</option>
-//                     {/* <option value="member_mgr">member_mgr</option> */}
+//                     <option value="member_mgr">member_mgr</option>
 //                     <option value="admin">admin</option>
 //                   </select>
 //                 </div>
@@ -586,26 +464,24 @@
 //                   display: "flex",
 //                   gap: 8,
 //                   justifyContent: "flex-end",
-//                   marginTop: 8,
+//                   marginTop: 12,
 //                 }}
 //               >
 //                 <button
 //                   type="button"
-//                   className="btn btn-muted"
-//                   onClick={() => setShowModal(false)}
+//                   onClick={() => {
+//                     setShowModal(false);
+//                     setMenuRow(null);
+//                   }}
 //                 >
 //                   Cancel
 //                 </button>
-//                 <button type="submit" className="btn btn-primary">
-//                   {editId ? "Save" : "Create"}
-//                 </button>
+//                 <button type="submit">{editId ? "Save" : "Create"}</button>
 //               </div>
 //             </form>
 //           </div>
 //         </div>
 //       )}
-
-
 //     </>
 //   );
 // }
@@ -639,8 +515,25 @@ function cadenceLabel(n) {
   return `${n} months`;
 }
 
+/**
+ * UsersTable supports BOTH:
+ * - Public/Member list: endpoint="/members"    -> GET/POST/PUT/DELETE /api/members
+ * - Admin management:   endpoint="/admin/users"-> GET/POST/PATCH/DELETE /api/admin/users
+ *
+ * Admin endpoints:
+ *   GET    /api/admin/users
+ *   POST   /api/admin/users
+ *   PATCH  /api/admin/users/:id/role
+ *   DELETE /api/admin/users/:id
+ *
+ * Members endpoints (if your backend has them):
+ *   GET    /api/members
+ *   POST   /api/members
+ *   PUT    /api/members/:id
+ *   DELETE /api/members/:id
+ */
 export default function UsersTable({
-  endpoint = "/members", // => GET /api/members
+  endpoint = "/members", // default => GET /api/members
   canCreate = false,
   canEditRole = false,
   canDelete = false,
@@ -648,6 +541,20 @@ export default function UsersTable({
   const { user } = useAuth() || {};
   const role = user?.role || "member";
   const isAdmin = role === "admin";
+
+  // normalize endpoint into a leading-slash path (no trailing slash)
+  const endpointPath = useMemo(() => {
+    let e = (endpoint || "/members").trim();
+    if (!e.startsWith("/")) e = `/${e}`;
+    e = e.replace(/\/+$/, "");
+    return e;
+  }, [endpoint]);
+
+  // detect if we are on admin API
+  const isAdminEndpoint = useMemo(
+    () => endpointPath.startsWith("/admin/"),
+    [endpointPath]
+  );
 
   const [rows, setRows] = useState([]);
   const [search, setSearch] = useState("");
@@ -665,20 +572,24 @@ export default function UsersTable({
   const [menuRow, setMenuRow] = useState(null);
 
   const canReallyCreate = canCreate && isAdmin;
-  const canReallyEdit = isAdmin;
+  const canReallyEdit = isAdmin; // edit form for admin only in this table
   const canReallyDelete = canDelete && isAdmin;
 
   async function load() {
     const params = { search, page, pageSize };
-    const url = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
-    const { data } = await api.get(url, { params });
+
+    // ✅ Admin list uses /api/admin/users (your backend returns { ok, rows })
+    // ✅ Members list uses /api/members (your backend returns { rows, total } or { ok, rows, total })
+    const { data } = await api.get(endpointPath, { params });
+
     setRows(data.rows || []);
     setTotal(data.total || 0);
   }
+
   useEffect(() => {
     load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search, page, endpoint]);
+  }, [search, page, endpointPath]);
 
   function openCreate() {
     if (!canReallyCreate) return;
@@ -738,15 +649,43 @@ export default function UsersTable({
 
     try {
       if (editId) {
+        // ---- EDIT ----
+        // Your backend currently supports:
+        // - members: PUT /api/members/:id
+        // - admin:   (role changes via PATCH /api/admin/users/:id/role)
+        //
+        // We'll do:
+        // - If admin endpoint: PATCH role + (optional) PUT members details if you later add it
+        // - If members endpoint: PUT /members/:id
         const { password, ...payload } = form; // no password change here
-        await api.put(`/members/${editId}`, payload);
+
+        if (isAdminEndpoint) {
+          // ✅ update role using admin route (only if role changed / allowed)
+          if (canEditRole && payload.role) {
+            await api.patch(`/admin/users/${editId}/role`, { role: payload.role });
+          }
+
+          // NOTE: Your admin.js does NOT currently have an endpoint to update profile fields.
+          // If you want editing name/phone/address from admin, add:
+          // PATCH /api/admin/users/:id (update fields)
+          // For now, we just close and reload.
+        } else {
+          // members API edit
+          await api.put(`${endpointPath}/${editId}`, payload);
+        }
       } else {
+        // ---- CREATE ----
         if (!form.password || form.password.length < 6) {
           setErr("Password must be at least 6 characters.");
           return;
         }
-        await api.post(`/members`, form);
+
+        // ✅ Create at the correct endpoint
+        // Admin: POST /api/admin/users
+        // Members: POST /api/members (if enabled)
+        await api.post(endpointPath, form);
       }
+
       setShowModal(false);
       setMenuRow(null);
       load();
@@ -758,8 +697,15 @@ export default function UsersTable({
   async function remove(id) {
     if (!canReallyDelete) return;
     if (!window.confirm("Delete this member?")) return;
+
     try {
-      await api.delete(`/members/${id}`);
+      if (isAdminEndpoint) {
+        // ✅ Admin delete route
+        await api.delete(`/admin/users/${id}`);
+      } else {
+        // members delete route
+        await api.delete(`${endpointPath}/${id}`);
+      }
       setMenuRow(null);
       load();
     } catch (e2) {
@@ -858,6 +804,7 @@ export default function UsersTable({
                         >
                           Edit member
                         </button>
+
                         {canReallyCreate && (
                           <button
                             type="button"
@@ -867,6 +814,7 @@ export default function UsersTable({
                             Copy row to new member
                           </button>
                         )}
+
                         {canReallyDelete && (
                           <button
                             type="button"
@@ -883,6 +831,7 @@ export default function UsersTable({
                 )}
               </tr>
             ))}
+
             {!rows.length && (
               <tr>
                 <td
@@ -923,7 +872,10 @@ export default function UsersTable({
 
       {showModal && (
         <div className="terms-overlay" role="dialog" aria-modal="true">
-          <div className="terms-modal" style={{ maxWidth: 720, maxHeight: "90vh" }}>
+          <div
+            className="terms-modal"
+            style={{ maxWidth: 720, maxHeight: "90vh" }}
+          >
             <div className="terms-head">
               <h2>{editId ? "Edit Member" : "Create Member"}</h2>
               <button
@@ -1054,6 +1006,13 @@ export default function UsersTable({
                     <option value="member_mgr">member_mgr</option>
                     <option value="admin">admin</option>
                   </select>
+
+                  {isAdminEndpoint && editId ? (
+                    <small style={{ display: "block", marginTop: 6, opacity: 0.8 }}>
+                      Tip: On Admin endpoint, role updates are saved via{" "}
+                      <code>/api/admin/users/:id/role</code>.
+                    </small>
+                  ) : null}
                 </div>
               )}
 
@@ -1066,6 +1025,7 @@ export default function UsersTable({
                     onChange={(e) =>
                       setForm((f) => ({ ...f, password: e.target.value }))
                     }
+                    placeholder="min 6 characters"
                   />
                 </div>
               )}

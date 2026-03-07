@@ -1,47 +1,6 @@
-// // // src/hooks/useAuth.jsx
-
-// import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
-
-// const AuthContext = createContext(null);
-
-// export function AuthProvider({ children }) {
-//   const [token, setToken] = useState(() => localStorage.getItem("ht_token") || "");
-//   const [user, setUser]   = useState(() => {
-//     try { return JSON.parse(localStorage.getItem("ht_user") || "null"); }
-//     catch { return null; }
-//   });
-
-//   // keep localStorage in sync
-//   useEffect(() => {
-//     if (token) localStorage.setItem("ht_token", token);
-//     else localStorage.removeItem("ht_token");
-//   }, [token]);
-
-//   useEffect(() => {
-//     if (user) localStorage.setItem("ht_user", JSON.stringify(user));
-//     else localStorage.removeItem("ht_user");
-//   }, [user]);
-
-//   const value = useMemo(() => ({ token, setToken, user, setUser }), [token, user]);
-//   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-// }
-
-// export function useAuth() {
-//   return useContext(AuthContext);
-// }
-
-
-// // in hooks/useAuth.jsx
-// // src/hooks/useAuth.jsx (add/export this)
-// export function landingForRole(role) {
-//   if (role === 'admin')   return '/dash/admin';
-//   if (role === 'finance') return '/dash/finance';
-//   return '/dash/membership';
-// }
-
-
 // src/hooks/useAuth.jsx
-import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+import React, { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
+import api, { getAccessToken, setAccessToken } from "../components/api";
 
 const AuthContext = createContext(null);
 
@@ -52,26 +11,36 @@ export function landingForRole(role) {
 }
 
 export function AuthProvider({ children }) {
-  const [token, setToken] = useState(() => localStorage.getItem("ht_token") || "");
-  const [user, setUser] = useState(() => {
+  const [token, setTokenState] = useState(() => getAccessToken());
+  const [user, setUserState] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem("ht_user") || "null");
     } catch {
       return null;
     }
   });
+  const [booting, setBooting] = useState(true);
+  const didBoot = useRef(false);
 
-  useEffect(() => {
-    if (token) localStorage.setItem("ht_token", token);
-    else localStorage.removeItem("ht_token");
-  }, [token]);
+  const setToken = (t) => {
+    const v = t || "";
+    setTokenState(v);
+    setAccessToken(v);
+  };
 
-  useEffect(() => {
-    if (user) localStorage.setItem("ht_user", JSON.stringify(user));
-    else localStorage.removeItem("ht_user");
-  }, [user]);
+  const setUser = (u) => {
+    const v = u || null;
+    setUserState(v);
+    try {
+      if (v) localStorage.setItem("ht_user", JSON.stringify(v));
+      else localStorage.removeItem("ht_user");
+    } catch {}
+  };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      await api.post("/auth/logout", {});
+    } catch {}
     setToken("");
     setUser(null);
   };
@@ -83,9 +52,47 @@ export function AuthProvider({ children }) {
     return !!r && roles.includes(r);
   };
 
+  // Boot: try refresh once (cookie -> new access token)
+  useEffect(() => {
+    if (didBoot.current) return; // ✅ prevents double-run in StrictMode
+    didBoot.current = true;
+
+    let alive = true;
+
+    (async () => {
+      try {
+        const { data } = await api.post("/auth/refresh", {});
+        if (!alive) return;
+        if (data?.token) setToken(data.token);
+        if (data?.user) setUser(data.user);
+      } catch {
+        // no cookie / expired -> stay logged out
+        if (!alive) return;
+        setToken("");
+        // keep user null
+      } finally {
+        if (alive) setBooting(false);
+      }
+    })();
+
+    return () => {
+      alive = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const value = useMemo(
-    () => ({ token, setToken, user, setUser, logout, isAuthed, hasRole }),
-    [token, user]
+    () => ({
+      token,
+      user,
+      booting,
+      isAuthed,
+      hasRole,
+      setToken,
+      setUser,
+      logout,
+    }),
+    [token, user, booting]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

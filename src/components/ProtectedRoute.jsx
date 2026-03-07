@@ -1,41 +1,30 @@
 
+
 // src/components/ProtectedRoute.jsx
 import React from "react";
-import { Navigate, useLocation } from "react-router-dom";
-import { useAuth, landingForRole } from "../hooks/useAuth";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 
-export default function ProtectedRoute({ roles, children }) {
-  const auth = useAuth();
-  const loc = useLocation();
+function getStoredUser() {
+  try {
+    const raw = localStorage.getItem("ht_user");
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
 
-  // Optional dev bypass (keep if you like)
-  const devBypass =
-    import.meta.env.VITE_BYPASS_AUTH === "1" ||
-    localStorage.getItem("ht_role_override") === "all";
+export default function ProtectedRoute({ roles = [], children }) {
+  const location = useLocation();
+  const token = localStorage.getItem("ht_token");
+  const user = getStoredUser();
 
-  // If no auth context and no bypass → must log in
-  if (!auth && !devBypass) {
-    return <Navigate to="/login" replace state={{ from: loc.pathname }} />;
+  if (!token || !user) {
+    return <Navigate to="/login" replace state={{ from: location.pathname }} />;
   }
 
-  const token = devBypass ? "dev-token" : auth?.token;
-  const user  = devBypass ? { role: "admin", email: "dev@local" } : auth?.user;
-
-  // Not logged in → login screen
-  if (!token) {
-    return <Navigate to="/login" replace state={{ from: loc.pathname }} />;
+  if (roles.length && !roles.includes(user.role)) {
+    return <Navigate to="/" replace />;
   }
 
-  // Role-based check
-  if (!devBypass && roles?.length) {
-    const userRole = user?.role || "member";
-
-    if (!roles.includes(userRole)) {
-      // ❗ Instead of sending to "/", send them to *their* landing dashboard
-      const safe = landingForRole(userRole);
-      return <Navigate to={safe} replace />;
-    }
-  }
-
-  return children;
+  return children ? children : <Outlet />;
 }

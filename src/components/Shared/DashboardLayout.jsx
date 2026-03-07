@@ -1,45 +1,69 @@
+
+// // src/components/Shared/DashboardLayout.jsx
 // src/components/Shared/DashboardLayout.jsx
 import React from "react";
-import { Link } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "../../styles/dashboard.css";
 
-/**
- * Content wrapper for dashboard pages.
- *
- * By default it renders **no sidebar** — it assumes a parent layout (e.g., MemberLayout/AdminLayout/FinanceLayout)
- * already provides the left nav. If you ever want DashboardLayout to render its own local nav,
- * pass showNav={true} and a `nav` array.
- */
-export default function DashboardLayout({
+export default function DashboardTopbar({
   title,
-  children,
-  showNav = false,   // ← default: no internal sidebar
-  nav = [],
+  subtitle = "",
+  userLabel = "",
+  showLogout = true,
+  onToggleMenu, // ✅ controlled by layout
 }) {
+  const nav = useNavigate();
+  const location = useLocation();
+
+  const closeDrawer = () => document.body.classList.remove("dash-nav-open");
+
+  const logout = () => {
+    try {
+      localStorage.removeItem("ht_token");
+      localStorage.removeItem("ht_user");
+    } catch {}
+
+    document.body.classList.remove("dash-nav-open");
+    document.body.classList.remove("dash-nav-hidden");
+
+    nav("/login", { state: { from: location.pathname } });
+  };
+
   return (
-    <div className="dash-content">
-      <header className="section-header">
-        <h1>{title}</h1>
-        <Link to="/" className="btn">Back to site</Link>
-      </header>
+    <>
+      <div className="dash-topbar">
+        <div className="dash-topbar-left">
+          <button
+            className="dash-menu-btn"
+            onClick={onToggleMenu}
+            aria-label="Toggle menu"
+            type="button"
+          >
+            ☰
+          </button>
 
-      <div className={`section-body ${showNav ? "with-local-nav" : ""}`}>
-        {showNav && (
-          <aside className="local-aside">
-            <nav>
-              {nav.map((i) => (
-                <Link key={i.to} to={i.to} className="local-link">
-                  {i.label}
-                </Link>
-              ))}
-            </nav>
-          </aside>
-        )}
+          <div className="dash-titleWrap">
+            <div className="dash-title">{title}</div>
+            {subtitle ? <div className="dash-subtitle">{subtitle}</div> : null}
+          </div>
+        </div>
 
-        <div className="section-main">
-          {children}
+        <div className="dash-topbar-right">
+          <div className="dash-user">
+            <div className="avatar" />
+            <span>{userLabel}</span>
+          </div>
+
+          {showLogout && (
+            <button className="dash-logout-btn" onClick={logout} type="button">
+              Logout
+            </button>
+          )}
         </div>
       </div>
-    </div>
+
+      {/* overlay click handled in layouts too, but keep safe close */}
+      <div className="dash-overlay" onClick={closeDrawer} aria-hidden="true" />
+    </>
   );
 }

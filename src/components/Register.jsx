@@ -26,6 +26,7 @@ export default function Register() {
   const [err, setErr] = useState("");
   const [busy, setBusy] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
+
   const nav = useNavigate();
   const auth = useAuth();
 
@@ -35,7 +36,7 @@ export default function Register() {
     e.preventDefault();
     setErr("");
 
-    if (form.password.length < 6) return setErr("Password must be at least 6 characters.");
+    if (form.password.length < 12) return setErr("Password must be at least 12 characters.");
     if (form.password !== form.confirm) return setErr("Passwords do not match.");
     if (!form.agree) return setErr("You must agree to the terms.");
 
@@ -43,24 +44,20 @@ export default function Register() {
     try {
       const payload = {
         ...form,
-        username: form.email, // email-as-username
+        username: form.email,
       };
 
       const { data } = await api.post("/auth/register", payload);
       if (!data?.token) throw new Error("Invalid response from server.");
 
-      // Save to auth context + localStorage
       auth?.setToken?.(data.token);
       auth?.setUser?.(data.user || null);
 
-      // Convenience header
       try {
-        api.defaults.headers.common.Authorization = `Bearer ${data.token}`;
+        localStorage.setItem("ht_user", JSON.stringify(data.user || null));
       } catch {}
 
-      // Send them to their dashboard (member by default)
-      const landing = landingForRole(data.user?.role || "member");
-      nav(landing, { replace: true });
+      nav(landingForRole(data.user?.role || "member"), { replace: true });
     } catch (e2) {
       console.error("Register error:", e2);
       setErr(e2.response?.data?.error || "Registration failed");
@@ -136,6 +133,7 @@ export default function Register() {
               required
             />
           </div>
+
           <div className="auth-field">
             <label>Address line 2 (optional)</label>
             <input
@@ -147,27 +145,15 @@ export default function Register() {
           <div className="auth-grid-3">
             <div className="auth-field">
               <label>City</label>
-              <input
-                value={form.city}
-                onChange={(e) => upd("city", e.target.value)}
-                required
-              />
+              <input value={form.city} onChange={(e) => upd("city", e.target.value)} required />
             </div>
             <div className="auth-field">
               <label>State</label>
-              <input
-                value={form.state}
-                onChange={(e) => upd("state", e.target.value)}
-                required
-              />
+              <input value={form.state} onChange={(e) => upd("state", e.target.value)} required />
             </div>
             <div className="auth-field">
               <label>ZIP</label>
-              <input
-                value={form.zip}
-                onChange={(e) => upd("zip", e.target.value)}
-                required
-              />
+              <input value={form.zip} onChange={(e) => upd("zip", e.target.value)} required />
             </div>
           </div>
 
@@ -179,7 +165,7 @@ export default function Register() {
                 value={form.password}
                 onChange={(e) => upd("password", e.target.value)}
                 autoComplete="new-password"
-                placeholder="Create a password"
+                placeholder="Create a strong password (12+ chars)"
                 required
               />
             </div>
@@ -196,7 +182,6 @@ export default function Register() {
             </div>
           </div>
 
-          {/* Terms row */}
           <div className="auth-terms">
             <button
               type="button"
@@ -231,79 +216,29 @@ export default function Register() {
         </form>
       </div>
 
-      {/* Terms Modal */}
       {showTerms && (
         <div className="terms-overlay" role="dialog" aria-modal="true">
           <div className="terms-modal">
             <div className="terms-head">
               <h2>Membership Terms & Conditions</h2>
-              <button
-                className="terms-close"
-                onClick={() => setShowTerms(false)}
-                aria-label="Close"
-              >
+              <button className="terms-close" onClick={() => setShowTerms(false)} aria-label="Close">
                 ✕
               </button>
             </div>
 
-          <div className="terms-body">
-  <p>
-    <strong>Last Updated:</strong> February 2025
-  </p>
-
-  <h3>1. Purpose of Membership</h3>
-  <p>
-    Membership at Holy Trinity Ethiopian Orthodox Tewahedo Church provides
-    spiritual support, participation in liturgical life, and access to
-    community programs, events, and services.
-  </p>
-
-  <h3>2. Member Responsibilities</h3>
-  <ul>
-    <li>Participate in the spiritual and community life of the parish.</li>
-    <li>
-      Respect clergy, leaders, volunteers, and fellow parishioners in all
-      interactions.
-    </li>
-    <li>
-      Keep your contact information up to date so that we can reach you with
-      important announcements.
-    </li>
-  </ul>
-
-  <h3>3. Financial Contributions</h3>
-  <p>
-    Members are encouraged to contribute according to their ability to support
-    the church&apos;s ministries and operating costs. The finance team may
-    establish recommended monthly, semi-annual, or annual plans.
-  </p>
-
-  <h3>4. Use of Information</h3>
-  <p>
-    Contact details you provide will only be used for parish communication,
-    ministry coordination, and required administrative purposes. We do not sell
-    your information.
-  </p>
-
-  <h3>5. Code of Conduct</h3>
-  <p>
-    Members are expected to uphold Christian values and avoid behavior that
-    harms the peace, safety, or dignity of others in the community.
-  </p>
-
-  <h3>6. Changes to These Terms</h3>
-  <p>
-    These terms may be updated periodically by the parish council. When
-    changes occur, a notice will be posted and the &quot;Last Updated&quot;
-    date will be revised.
-  </p>
-
-  <p>
-    If you have any questions about these terms, please contact the parish
-    council or clergy for clarification before completing your registration.
-  </p>
-</div>
-
+            <div className="terms-body">
+              <p>
+                <strong>Last Updated:</strong> February 2025
+              </p>
+              <p>
+                Membership provides spiritual support, participation in parish life, and access to
+                community programs and services.
+              </p>
+              <p>
+                Members are encouraged to contribute according to their ability and keep contact
+                information up to date.
+              </p>
+            </div>
 
             <div className="terms-actions">
               <button
@@ -316,11 +251,7 @@ export default function Register() {
               >
                 ✓ I Agree & Close
               </button>
-              <button
-                type="button"
-                className="terms-cancel"
-                onClick={() => setShowTerms(false)}
-              >
+              <button type="button" className="terms-cancel" onClick={() => setShowTerms(false)}>
                 Close
               </button>
             </div>
@@ -330,4 +261,3 @@ export default function Register() {
     </div>
   );
 }
-

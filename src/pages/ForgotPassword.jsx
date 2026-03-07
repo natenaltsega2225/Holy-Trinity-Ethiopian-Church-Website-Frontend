@@ -11,32 +11,51 @@ export default function ForgotPassword() {
   async function submit(e) {
     e.preventDefault();
     setErr("");
+
     try {
       await api.post("/auth/forgot-password", { email });
+      // Always show success (don’t reveal if email exists)
       setSent(true);
     } catch (e2) {
-      setErr(e2.response?.data?.error || "Could not send reset email");
+      setErr("Could not send reset email. Try again later.");
     }
   }
 
   return (
-    <main style={{ maxWidth: 420, margin: "24px auto", padding: "0 16px" }}>
-      <h2>Forgot Password</h2>
-      {sent ? (
-        <p>We’ve sent a reset link if that email exists in our system.</p>
-      ) : (
-        <form onSubmit={submit} style={{ display: "grid", gap: 12 }}>
-          <input
-            type="email"
-            placeholder="Your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          {err && <div role="alert">{err}</div>}
-          <button>Send reset link</button>
-        </form>
-      )}
-    </main>
+    <div className="auth-wrap">
+      <div className="auth-card auth-card-narrow">
+        <h1 className="auth-title">Forgot Password</h1>
+        <p className="auth-sub">
+          Enter your email. If it exists, we’ll send a password reset link.
+        </p>
+
+        {sent ? (
+          <div className="auth-banner" role="status">
+            If that email exists, a reset link was sent.
+          </div>
+        ) : (
+          <form className="auth-form" onSubmit={submit} noValidate>
+            <div className="auth-field">
+              <label>Email</label>
+              <input
+                type="email"
+                placeholder="name@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+
+            {err && (
+              <div className="auth-banner" role="alert">
+                {err}
+              </div>
+            )}
+
+            <button className="auth-btn">Send reset link</button>
+          </form>
+        )}
+      </div>
+    </div>
   );
 }

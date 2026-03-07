@@ -1,216 +1,74 @@
-
-
 // src/components/AdminDashboard/NewsEventsAdmin.jsx
-import React, { useEffect, useMemo, useState, useRef } from "react";
-import DashboardLayout from "../Shared/DashboardLayout";
-import api from "../api";
-import "../../styles/dashboard.css";
-import "../../styles/auth.css";
+import React, { useEffect, useMemo, useState } from "react";
+import api, { toPublicUrl } from "../api";
+import "../../styles/newsEventsAdmin.css";
 
-// left nav for the top bar in DashboardLayout
-const NAV = [{ to: "/dash/admin/events", label: "Events" }];
+const CATEGORY_OPTIONS = [
+  { value: "kids", label: "Kids Programs" },
+  { value: "holiday", label: "Holiday Activities" },
+  { value: "trip", label: "Trips" },
+  { value: "news", label: "Church News" },
+];
 
-/* ------------------------------------------------------------------
-   WYSIWYG / Notepad-style editor (no extra dependency)
-   - Bold / italic / underline
-   - Bullets, numbered list
-   - Headings (P, H3, H4)
-   - Text colours
-   - Align left/center/right
-   - Indent / outdent
-   - Link, clear formatting
-   Content is stored as clean HTML in the DB.
--------------------------------------------------------------------*/
-function WysiwygEditor({ label, value, onChange, placeholder }) {
-  const editorRef = useRef(null);
-
-  // keep DOM in sync with incoming value (Edit mode)
-  useEffect(() => {
-    const el = editorRef.current;
-    if (!el) return;
-    const html = value || "";
-    if (el.innerHTML !== html) {
-      el.innerHTML = html;
-    }
-  }, [value]);
-
-  const exec = (cmd, arg = null) => {
-    const el = editorRef.current;
-    if (!el) return;
-    el.focus();
-    try {
-      document.execCommand(cmd, false, arg);
-      onChange(el.innerHTML);
-    } catch (e) {
-      console.warn("execCommand failed", cmd, arg, e);
-    }
-  };
-
-  const handleInput = () => {
-    const el = editorRef.current;
-    if (!el) return;
-    onChange(el.innerHTML);
-  };
-
-  const makeLink = () => {
-    const url = window.prompt("Enter URL (https://…):");
-    if (!url) return;
-    exec("createLink", url);
-  };
-
-  const setBlock = (tag) => exec("formatBlock", tag);
-
-  return (
-    <div className="auth-field rte-field">
-      <label>{label}</label>
-
-      <div className="rte-toolbar">
-        <button type="button" onClick={() => exec("bold")}>
-          B
-        </button>
-        <button type="button" onClick={() => exec("italic")}>
-          I
-        </button>
-        <button type="button" onClick={() => exec("underline")}>
-          U
-        </button>
-
-        <span className="rte-sep" />
-
-        <button type="button" onClick={() => exec("insertUnorderedList")}>
-          • List
-        </button>
-        <button type="button" onClick={() => exec("insertOrderedList")}>
-          1.
-        </button>
-
-        <span className="rte-sep" />
-
-        <button type="button" onClick={() => setBlock("p")}>
-          P
-        </button>
-        <button type="button" onClick={() => setBlock("h3")}>
-          H3
-        </button>
-        <button type="button" onClick={() => setBlock("h4")}>
-          H4
-        </button>
-
-        <span className="rte-sep" />
-
-        <button type="button" onClick={() => exec("foreColor", "#111827")}>
-          A
-        </button>
-        <button type="button" onClick={() => exec("foreColor", "#1d4ed8")}>
-          A
-        </button>
-        <button type="button" onClick={() => exec("foreColor", "#15803d")}>
-          A
-        </button>
-
-        <span className="rte-sep" />
-
-        <button type="button" onClick={() => exec("justifyLeft")}>
-          ⇤
-        </button>
-        <button type="button" onClick={() => exec("justifyCenter")}>
-          ⌾
-        </button>
-        <button type="button" onClick={() => exec("justifyRight")}>
-          ⇥
-        </button>
-
-        <span className="rte-sep" />
-
-        <button type="button" onClick={() => exec("outdent")}>
-          «
-        </button>
-        <button type="button" onClick={() => exec("indent")}>
-          »
-        </button>
-
-        <span className="rte-sep" />
-
-        <button type="button" onClick={makeLink}>
-          🔗
-        </button>
-        <button type="button" onClick={() => exec("removeFormat")}>
-          ⌫
-        </button>
-
-        <span className="rte-hint">Rich text – stored as HTML</span>
-      </div>
-
-      <div
-        ref={editorRef}
-        className="rte-editor"
-        contentEditable
-        suppressContentEditableWarning
-        onInput={handleInput}
-        data-placeholder={placeholder || ""}
-      />
-    </div>
-  );
+function safeText(v) {
+  return String(v || "").trim();
 }
 
-// ----- Admin Events Page -----
-
-const blank = {
-  id: null,
-  category: "kids",
-  title: "",
-  subtitle: "",
-  summary: "", // HTML
-  body_html: "", // HTML
-  start_date: "",
-  end_date: "",
-  start_time: "",
-  end_time: "",
-  location: "",
-  flyer_url: "",
-  pdf_url: "",
-  pdf_title: "",
-  audience: "",
-  is_published: 1,
-};
-
-const CATEGORY_LABELS = {
-  kids: "Kids Programs",
-  holiday: "Holiday Activities",
-  trip: "Trips & Outings",
-  news: "Church News",
-};
-
-function fmtDateRange(row) {
-  if (row.start_date || row.end_date) {
-    return `${row.start_date || "—"} → ${row.end_date || "—"}`;
-  }
-  return "—";
+function normalizeListResponse(res) {
+  const data = res?.data;
+  if (Array.isArray(data?.rows)) return data;
+  if (Array.isArray(data?.items)) return { ...data, rows: data.items };
+  if (Array.isArray(data)) return { rows: data, page: 1, totalPages: 1, total: data.length };
+  return { rows: [], page: 1, totalPages: 1, total: 0 };
 }
 
 export default function NewsEventsAdmin() {
   const [rows, setRows] = useState([]);
-  const [search, setSearch] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState("all");
+  const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
 
-  const [showModal, setShowModal] = useState(false);
-  const [form, setForm] = useState(blank);
-  const [err, setErr] = useState("");
+  const [category, setCategory] = useState("all");
+  const [q, setQ] = useState("");
+  const [page, setPage] = useState(1);
+  const limit = 8;
 
-  const [imageFile, setImageFile] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [editing, setEditing] = useState(null);
+
+  const [form, setForm] = useState({
+    category: "news",
+    title: "",
+    summary: "",
+    audience: "",
+    start_date: "",
+    end_date: "",
+    time_text: "",
+    location: "",
+    is_published: true,
+    pdf_title: "Open PDF (print / download)",
+    pdf_url: "",
+    flyer_url: "",
+    body_html: "",
+    remove_flyer: false,
+    remove_pdf: false,
+  });
+
+  const [flyerFile, setFlyerFile] = useState(null);
   const [pdfFile, setPdfFile] = useState(null);
 
   async function load() {
     setLoading(true);
     try {
-      const params = {};
-      if (categoryFilter !== "all") params.category = categoryFilter;
-      if (search.trim()) params.search = search.trim();
-      const { data } = await api.get("/news-events", { params });
-      setRows(data.rows || []);
+      const res = await api.get("/news-events/admin", {
+        params: { category, q, page, limit },
+      });
+      const parsed = normalizeListResponse(res);
+      setRows(parsed.rows || []);
+      setTotalPages(Number(parsed.totalPages || 1));
     } catch (e) {
       console.error(e);
+      alert(e?.response?.data?.error || "Failed to load events");
     } finally {
       setLoading(false);
     }
@@ -219,439 +77,323 @@ export default function NewsEventsAdmin() {
   useEffect(() => {
     load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categoryFilter]);
+  }, [category, q, page]);
 
-  const filteredRows = useMemo(() => {
-    if (!search.trim()) return rows;
-    const s = search.toLowerCase();
-    return rows.filter(
-      (r) =>
-        (r.title || "").toLowerCase().includes(s) ||
-        (r.summary || "").toLowerCase().includes(s) ||
-        (r.location || "").toLowerCase().includes(s)
-    );
-  }, [rows, search]);
+  const canPrev = page > 1;
+  const canNext = useMemo(() => page < totalPages, [page, totalPages]);
 
-  function openNew() {
-    setForm(blank);
-    setErr("");
-    setImageFile(null);
+  function openCreate() {
+    setEditing(null);
+    setFlyerFile(null);
     setPdfFile(null);
-    setShowModal(true);
-  }
-
-  function openEdit(row) {
     setForm({
-      ...blank,
-      ...row,
-      start_date: row.start_date || "",
-      end_date: row.end_date || "",
-      start_time: row.start_time ? row.start_time.slice(0, 5) : "",
-      end_time: row.end_time ? row.end_time.slice(0, 5) : "",
-      is_published: row.is_published ? 1 : 0,
-      flyer_url: row.flyer_url || row.flyer_image_url || "",
-      pdf_url: row.pdf_url || row.program_pdf_url || "",
-      pdf_title: row.pdf_title || "",
+      category: "news",
+      title: "",
+      summary: "",
+      audience: "",
+      start_date: "",
+      end_date: "",
+      time_text: "",
+      location: "",
+      is_published: true,
+      pdf_title: "Open PDF (print / download)",
+      pdf_url: "",
+      flyer_url: "",
+      body_html: "",
+      remove_flyer: false,
+      remove_pdf: false,
     });
-    setErr("");
-    setImageFile(null);
+    setOpen(true);
+  }
+
+  function openEdit(item) {
+    setEditing(item);
+    setFlyerFile(null);
     setPdfFile(null);
-    setShowModal(true);
+    setForm({
+      category: item?.category || "news",
+      title: item?.title || "",
+      summary: item?.summary || "",
+      audience: item?.audience || "",
+      start_date: (item?.start_date || "").slice(0, 10),
+      end_date: (item?.end_date || "").slice(0, 10),
+      time_text: item?.time_text || "",
+      location: item?.location || "",
+      is_published: !!item?.is_published,
+      pdf_title: item?.pdf_title || "Open PDF (print / download)",
+      pdf_url: item?.pdf_url || "",
+      flyer_url: item?.flyer_url || "",
+      body_html: item?.body_html || "",
+      remove_flyer: false,
+      remove_pdf: false,
+    });
+    setOpen(true);
   }
 
-  function setField(k, v) {
-    setForm((f) => ({ ...f, [k]: v }));
+  function closeModal() {
+    setOpen(false);
+    setEditing(null);
   }
 
-  async function handleSave(e) {
-    e.preventDefault();
-    setErr("");
-
-    if (!form.title.trim()) {
-      setErr("Title is required.");
-      return;
+  async function removeItem(item) {
+    if (!window.confirm("Delete this announcement?")) return;
+    try {
+      await api.delete(`/news-events/admin/${item.id}`);
+      await load();
+    } catch (e) {
+      console.error(e);
+      alert(e?.response?.data?.error || "Delete failed");
     }
+  }
 
+  async function submit(e) {
+    e.preventDefault();
+    const title = safeText(form.title);
+    if (!title) return alert("Title is required.");
+
+    setSaving(true);
     try {
       const fd = new FormData();
-      fd.append("category", form.category);
-      fd.append("title", form.title);
-      fd.append("subtitle", form.subtitle || "");
-      fd.append("summary", form.summary || "");
-      fd.append("body_html", form.body_html || "");
-      fd.append("start_date", form.start_date || "");
-      fd.append("end_date", form.end_date || "");
-      fd.append("start_time", form.start_time || "");
-      fd.append("end_time", form.end_time || "");
-      fd.append("location", form.location || "");
-      fd.append("audience", form.audience || "");
-      fd.append("flyer_url", form.flyer_url || "");
-      fd.append("pdf_url", form.pdf_url || "");
-      fd.append("pdf_title", form.pdf_title || "");
-      fd.append("is_published", form.is_published ? "1" : "0");
+      fd.set("category", form.category);
+      fd.set("title", title);
+      fd.set("summary", safeText(form.summary));
+      fd.set("audience", safeText(form.audience));
+      fd.set("start_date", form.start_date || "");
+      fd.set("end_date", form.end_date || "");
+      fd.set("time_text", safeText(form.time_text));
+      fd.set("location", safeText(form.location));
+      fd.set("is_published", form.is_published ? "1" : "0");
+      fd.set("pdf_title", safeText(form.pdf_title));
+      fd.set("pdf_url", safeText(form.pdf_url));
+      fd.set("flyer_url", safeText(form.flyer_url));
+      fd.set("body_html", form.body_html || "");
 
-      if (imageFile) fd.append("flyer_image", imageFile);
+      if (form.remove_flyer) fd.set("remove_flyer", "1");
+      if (form.remove_pdf) fd.set("remove_pdf", "1");
+
+      if (flyerFile) fd.append("flyer_image", flyerFile);
       if (pdfFile) fd.append("attachment_pdf", pdfFile);
 
-      if (form.id) {
-        await api.put(`/news-events/${form.id}`, fd, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
+      if (editing?.id) {
+        await api.put(`/news-events/admin/${editing.id}`, fd, { headers: { "Content-Type": "multipart/form-data" } });
       } else {
-        await api.post("/news-events", fd, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
+        await api.post(`/news-events/admin`, fd, { headers: { "Content-Type": "multipart/form-data" } });
       }
 
-      setShowModal(false);
+      closeModal();
       await load();
     } catch (e2) {
       console.error(e2);
-      setErr(e2.response?.data?.error || "Save failed");
-    }
-  }
-
-  async function handleDelete(id) {
-    if (!window.confirm("Delete this item?")) return;
-    try {
-      await api.delete(`/news-events/${id}`);
-      load();
-    } catch (e) {
-      alert(e.response?.data?.error || "Delete failed");
+      alert(e2?.response?.data?.error || "Save failed");
+    } finally {
+      setSaving(false);
     }
   }
 
   return (
-    <DashboardLayout title="Admin – News & Events" nav={NAV}>
-      {/* Filters + New button */}
-      <div className="card" style={{ marginBottom: 16 }}>
-        <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-          <input
-            placeholder="Search title, summary, location…"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            style={{ flex: "1 1 260px" }}
-          />
+    <div className="neAdminWrap">
+      <div className="neAdminHeader">
+        <div>
+          <h2 className="neAdminTitle">News &amp; Events (Admin)</h2>
+          <div className="neAdminSub">Create, edit, publish, and manage announcements. Upload flyer + PDF or use links.</div>
+        </div>
 
-          <select
-            value={categoryFilter}
-            onChange={(e) => setCategoryFilter(e.target.value)}
-          >
-            <option value="all">All Categories</option>
-            <option value="kids">Kids Programs</option>
-            <option value="holiday">Holiday Activities</option>
-            <option value="trip">Trips & Outings</option>
-            <option value="news">Church News</option>
-          </select>
-
-          <button onClick={openNew} className="btn btn-primary">
-            + New Item
+        <div className="neAdminHeaderActions">
+          <button className="neBtnSolid" onClick={load} disabled={loading}>
+            {loading ? "Loading..." : "Refresh"}
+          </button>
+          <button className="neBtnSolid" onClick={openCreate}>
+            + New Announcement
           </button>
         </div>
       </div>
 
-      {/* Table of events */}
-      <div className="card" style={{ overflowX: "auto" }}>
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Category</th>
-              <th>Title</th>
-              <th>Dates</th>
-              <th>Location</th>
-              <th>Media</th>
-              <th>Published</th>
-              <th style={{ width: 180 }} />
-            </tr>
-          </thead>
-          <tbody>
-            {loading && (
-              <tr>
-                <td colSpan={7} style={{ textAlign: "center", padding: 16 }}>
-                  Loading…
-                </td>
-              </tr>
-            )}
+      <div className="neAdminFilters">
+        <div className="neField">
+          <label>Category</label>
+          <select value={category} onChange={(e) => { setPage(1); setCategory(e.target.value); }}>
+            <option value="all">All</option>
+            {CATEGORY_OPTIONS.map((c) => (
+              <option key={c.value} value={c.value}>{c.label}</option>
+            ))}
+          </select>
+        </div>
 
-            {!loading &&
-              filteredRows.map((r) => {
-                const flyerUrl = r.flyer_url || r.flyer_image_url;
-                const pdfUrl = r.pdf_url || r.program_pdf_url;
-                return (
-                  <tr key={r.id}>
-                    <td>{CATEGORY_LABELS[r.category] || r.category}</td>
-                    <td>{r.title}</td>
-                    <td>{fmtDateRange(r)}</td>
-                    <td>{r.location || "—"}</td>
-                    <td>
-                      <div
-                        style={{ display: "flex", gap: 6, flexWrap: "wrap" }}
-                      >
-                        {flyerUrl && (
-                          <button
-                            type="button"
-                            className="btn btn-small"
-                            onClick={() =>
-                              window.open(flyerUrl, "_blank", "noopener")
-                            }
-                          >
-                            🖼 Image
-                          </button>
-                        )}
-                        {pdfUrl && (
-                          <button
-                            type="button"
-                            className="btn btn-small"
-                            onClick={() =>
-                              window.open(pdfUrl, "_blank", "noopener")
-                            }
-                          >
-                            📄 PDF
-                          </button>
-                        )}
-                        {!flyerUrl && !pdfUrl && <span>—</span>}
-                      </div>
-                    </td>
-                    <td>
-                      {r.is_published ? (
-                        <span className="pill pill-ok">Yes</span>
-                      ) : (
-                        <span className="pill pill-warn">No</span>
-                      )}
-                    </td>
-                    <td className="actions">
-                      <button
-                        className="btn btn-small"
-                        onClick={() => openEdit(r)}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="btn btn-small btn-danger"
-                        onClick={() => handleDelete(r.id)}
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
+        <div className="neField neGrow">
+          <label>Search</label>
+          <input
+            value={q}
+            onChange={(e) => { setPage(1); setQ(e.target.value); }}
+            placeholder="Search title, summary, location..."
+          />
+        </div>
 
-            {!loading && !filteredRows.length && (
-              <tr>
-                <td colSpan={7} style={{ textAlign: "center", padding: 18 }}>
-                  No items found.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+        <div className="nePager">
+          <button className="neBtnOutline" disabled={!canPrev} onClick={() => setPage((p) => Math.max(1, p - 1))}>
+            Prev
+          </button>
+          <div className="nePagerText">Page {page} / {totalPages}</div>
+          <button className="neBtnOutline" disabled={!canNext} onClick={() => setPage((p) => p + 1)}>
+            Next
+          </button>
+        </div>
       </div>
 
-      {/* Modal */}
-      {showModal && (
-        <div className="terms-overlay" role="dialog" aria-modal="true">
-          <div className="terms-modal events-modal">
-            <div className="terms-head">
-              <h2>{form.id ? "Edit Item" : "Create Item"}</h2>
-              <button
-                className="terms-close"
-                onClick={() => setShowModal(false)}
-                aria-label="Close"
-              >
-                ✕
-              </button>
-            </div>
-
-            {err && (
-              <div className="auth-banner" style={{ margin: "0 0 10px" }}>
-                {err}
+      <div className="neAdminList">
+        {rows.length ? (
+          rows.map((it) => (
+            <div className="neAdminRow" key={it.id}>
+              <div className="neAdminRowMain">
+                <div className="neAdminRowTitle">
+                  {it.title}{" "}
+                  <span className={`nePill ${it.is_published ? "isOn" : "isOff"}`}>
+                    {it.is_published ? "Published" : "Draft"}
+                  </span>
+                </div>
+                <div className="neAdminRowMeta">
+                  <span className="neMetaTag">{it.category}</span>
+                  {it.start_date && <span className="neMetaTag">{it.start_date}</span>}
+                  {it.time_text && <span className="neMetaTag">{it.time_text}</span>}
+                  {it.location && <span className="neMetaTag">{it.location}</span>}
+                </div>
               </div>
-            )}
 
-            <div className="events-modal-body">
-              <form className="auth-form" onSubmit={handleSave}>
-                <div className="auth-grid-2">
-                  <div className="auth-field">
-                    <label>Category</label>
-                    <select
-                      value={form.category}
-                      onChange={(e) => setField("category", e.target.value)}
-                    >
-                      <option value="kids">Kids Programs</option>
-                      <option value="holiday">Holiday Activities</option>
-                      <option value="trip">Trips & Outings</option>
-                      <option value="news">Church News</option>
-                    </select>
-                  </div>
-                  <div className="auth-field">
-                    <label>Published</label>
-                    <select
-                      value={form.is_published ? 1 : 0}
-                      onChange={(e) =>
-                        setField("is_published", Number(e.target.value))
-                      }
-                    >
-                      <option value={1}>Yes</option>
-                      <option value={0}>No (draft)</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="auth-field">
-                  <label>Title</label>
-                  <input
-                    value={form.title}
-                    onChange={(e) => setField("title", e.target.value)}
-                    required
-                  />
-                </div>
-
-                <div className="auth-field">
-                  <label>Subtitle (short tagline)</label>
-                  <input
-                    value={form.subtitle}
-                    onChange={(e) => setField("subtitle", e.target.value)}
-                  />
-                </div>
-
-                <WysiwygEditor
-                  label="Summary (shown on cards / top of details)"
-                  value={form.summary}
-                  onChange={(v) => setField("summary", v)}
-                  placeholder="Short teaser that appears in the public view."
-                />
-
-                <WysiwygEditor
-                  label="Full Description / Details"
-                  value={form.body_html}
-                  onChange={(v) => setField("body_html", v)}
-                  placeholder="Full description, schedule, notes, etc."
-                />
-
-                <div className="auth-grid-3">
-                  <div className="auth-field">
-                    <label>Start Date</label>
-                    <input
-                      type="date"
-                      value={form.start_date || ""}
-                      onChange={(e) => setField("start_date", e.target.value)}
-                    />
-                  </div>
-                  <div className="auth-field">
-                    <label>End Date</label>
-                    <input
-                      type="date"
-                      value={form.end_date || ""}
-                      onChange={(e) => setField("end_date", e.target.value)}
-                    />
-                  </div>
-                  <div className="auth-field">
-                    <label>Location</label>
-                    <input
-                      value={form.location}
-                      onChange={(e) => setField("location", e.target.value)}
-                    />
-                  </div>
-                </div>
-
-                <div className="auth-grid-2">
-                  <div className="auth-field">
-                    <label>Start Time</label>
-                    <input
-                      type="time"
-                      value={form.start_time || ""}
-                      onChange={(e) => setField("start_time", e.target.value)}
-                    />
-                  </div>
-                  <div className="auth-field">
-                    <label>End Time</label>
-                    <input
-                      type="time"
-                      value={form.end_time || ""}
-                      onChange={(e) => setField("end_time", e.target.value)}
-                    />
-                  </div>
-                </div>
-
-                <div className="auth-grid-2">
-                  <div className="auth-field">
-                    <label>Audience (e.g., Kids 6–12, Youth, Families)</label>
-                    <input
-                      value={form.audience}
-                      onChange={(e) => setField("audience", e.target.value)}
-                    />
-                  </div>
-                  <div className="auth-field">
-                    <label>Existing Flyer / PDF URLs (optional)</label>
-                    <input
-                      value={form.flyer_url}
-                      onChange={(e) => setField("flyer_url", e.target.value)}
-                      placeholder="https://… flyer image URL"
-                    />
-                    <input
-                      style={{ marginTop: 8 }}
-                      value={form.pdf_url}
-                      onChange={(e) => setField("pdf_url", e.target.value)}
-                      placeholder="https://… program PDF URL"
-                    />
-                  </div>
-                </div>
-
-                <div className="auth-field">
-                  <label>PDF Resource Title (shown in PDF list)</label>
-                  <input
-                    value={form.pdf_title}
-                    onChange={(e) => setField("pdf_title", e.target.value)}
-                    placeholder="Program / flyer PDF"
-                  />
-                </div>
-
-                <div className="auth-grid-2">
-                  <div className="auth-field">
-                    <label>Upload Flyer Image</label>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) =>
-                        setImageFile(e.target.files?.[0] || null)
-                      }
-                    />
-                    <small className="field-note">
-                      JPG / PNG recommended. If you leave this empty, any
-                      existing image URL will be kept.
-                    </small>
-                  </div>
-                  <div className="auth-field">
-                    <label>Upload PDF (program / flyer)</label>
-                    <input
-                      type="file"
-                      accept="application/pdf"
-                      onChange={(e) => setPdfFile(e.target.files?.[0] || null)}
-                    />
-                    <small className="field-note">
-                      Optional PDF attachment visible on the public page.
-                    </small>
-                  </div>
-                </div>
-
-                <div className="modal-actions">
-                  <button
-                    type="button"
-                    className="btn-secondary terms-cancel"
-                    onClick={() => setShowModal(false)}
-                  >
-                    Cancel
-                  </button>
-                  <button type="submit" className="btn-primary terms-accept">
-                    {form.id ? "Save" : "Create"}
-                  </button>
-                </div>
-              </form>
+              <div className="neAdminRowActions">
+                <button className="neBtnOutline" onClick={() => openEdit(it)}>Edit</button>
+                <button className="neBtnDanger" onClick={() => removeItem(it)}>Delete</button>
+              </div>
             </div>
+          ))
+        ) : (
+          <div className="neEmpty">No announcements found.</div>
+        )}
+      </div>
+
+      {open && (
+        <div className="neModalOverlay" role="dialog" aria-modal="true">
+          <div className="neModal">
+            <div className="neModalHeader">
+              <div className="neModalTitle">{editing ? "Edit Announcement" : "New Announcement"}</div>
+              <button className="neIconBtn" onClick={closeModal} aria-label="Close">✕</button>
+            </div>
+
+            <form className="neModalBody" onSubmit={submit}>
+              <div className="neGrid2">
+                <div className="neField">
+                  <label>Category</label>
+                  <select value={form.category} onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))}>
+                    {CATEGORY_OPTIONS.map((c) => (
+                      <option key={c.value} value={c.value}>{c.label}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="neField">
+                  <label>Title *</label>
+                  <input value={form.title} onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))} required />
+                </div>
+
+                <div className="neField neSpan2">
+                  <label>Summary</label>
+                  <textarea rows={3} value={form.summary} onChange={(e) => setForm((f) => ({ ...f, summary: e.target.value }))} />
+                </div>
+
+                <div className="neField">
+                  <label>Audience</label>
+                  <input value={form.audience} onChange={(e) => setForm((f) => ({ ...f, audience: e.target.value }))} placeholder="e.g. all, youth, members" />
+                </div>
+
+                <div className="neField">
+                  <label>Location</label>
+                  <input value={form.location} onChange={(e) => setForm((f) => ({ ...f, location: e.target.value }))} placeholder="e.g. 2558 Couchville Pike" />
+                </div>
+
+                <div className="neField">
+                  <label>Start Date</label>
+                  <input type="date" value={form.start_date} onChange={(e) => setForm((f) => ({ ...f, start_date: e.target.value }))} />
+                </div>
+
+                <div className="neField">
+                  <label>End Date</label>
+                  <input type="date" value={form.end_date} onChange={(e) => setForm((f) => ({ ...f, end_date: e.target.value }))} />
+                </div>
+
+                <div className="neField neSpan2">
+                  <label>Time</label>
+                  <input value={form.time_text} onChange={(e) => setForm((f) => ({ ...f, time_text: e.target.value }))} placeholder="Example: 10:00 AM - 12:00 PM" />
+                </div>
+
+                <div className="neField neSpan2">
+                  <label>Details (HTML or plain text)</label>
+                  <textarea rows={8} value={form.body_html} onChange={(e) => setForm((f) => ({ ...f, body_html: e.target.value }))} placeholder="You can paste HTML, or just type text." />
+                  <div className="neHint">Tip: If you don’t want HTML, just type normal text.</div>
+                </div>
+
+                <div className="neField">
+                  <label>Flyer Image Upload</label>
+                  <input type="file" accept="image/*" onChange={(e) => setFlyerFile(e.target.files?.[0] || null)} />
+                  {editing?.flyer_url && (
+                    <div className="neMiniRow">
+                      <a href={toPublicUrl(editing.flyer_url)} target="_blank" rel="noreferrer">View current</a>
+                      <label className="neCheck">
+                        <input type="checkbox" checked={!!form.remove_flyer} onChange={(e) => setForm((f) => ({ ...f, remove_flyer: e.target.checked }))} />
+                        Remove
+                      </label>
+                    </div>
+                  )}
+                </div>
+
+                <div className="neField">
+                  <label>PDF Upload</label>
+                  <input type="file" accept="application/pdf" onChange={(e) => setPdfFile(e.target.files?.[0] || null)} />
+                  {editing?.pdf_url && (
+                    <div className="neMiniRow">
+                      <a href={toPublicUrl(editing.pdf_url)} target="_blank" rel="noreferrer">Open current</a>
+                      <label className="neCheck">
+                        <input type="checkbox" checked={!!form.remove_pdf} onChange={(e) => setForm((f) => ({ ...f, remove_pdf: e.target.checked }))} />
+                        Remove
+                      </label>
+                    </div>
+                  )}
+                </div>
+
+                <div className="neField neSpan2">
+                  <label>PDF Title (shows on frontend)</label>
+                  <input value={form.pdf_title} onChange={(e) => setForm((f) => ({ ...f, pdf_title: e.target.value }))} />
+                </div>
+
+                <div className="neField neSpan2">
+                  <label>Optional Links (if not uploading)</label>
+                  <div className="neGrid2">
+                    <div className="neField">
+                      <label>Flyer URL</label>
+                      <input value={form.flyer_url} onChange={(e) => setForm((f) => ({ ...f, flyer_url: e.target.value }))} placeholder="https://..." />
+                    </div>
+                    <div className="neField">
+                      <label>PDF URL</label>
+                      <input value={form.pdf_url} onChange={(e) => setForm((f) => ({ ...f, pdf_url: e.target.value }))} placeholder="https://..." />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="neField neSpan2">
+                  <label className="neCheck">
+                    <input type="checkbox" checked={!!form.is_published} onChange={(e) => setForm((f) => ({ ...f, is_published: e.target.checked }))} />
+                    Published
+                  </label>
+                </div>
+              </div>
+
+              <div className="neModalFooter">
+                <button type="button" className="neBtnOutline" onClick={closeModal}>Cancel</button>
+                <button type="submit" className="neBtnSolid" disabled={saving}>
+                  {saving ? "Saving..." : editing ? "Update" : "Create"}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
-    </DashboardLayout>
+    </div>
   );
 }

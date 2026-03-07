@@ -1,499 +1,12 @@
 
 
-// // src/components/Shared/UsersTable.jsx
-// import React, { useEffect, useMemo, useState } from "react";
-// import api from "../api";
-// import { useAuth } from "../../hooks/useAuth";
-// import "../../styles/dashboard.css";
-
-// const blank = {
-//   first_name: "",
-//   last_name: "",
-//   email: "",
-//   phone: "",
-//   address_line1: "",
-//   address_line2: "",
-//   city: "",
-//   state: "",
-//   zip: "",
-//   role: "member",
-//   password: "",
-// };
-
-// function cadenceLabel(n) {
-//   if (!n) return "—";
-//   if (n === 1) return "Monthly";
-//   if (n === 6) return "Semi-annual";
-//   if (n === 12) return "Annual";
-//   return `${n} months`;
-// }
-
-// export default function UsersTable({
-//   endpoint = "/members", // => GET /api/members
-//   canCreate = false,
-//   canEditRole = false,
-//   canDelete = false,
-// }) {
-//   const { user } = useAuth() || {};
-//   const role = user?.role || "member";
-//   const isAdmin = role === "admin";
-
-//   const [rows, setRows] = useState([]);
-//   const [search, setSearch] = useState("");
-//   const [page, setPage] = useState(1);
-//   const [total, setTotal] = useState(0);
-//   const [pageSize] = useState(50);
-
-//   // modal
-//   const [showModal, setShowModal] = useState(false);
-//   const [editId, setEditId] = useState(null);
-//   const [form, setForm] = useState(blank);
-//   const [err, setErr] = useState("");
-
-//   // which row's 3-dot menu is open
-//   const [menuRow, setMenuRow] = useState(null);
-
-//   const canReallyCreate = canCreate && isAdmin;
-//   const canReallyEdit = isAdmin;
-//   const canReallyDelete = canDelete && isAdmin;
-
-//   async function load() {
-//     const params = { search, page, pageSize };
-//     const url = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
-//     const { data } = await api.get(url, { params });
-//     setRows(data.rows || []);
-//     setTotal(data.total || 0);
-//   }
-//   useEffect(() => {
-//     load();
-//     // eslint-disable-next-line react-hooks/exhaustive-deps
-//   }, [search, page, endpoint]);
-
-//   function openCreate() {
-//     if (!canReallyCreate) return;
-//     setEditId(null);
-//     setForm(blank);
-//     setErr("");
-//     setMenuRow(null);
-//     setShowModal(true);
-//   }
-
-//   function openEdit(r) {
-//     if (!canReallyEdit) return;
-//     setEditId(r.id);
-//     setForm({
-//       first_name: r.first_name || "",
-//       last_name: r.last_name || "",
-//       email: r.email || "",
-//       phone: r.phone || "",
-//       address_line1: r.address_line1 || "",
-//       address_line2: r.address_line2 || "",
-//       city: r.city || "",
-//       state: r.state || "",
-//       zip: r.zip || "",
-//       role: r.role || "member",
-//       password: "",
-//     });
-//     setErr("");
-//     setMenuRow(null);
-//     setShowModal(true);
-//   }
-
-//   // Copy an existing row into a "Create Member" form
-//   function copyToNew(r) {
-//     if (!canReallyCreate) return;
-//     setEditId(null); // creating, not editing
-//     setForm({
-//       first_name: r.first_name || "",
-//       last_name: r.last_name || "",
-//       email: "", // force admin to enter a new unique email
-//       phone: r.phone || "",
-//       address_line1: r.address_line1 || "",
-//       address_line2: r.address_line2 || "",
-//       city: r.city || "",
-//       state: r.state || "",
-//       zip: r.zip || "",
-//       role: r.role || "member",
-//       password: "",
-//     });
-//     setErr("");
-//     setMenuRow(null);
-//     setShowModal(true);
-//   }
-
-//   async function submit(e) {
-//     e.preventDefault();
-//     setErr("");
-
-//     try {
-//       if (editId) {
-//         const { password, ...payload } = form; // no password change here
-//         await api.put(`/members/${editId}`, payload);
-//       } else {
-//         if (!form.password || form.password.length < 6) {
-//           setErr("Password must be at least 6 characters.");
-//           return;
-//         }
-//         await api.post(`/members`, form);
-//       }
-//       setShowModal(false);
-//       setMenuRow(null);
-//       load();
-//     } catch (e2) {
-//       setErr(e2.response?.data?.error || "Save failed");
-//     }
-//   }
-
-//   async function remove(id) {
-//     if (!canReallyDelete) return;
-//     if (!window.confirm("Delete this member?")) return;
-//     try {
-//       await api.delete(`/members/${id}`);
-//       setMenuRow(null);
-//       load();
-//     } catch (e2) {
-//       alert(e2.response?.data?.error || "Delete failed");
-//     }
-//   }
-
-//   const pages = useMemo(
-//     () => Math.max(1, Math.ceil(total / pageSize)),
-//     [total, pageSize]
-//   );
-
-//   return (
-//     <>
-//       <div className="card" style={{ marginBottom: 12 }}>
-//         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-//           <input
-//             placeholder="Search name/email/phone/city/state/zip…"
-//             value={search}
-//             onChange={(e) => {
-//               setPage(1);
-//               setSearch(e.target.value);
-//             }}
-//             style={{ flex: "1 1 280px" }}
-//           />
-//           {canReallyCreate && (
-//             <button onClick={openCreate} className="btn btn-primary">
-//               + New Member
-//             </button>
-//           )}
-//         </div>
-//       </div>
-
-//       <div className="card" style={{ overflowX: "auto" }}>
-//         <table className="table">
-//           <thead>
-//             <tr>
-//               <th>Name</th>
-//               <th>Email</th>
-//               <th>Phone</th>
-//               <th>Address</th>
-//               <th>Role</th>
-//               <th>Billing Cadence</th>
-//               <th>Paid</th>
-//               {isAdmin && <th style={{ width: 64 }} />}
-//             </tr>
-//           </thead>
-//           <tbody>
-//             {rows.map((r) => (
-//               <tr key={r.id}>
-//                 <td>
-//                   {r.first_name} {r.last_name}
-//                 </td>
-//                 <td>{r.email}</td>
-//                 <td>{r.phone || "-"}</td>
-//                 <td>
-//                   <div>{r.address_line1 || "-"}</div>
-//                   <small>
-//                     {[r.city, r.state, r.zip].filter(Boolean).join(", ")}
-//                   </small>
-//                 </td>
-//                 <td>
-//                   <span className="badge">{r.role}</span>
-//                 </td>
-//                 <td>{cadenceLabel(r.cadence_months)}</td>
-//                 <td>
-//                   {r.paid_status === "paid" ? (
-//                     <span className="pill pill-ok">Paid</span>
-//                   ) : (
-//                     <span className="pill pill-warn">Unpaid</span>
-//                   )}
-//                 </td>
-
-//                 {isAdmin && (
-//                   <td className="actions">
-//                     {/* 3-dot menu trigger */}
-//                     <button
-//                       type="button"
-//                       className="row-menu-btn"
-//                       aria-haspopup="menu"
-//                       aria-expanded={menuRow === r.id}
-//                       onClick={(e) => {
-//                         e.stopPropagation();
-//                         setMenuRow((curr) => (curr === r.id ? null : r.id));
-//                       }}
-//                     >
-//                       ⋮
-//                     </button>
-
-//                     {menuRow === r.id && (
-//                       <div className="row-menu" role="menu">
-//                         <button
-//                           type="button"
-//                           onClick={() => openEdit(r)}
-//                           role="menuitem"
-//                         >
-//                           Edit member
-//                         </button>
-//                         {canReallyCreate && (
-//                           <button
-//                             type="button"
-//                             onClick={() => copyToNew(r)}
-//                             role="menuitem"
-//                           >
-//                             Copy row to new member
-//                           </button>
-//                         )}
-//                         {canReallyDelete && (
-//                           <button
-//                             type="button"
-//                             className="danger"
-//                             onClick={() => remove(r.id)}
-//                             role="menuitem"
-//                           >
-//                             Delete member
-//                           </button>
-//                         )}
-//                       </div>
-//                     )}
-//                   </td>
-//                 )}
-//               </tr>
-//             ))}
-//             {!rows.length && (
-//               <tr>
-//                 <td
-//                   colSpan={isAdmin ? 8 : 7}
-//                   style={{ textAlign: "center", padding: "18px" }}
-//                 >
-//                   No members found.
-//                 </td>
-//               </tr>
-//             )}
-//           </tbody>
-//         </table>
-
-//         {pages > 1 && (
-//           <div
-//             style={{
-//               display: "flex",
-//               justifyContent: "flex-end",
-//               gap: 8,
-//               paddingTop: 10,
-//             }}
-//           >
-//             <button disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>
-//               Prev
-//             </button>
-//             <div style={{ alignSelf: "center" }}>
-//               Page {page} / {pages}
-//             </div>
-//             <button
-//               disabled={page >= pages}
-//               onClick={() => setPage((p) => p + 1)}
-//             >
-//               Next
-//             </button>
-//           </div>
-//         )}
-//       </div>
-
-//       {showModal && (
-//         <div className="terms-overlay" role="dialog" aria-modal="true">
-//           <div className="terms-modal" style={{ maxWidth: 720, maxHeight: "90vh" }}>
-//             <div className="terms-head">
-//               <h2>{editId ? "Edit Member" : "Create Member"}</h2>
-//               <button
-//                 className="terms-close"
-//                 onClick={() => {
-//                   setShowModal(false);
-//                   setMenuRow(null);
-//                 }}
-//                 aria-label="Close"
-//               >
-//                 ✕
-//               </button>
-//             </div>
-
-//             {err && (
-//               <div className="auth-banner" style={{ margin: "0 0 12px" }}>
-//                 {err}
-//               </div>
-//             )}
-
-//             <form onSubmit={submit} className="auth-form">
-//               <div className="auth-grid-2">
-//                 <div className="auth-field">
-//                   <label>First Name</label>
-//                   <input
-//                     value={form.first_name}
-//                     onChange={(e) =>
-//                       setForm((f) => ({ ...f, first_name: e.target.value }))
-//                     }
-//                     required
-//                   />
-//                 </div>
-//                 <div className="auth-field">
-//                   <label>Last Name</label>
-//                   <input
-//                     value={form.last_name}
-//                     onChange={(e) =>
-//                       setForm((f) => ({ ...f, last_name: e.target.value }))
-//                     }
-//                     required
-//                   />
-//                 </div>
-//               </div>
-
-//               <div className="auth-grid-2">
-//                 <div className="auth-field">
-//                   <label>Email</label>
-//                   <input
-//                     type="email"
-//                     value={form.email}
-//                     onChange={(e) =>
-//                       setForm((f) => ({ ...f, email: e.target.value }))
-//                     }
-//                     required
-//                   />
-//                 </div>
-//                 <div className="auth-field">
-//                   <label>Phone</label>
-//                   <input
-//                     value={form.phone}
-//                     onChange={(e) =>
-//                       setForm((f) => ({ ...f, phone: e.target.value }))
-//                     }
-//                   />
-//                 </div>
-//               </div>
-
-//               <div className="auth-field">
-//                 <label>Address 1</label>
-//                 <input
-//                   value={form.address_line1}
-//                   onChange={(e) =>
-//                     setForm((f) => ({ ...f, address_line1: e.target.value }))
-//                   }
-//                 />
-//               </div>
-//               <div className="auth-field">
-//                 <label>Address 2</label>
-//                 <input
-//                   value={form.address_line2}
-//                   onChange={(e) =>
-//                     setForm((f) => ({ ...f, address_line2: e.target.value }))
-//                   }
-//                 />
-//               </div>
-
-//               <div className="auth-grid-3">
-//                 <div className="auth-field">
-//                   <label>City</label>
-//                   <input
-//                     value={form.city}
-//                     onChange={(e) =>
-//                       setForm((f) => ({ ...f, city: e.target.value }))
-//                     }
-//                   />
-//                 </div>
-//                 <div className="auth-field">
-//                   <label>State</label>
-//                   <input
-//                     value={form.state}
-//                     onChange={(e) =>
-//                       setForm((f) => ({ ...f, state: e.target.value }))
-//                     }
-//                   />
-//                 </div>
-//                 <div className="auth-field">
-//                   <label>ZIP</label>
-//                   <input
-//                     value={form.zip}
-//                     onChange={(e) =>
-//                       setForm((f) => ({ ...f, zip: e.target.value }))
-//                     }
-//                   />
-//                 </div>
-//               </div>
-
-//               {canEditRole && (
-//                 <div className="auth-field">
-//                   <label>Role</label>
-//                   <select
-//                     value={form.role}
-//                     onChange={(e) =>
-//                       setForm((f) => ({ ...f, role: e.target.value }))
-//                     }
-//                   >
-//                     <option value="member">member</option>
-//                     <option value="finance">finance</option>
-//                     <option value="member_mgr">member_mgr</option>
-//                     <option value="admin">admin</option>
-//                   </select>
-//                 </div>
-//               )}
-
-//               {!editId && (
-//                 <div className="auth-field">
-//                   <label>Temp Password (new user)</label>
-//                   <input
-//                     type="password"
-//                     value={form.password}
-//                     onChange={(e) =>
-//                       setForm((f) => ({ ...f, password: e.target.value }))
-//                     }
-//                   />
-//                 </div>
-//               )}
-
-//               <div
-//                 style={{
-//                   display: "flex",
-//                   gap: 8,
-//                   justifyContent: "flex-end",
-//                   marginTop: 12,
-//                 }}
-//               >
-//                 <button
-//                   type="button"
-//                   onClick={() => {
-//                     setShowModal(false);
-//                     setMenuRow(null);
-//                   }}
-//                 >
-//                   Cancel
-//                 </button>
-//                 <button type="submit">{editId ? "Save" : "Create"}</button>
-//               </div>
-//             </form>
-//           </div>
-//         </div>
-//       )}
-//     </>
-//   );
-// }
-
-
 // src/components/Shared/UsersTable.jsx
 import React, { useEffect, useMemo, useState } from "react";
 import api from "../api";
-import { useAuth } from "../../hooks/useAuth";
-import "../../styles/dashboard.css";
 
-const blank = {
+const ROLES = ["member", "finance", "admin"];
+
+const emptyCreate = {
   first_name: "",
   last_name: "",
   email: "",
@@ -507,552 +20,667 @@ const blank = {
   password: "",
 };
 
-function cadenceLabel(n) {
-  if (!n) return "—";
-  if (n === 1) return "Monthly";
-  if (n === 6) return "Semi-annual";
-  if (n === 12) return "Annual";
-  return `${n} months`;
-}
-
-/**
- * UsersTable supports BOTH:
- * - Public/Member list: endpoint="/members"    -> GET/POST/PUT/DELETE /api/members
- * - Admin management:   endpoint="/admin/users"-> GET/POST/PATCH/DELETE /api/admin/users
- *
- * Admin endpoints:
- *   GET    /api/admin/users
- *   POST   /api/admin/users
- *   PATCH  /api/admin/users/:id/role
- *   DELETE /api/admin/users/:id
- *
- * Members endpoints (if your backend has them):
- *   GET    /api/members
- *   POST   /api/members
- *   PUT    /api/members/:id
- *   DELETE /api/members/:id
- */
 export default function UsersTable({
-  endpoint = "/members", // default => GET /api/members
+  endpoint = "/admin/users",
   canCreate = false,
   canEditRole = false,
   canDelete = false,
+  showAddress = true,
+  showBilling = false,
+  stickyHeader = true,
 }) {
-  const { user } = useAuth() || {};
-  const role = user?.role || "member";
-  const isAdmin = role === "admin";
-
-  // normalize endpoint into a leading-slash path (no trailing slash)
-  const endpointPath = useMemo(() => {
-    let e = (endpoint || "/members").trim();
-    if (!e.startsWith("/")) e = `/${e}`;
-    e = e.replace(/\/+$/, "");
-    return e;
-  }, [endpoint]);
-
-  // detect if we are on admin API
-  const isAdminEndpoint = useMemo(
-    () => endpointPath.startsWith("/admin/"),
-    [endpointPath]
-  );
-
   const [rows, setRows] = useState([]);
+  const [msg, setMsg] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  // search + pagination
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(25);
   const [total, setTotal] = useState(0);
-  const [pageSize] = useState(50);
 
-  // modal
-  const [showModal, setShowModal] = useState(false);
-  const [editId, setEditId] = useState(null);
-  const [form, setForm] = useState(blank);
-  const [err, setErr] = useState("");
+  // create collapse
+  const [createOpen, setCreateOpen] = useState(false);
+  const [create, setCreate] = useState(emptyCreate);
+  const [createBusy, setCreateBusy] = useState(false);
 
-  // which row's 3-dot menu is open
-  const [menuRow, setMenuRow] = useState(null);
+  // edit modal
+  const [editing, setEditing] = useState(null);
+  const [editBusy, setEditBusy] = useState(false);
 
-  const canReallyCreate = canCreate && isAdmin;
-  const canReallyEdit = isAdmin; // edit form for admin only in this table
-  const canReallyDelete = canDelete && isAdmin;
+  const totalPages = Math.max(1, Math.ceil((total || 0) / pageSize));
+  const canPrev = page > 1;
+  const canNext = page < totalPages;
 
-  async function load() {
-    const params = { search, page, pageSize };
+  const load = async (p = page, ps = pageSize, q = search) => {
+    setLoading(true);
+    setMsg("");
+    try {
+      const { data } = await api.get(
+        `${endpoint}?search=${encodeURIComponent(q)}&page=${p}&pageSize=${ps}`
+      );
 
-    // ✅ Admin list uses /api/admin/users (your backend returns { ok, rows })
-    // ✅ Members list uses /api/members (your backend returns { rows, total } or { ok, rows, total })
-    const { data } = await api.get(endpointPath, { params });
-
-    setRows(data.rows || []);
-    setTotal(data.total || 0);
-  }
+      setRows(data?.rows || []);
+      setTotal(Number(data?.total || 0));
+    } catch (e) {
+      console.error(e);
+      setRows([]);
+      setTotal(0);
+      setMsg(e?.response?.data?.error || "Failed to load members");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    load();
+    load(1, pageSize, "");
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search, page, endpointPath]);
+  }, []);
 
-  function openCreate() {
-    if (!canReallyCreate) return;
-    setEditId(null);
-    setForm(blank);
-    setErr("");
-    setMenuRow(null);
-    setShowModal(true);
-  }
+  const rowsById = useMemo(() => {
+    const m = new Map();
+    rows.forEach((r) => m.set(r.id, r));
+    return m;
+  }, [rows]);
 
-  function openEdit(r) {
-    if (!canReallyEdit) return;
-    setEditId(r.id);
-    setForm({
-      first_name: r.first_name || "",
-      last_name: r.last_name || "",
-      email: r.email || "",
-      phone: r.phone || "",
-      address_line1: r.address_line1 || "",
-      address_line2: r.address_line2 || "",
-      city: r.city || "",
-      state: r.state || "",
-      zip: r.zip || "",
-      role: r.role || "member",
-      password: "",
-    });
-    setErr("");
-    setMenuRow(null);
-    setShowModal(true);
-  }
+  const resetSearch = async () => {
+    setSearch("");
+    setPage(1);
+    await load(1, pageSize, "");
+  };
 
-  // Copy an existing row into a "Create Member" form
-  function copyToNew(r) {
-    if (!canReallyCreate) return;
-    setEditId(null); // creating, not editing
-    setForm({
-      first_name: r.first_name || "",
-      last_name: r.last_name || "",
-      email: "", // force admin to enter a new unique email
-      phone: r.phone || "",
-      address_line1: r.address_line1 || "",
-      address_line2: r.address_line2 || "",
-      city: r.city || "",
-      state: r.state || "",
-      zip: r.zip || "",
-      role: r.role || "member",
-      password: "",
-    });
-    setErr("");
-    setMenuRow(null);
-    setShowModal(true);
-  }
-
-  async function submit(e) {
+  const submitSearch = async (e) => {
     e.preventDefault();
-    setErr("");
+    setPage(1);
+    await load(1, pageSize, search);
+  };
+
+  const onChangePageSize = async (ps) => {
+    setPageSize(ps);
+    setPage(1);
+    await load(1, ps, search);
+  };
+
+  const openEdit = (u) => {
+    setMsg("");
+    setEditing({
+      id: u.id,
+      first_name: u.first_name || "",
+      last_name: u.last_name || "",
+      email: u.email || "",
+      phone: u.phone || "",
+      address_line1: u.address_line1 || "",
+      address_line2: u.address_line2 || "",
+      city: u.city || "",
+      state: u.state || "",
+      zip: u.zip || "",
+      is_active: Number(u.is_active ?? 1),
+    });
+  };
+
+  const closeEdit = () => setEditing(null);
+
+  const saveEdit = async () => {
+    if (!editing?.id) return;
+    setEditBusy(true);
+    setMsg("");
+    try {
+      await api.put(`/admin/users/${editing.id}`, {
+        first_name: editing.first_name.trim(),
+        last_name: editing.last_name.trim(),
+        email: editing.email.trim(),
+        phone: editing.phone?.trim() || null,
+        address_line1: editing.address_line1?.trim() || null,
+        address_line2: editing.address_line2?.trim() || null,
+        city: editing.city?.trim() || null,
+        state: editing.state?.trim() || null,
+        zip: editing.zip?.trim() || null,
+        is_active: Number(editing.is_active) ? 1 : 0,
+      });
+
+      setMsg("✅ Member updated");
+      setEditing(null);
+      await load(page, pageSize, search);
+    } catch (e) {
+      console.error(e);
+      setMsg(e?.response?.data?.error || "Update failed");
+    } finally {
+      setEditBusy(false);
+    }
+  };
+
+  const saveRole = async (id, role) => {
+    setMsg("");
+    try {
+      await api.patch(`/admin/users/${id}/role`, { role });
+      setMsg("✅ Role updated");
+      await load(page, pageSize, search);
+    } catch (e) {
+      console.error(e);
+      setMsg(e?.response?.data?.error || "Role update failed");
+    }
+  };
+
+  const doDelete = async (id) => {
+    const ok = window.confirm("Delete this member? This cannot be undone.");
+    if (!ok) return;
+
+    setMsg("");
+    try {
+      await api.delete(`/admin/users/${id}`);
+      setMsg("✅ Member deleted");
+
+      // if we deleted the last row on the page, go back one page safely
+      const nextPage = rows.length === 1 && page > 1 ? page - 1 : page;
+      setPage(nextPage);
+      await load(nextPage, pageSize, search);
+    } catch (e) {
+      console.error(e);
+      setMsg(e?.response?.data?.error || "Delete failed");
+    }
+  };
+
+  const createUser = async (e) => {
+    e.preventDefault();
+    if (!canCreate) return;
+
+    setCreateBusy(true);
+    setMsg("");
 
     try {
-      if (editId) {
-        // ---- EDIT ----
-        // Your backend currently supports:
-        // - members: PUT /api/members/:id
-        // - admin:   (role changes via PATCH /api/admin/users/:id/role)
-        //
-        // We'll do:
-        // - If admin endpoint: PATCH role + (optional) PUT members details if you later add it
-        // - If members endpoint: PUT /members/:id
-        const { password, ...payload } = form; // no password change here
+      await api.post(`/admin/users`, {
+        first_name: create.first_name.trim(),
+        last_name: create.last_name.trim(),
+        email: create.email.trim(),
+        phone: create.phone?.trim() || null,
+        address_line1: create.address_line1?.trim() || null,
+        address_line2: create.address_line2?.trim() || null,
+        city: create.city?.trim() || null,
+        state: create.state?.trim() || null,
+        zip: create.zip?.trim() || null,
+        role: create.role,
+        password: create.password,
+      });
 
-        if (isAdminEndpoint) {
-          // ✅ update role using admin route (only if role changed / allowed)
-          if (canEditRole && payload.role) {
-            await api.patch(`/admin/users/${editId}/role`, { role: payload.role });
-          }
+      setMsg("✅ User created");
+      setCreate(emptyCreate);
+      setCreateOpen(false);
 
-          // NOTE: Your admin.js does NOT currently have an endpoint to update profile fields.
-          // If you want editing name/phone/address from admin, add:
-          // PATCH /api/admin/users/:id (update fields)
-          // For now, we just close and reload.
-        } else {
-          // members API edit
-          await api.put(`${endpointPath}/${editId}`, payload);
-        }
-      } else {
-        // ---- CREATE ----
-        if (!form.password || form.password.length < 6) {
-          setErr("Password must be at least 6 characters.");
-          return;
-        }
-
-        // ✅ Create at the correct endpoint
-        // Admin: POST /api/admin/users
-        // Members: POST /api/members (if enabled)
-        await api.post(endpointPath, form);
-      }
-
-      setShowModal(false);
-      setMenuRow(null);
-      load();
+      setPage(1);
+      await load(1, pageSize, search);
     } catch (e2) {
-      setErr(e2.response?.data?.error || "Save failed");
+      console.error(e2);
+      setMsg(e2?.response?.data?.error || "Create user failed");
+    } finally {
+      setCreateBusy(false);
     }
-  }
-
-  async function remove(id) {
-    if (!canReallyDelete) return;
-    if (!window.confirm("Delete this member?")) return;
-
-    try {
-      if (isAdminEndpoint) {
-        // ✅ Admin delete route
-        await api.delete(`/admin/users/${id}`);
-      } else {
-        // members delete route
-        await api.delete(`${endpointPath}/${id}`);
-      }
-      setMenuRow(null);
-      load();
-    } catch (e2) {
-      alert(e2.response?.data?.error || "Delete failed");
-    }
-  }
-
-  const pages = useMemo(
-    () => Math.max(1, Math.ceil(total / pageSize)),
-    [total, pageSize]
-  );
+  };
 
   return (
-    <>
-      <div className="card" style={{ marginBottom: 12 }}>
-        <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-          <input
-            placeholder="Search name/email/phone/city/state/zip…"
-            value={search}
-            onChange={(e) => {
-              setPage(1);
-              setSearch(e.target.value);
-            }}
-            style={{ flex: "1 1 280px" }}
-          />
-          {canReallyCreate && (
-            <button onClick={openCreate} className="btn btn-primary">
-              + New Member
-            </button>
-          )}
+    <div>
+      {msg ? (
+        <div className="auth-banner" style={{ marginBottom: 12 }}>
+          {msg}
         </div>
-      </div>
+      ) : null}
 
-      <div className="card" style={{ overflowX: "auto" }}>
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Phone</th>
-              <th>Address</th>
-              <th>Role</th>
-              <th>Billing Cadence</th>
-              <th>Paid</th>
-              {isAdmin && <th style={{ width: 64 }} />}
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((r) => (
-              <tr key={r.id}>
-                <td>
-                  {r.first_name} {r.last_name}
-                </td>
-                <td>{r.email}</td>
-                <td>{r.phone || "-"}</td>
-                <td>
-                  <div>{r.address_line1 || "-"}</div>
-                  <small>
-                    {[r.city, r.state, r.zip].filter(Boolean).join(", ")}
-                  </small>
-                </td>
-                <td>
-                  <span className="badge">{r.role}</span>
-                </td>
-                <td>{cadenceLabel(r.cadence_months)}</td>
-                <td>
-                  {r.paid_status === "paid" ? (
-                    <span className="pill pill-ok">Paid</span>
-                  ) : (
-                    <span className="pill pill-warn">Unpaid</span>
-                  )}
-                </td>
+      {/* Toolbar */}
+      <form className="dash-toolbar" onSubmit={submitSearch}>
+        <div className="dash-toolbar-left">
+          <input
+            className="dash-input"
+            style={{ width: 520, maxWidth: "75vw" }}
+            placeholder="Search name/email/phone/city/state/zip..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <button className="dash-btn dash-btn-primary" type="submit">
+            Search
+          </button>
+          <button className="dash-btn dash-btn-ghost" type="button" onClick={resetSearch}>
+            Reset
+          </button>
+        </div>
 
-                {isAdmin && (
-                  <td className="actions">
-                    {/* 3-dot menu trigger */}
-                    <button
-                      type="button"
-                      className="row-menu-btn"
-                      aria-haspopup="menu"
-                      aria-expanded={menuRow === r.id}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setMenuRow((curr) => (curr === r.id ? null : r.id));
-                      }}
-                    >
-                      ⋮
-                    </button>
-
-                    {menuRow === r.id && (
-                      <div className="row-menu" role="menu">
-                        <button
-                          type="button"
-                          onClick={() => openEdit(r)}
-                          role="menuitem"
-                        >
-                          Edit member
-                        </button>
-
-                        {canReallyCreate && (
-                          <button
-                            type="button"
-                            onClick={() => copyToNew(r)}
-                            role="menuitem"
-                          >
-                            Copy row to new member
-                          </button>
-                        )}
-
-                        {canReallyDelete && (
-                          <button
-                            type="button"
-                            className="danger"
-                            onClick={() => remove(r.id)}
-                            role="menuitem"
-                          >
-                            Delete member
-                          </button>
-                        )}
-                      </div>
-                    )}
-                  </td>
-                )}
-              </tr>
+        <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+          <span className="badge">Page size</span>
+          <select
+            className="dash-select"
+            style={{ width: 120, height: 38 }}
+            value={pageSize}
+            onChange={(e) => onChangePageSize(Number(e.target.value))}
+          >
+            {[10, 25, 50, 100].map((n) => (
+              <option key={n} value={n}>
+                {n}
+              </option>
             ))}
+          </select>
+        </div>
+      </form>
 
-            {!rows.length && (
-              <tr>
-                <td
-                  colSpan={isAdmin ? 8 : 7}
-                  style={{ textAlign: "center", padding: "18px" }}
-                >
-                  No members found.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-
-        {pages > 1 && (
+      {/* Create (collapsible) */}
+      {canCreate ? (
+        <div className="dash-collapse" style={{ marginBottom: 14 }}>
           <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              gap: 8,
-              paddingTop: 10,
-            }}
+            className="dash-collapse-head"
+            onClick={() => setCreateOpen((v) => !v)}
+            role="button"
+            tabIndex={0}
           >
-            <button disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>
-              Prev
-            </button>
-            <div style={{ alignSelf: "center" }}>
-              Page {page} / {pages}
-            </div>
-            <button
-              disabled={page >= pages}
-              onClick={() => setPage((p) => p + 1)}
-            >
-              Next
-            </button>
+            <div className="dash-collapse-title">Create member</div>
+            <div className="dash-collapse-toggle">{createOpen ? "–" : "+"}</div>
           </div>
-        )}
-      </div>
 
-      {showModal && (
-        <div className="terms-overlay" role="dialog" aria-modal="true">
-          <div
-            className="terms-modal"
-            style={{ maxWidth: 720, maxHeight: "90vh" }}
-          >
-            <div className="terms-head">
-              <h2>{editId ? "Edit Member" : "Create Member"}</h2>
-              <button
-                className="terms-close"
-                onClick={() => {
-                  setShowModal(false);
-                  setMenuRow(null);
-                }}
-                aria-label="Close"
-              >
-                ✕
-              </button>
-            </div>
-
-            {err && (
-              <div className="auth-banner" style={{ margin: "0 0 12px" }}>
-                {err}
-              </div>
-            )}
-
-            <form onSubmit={submit} className="auth-form">
-              <div className="auth-grid-2">
-                <div className="auth-field">
-                  <label>First Name</label>
+          <div className={`dash-collapse-body ${createOpen ? "" : "collapsed"}`}>
+            <form className="dash-form compact" onSubmit={createUser}>
+              <div className="dash-grid-2">
+                <div className="dash-field">
+                  <div className="dash-label">First name</div>
                   <input
-                    value={form.first_name}
-                    onChange={(e) =>
-                      setForm((f) => ({ ...f, first_name: e.target.value }))
-                    }
+                    className="dash-input"
+                    value={create.first_name}
+                    onChange={(e) => setCreate((p) => ({ ...p, first_name: e.target.value }))}
                     required
                   />
                 </div>
-                <div className="auth-field">
-                  <label>Last Name</label>
+                <div className="dash-field">
+                  <div className="dash-label">Last name</div>
                   <input
-                    value={form.last_name}
-                    onChange={(e) =>
-                      setForm((f) => ({ ...f, last_name: e.target.value }))
-                    }
+                    className="dash-input"
+                    value={create.last_name}
+                    onChange={(e) => setCreate((p) => ({ ...p, last_name: e.target.value }))}
                     required
                   />
                 </div>
               </div>
 
-              <div className="auth-grid-2">
-                <div className="auth-field">
-                  <label>Email</label>
+              <div className="dash-grid-2">
+                <div className="dash-field">
+                  <div className="dash-label">Email</div>
                   <input
+                    className="dash-input"
                     type="email"
-                    value={form.email}
-                    onChange={(e) =>
-                      setForm((f) => ({ ...f, email: e.target.value }))
-                    }
+                    value={create.email}
+                    onChange={(e) => setCreate((p) => ({ ...p, email: e.target.value }))}
                     required
                   />
                 </div>
-                <div className="auth-field">
-                  <label>Phone</label>
-                  <input
-                    value={form.phone}
-                    onChange={(e) =>
-                      setForm((f) => ({ ...f, phone: e.target.value }))
-                    }
-                  />
-                </div>
-              </div>
-
-              <div className="auth-field">
-                <label>Address 1</label>
-                <input
-                  value={form.address_line1}
-                  onChange={(e) =>
-                    setForm((f) => ({ ...f, address_line1: e.target.value }))
-                  }
-                />
-              </div>
-              <div className="auth-field">
-                <label>Address 2</label>
-                <input
-                  value={form.address_line2}
-                  onChange={(e) =>
-                    setForm((f) => ({ ...f, address_line2: e.target.value }))
-                  }
-                />
-              </div>
-
-              <div className="auth-grid-3">
-                <div className="auth-field">
-                  <label>City</label>
-                  <input
-                    value={form.city}
-                    onChange={(e) =>
-                      setForm((f) => ({ ...f, city: e.target.value }))
-                    }
-                  />
-                </div>
-                <div className="auth-field">
-                  <label>State</label>
-                  <input
-                    value={form.state}
-                    onChange={(e) =>
-                      setForm((f) => ({ ...f, state: e.target.value }))
-                    }
-                  />
-                </div>
-                <div className="auth-field">
-                  <label>ZIP</label>
-                  <input
-                    value={form.zip}
-                    onChange={(e) =>
-                      setForm((f) => ({ ...f, zip: e.target.value }))
-                    }
-                  />
-                </div>
-              </div>
-
-              {canEditRole && (
-                <div className="auth-field">
-                  <label>Role</label>
+                <div className="dash-field">
+                  <div className="dash-label">Role</div>
                   <select
-                    value={form.role}
-                    onChange={(e) =>
-                      setForm((f) => ({ ...f, role: e.target.value }))
-                    }
+                    className="dash-select"
+                    value={create.role}
+                    onChange={(e) => setCreate((p) => ({ ...p, role: e.target.value }))}
                   >
-                    <option value="member">member</option>
-                    <option value="finance">finance</option>
-                    <option value="member_mgr">member_mgr</option>
-                    <option value="admin">admin</option>
+                    {ROLES.map((r) => (
+                      <option key={r} value={r}>
+                        {r}
+                      </option>
+                    ))}
                   </select>
-
-                  {isAdminEndpoint && editId ? (
-                    <small style={{ display: "block", marginTop: 6, opacity: 0.8 }}>
-                      Tip: On Admin endpoint, role updates are saved via{" "}
-                      <code>/api/admin/users/:id/role</code>.
-                    </small>
-                  ) : null}
                 </div>
-              )}
+              </div>
 
-              {!editId && (
-                <div className="auth-field">
-                  <label>Temp Password (new user)</label>
+              <div className="dash-grid-2">
+                <div className="dash-field">
+                  <div className="dash-label">Phone</div>
                   <input
-                    type="password"
-                    value={form.password}
-                    onChange={(e) =>
-                      setForm((f) => ({ ...f, password: e.target.value }))
-                    }
-                    placeholder="min 6 characters"
+                    className="dash-input"
+                    value={create.phone}
+                    onChange={(e) => setCreate((p) => ({ ...p, phone: e.target.value }))}
+                    placeholder="+1 615..."
                   />
                 </div>
-              )}
+                <div className="dash-field">
+                  <div className="dash-label">Temp password (12+ chars)</div>
+                  <input
+                    className="dash-input"
+                    type="password"
+                    autoComplete="new-password"
+                    value={create.password}
+                    onChange={(e) => setCreate((p) => ({ ...p, password: e.target.value }))}
+                    required
+                  />
+                </div>
+              </div>
 
-              <div
-                style={{
-                  display: "flex",
-                  gap: 8,
-                  justifyContent: "flex-end",
-                  marginTop: 12,
-                }}
-              >
+              <div className="dash-field">
+                <div className="dash-label">Address 1</div>
+                <input
+                  className="dash-input"
+                  value={create.address_line1}
+                  onChange={(e) => setCreate((p) => ({ ...p, address_line1: e.target.value }))}
+                />
+              </div>
+
+              <div className="dash-field">
+                <div className="dash-label">Address 2</div>
+                <input
+                  className="dash-input"
+                  value={create.address_line2}
+                  onChange={(e) => setCreate((p) => ({ ...p, address_line2: e.target.value }))}
+                />
+              </div>
+
+              <div className="dash-grid-3">
+                <div className="dash-field">
+                  <div className="dash-label">City</div>
+                  <input
+                    className="dash-input"
+                    value={create.city}
+                    onChange={(e) => setCreate((p) => ({ ...p, city: e.target.value }))}
+                  />
+                </div>
+                <div className="dash-field">
+                  <div className="dash-label">State</div>
+                  <input
+                    className="dash-input"
+                    value={create.state}
+                    onChange={(e) => setCreate((p) => ({ ...p, state: e.target.value }))}
+                  />
+                </div>
+                <div className="dash-field">
+                  <div className="dash-label">ZIP</div>
+                  <input
+                    className="dash-input"
+                    value={create.zip}
+                    onChange={(e) => setCreate((p) => ({ ...p, zip: e.target.value }))}
+                  />
+                </div>
+              </div>
+
+              <div className="dash-form-actions">
                 <button
+                  className="dash-btn dash-btn-ghost"
                   type="button"
-                  onClick={() => {
-                    setShowModal(false);
-                    setMenuRow(null);
-                  }}
+                  onClick={() => setCreateOpen(false)}
                 >
-                  Cancel
+                  Close
                 </button>
-                <button type="submit">{editId ? "Save" : "Create"}</button>
+
+                <button className="dash-btn dash-btn-primary" type="submit" disabled={createBusy}>
+                  {createBusy ? "Creating…" : "Create"}
+                </button>
               </div>
             </form>
           </div>
         </div>
-      )}
-    </>
+      ) : null}
+
+      {/* Table */}
+      <div className="dash-table-wrap">
+        <div className="dash-table-scroll" style={{ maxHeight: 560 }}>
+          <table className="dash-table">
+            <thead>
+              <tr>
+                <th style={{ width: 240 }}>Name</th>
+                <th>Email</th>
+                <th style={{ width: 170 }}>Phone</th>
+                {showAddress ? <th style={{ width: 320 }}>Address</th> : null}
+                <th style={{ width: 160 }}>Role</th>
+                {showBilling ? <th style={{ width: 160 }}>Billing</th> : null}
+                {showBilling ? <th style={{ width: 120 }}>Paid</th> : null}
+                <th style={{ width: 260, textAlign: "right" }}>Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {loading ? (
+                <tr>
+                  <td colSpan={showBilling ? 8 : showAddress ? 6 : 5} style={{ padding: 16 }}>
+                    Loading…
+                  </td>
+                </tr>
+              ) : null}
+
+              {!loading && rows.length === 0 ? (
+                <tr>
+                  <td colSpan={showBilling ? 8 : showAddress ? 6 : 5} style={{ padding: 16 }}>
+                    No members found.
+                  </td>
+                </tr>
+              ) : null}
+
+              {rows.map((u) => {
+                const addressParts = [
+                  u.address_line1,
+                  u.address_line2,
+                  u.city,
+                  u.state,
+                  u.zip,
+                ].filter(Boolean);
+
+                return (
+                  <tr key={u.id}>
+                    <td style={{ fontWeight: 950 }}>
+                      {u.first_name} {u.last_name}
+                    </td>
+                    <td>{u.email}</td>
+                    <td>{u.phone || <span style={{ color: "var(--dash-muted)" }}>—</span>}</td>
+
+                    {showAddress ? (
+                      <td style={{ color: u.address_line1 ? "var(--dash-text)" : "var(--dash-muted)" }}>
+                        {addressParts.length ? addressParts.join(", ") : "—"}
+                      </td>
+                    ) : null}
+
+                    <td>
+                      {canEditRole ? (
+                        <select
+                          className="dash-select"
+                          style={{ height: 34 }}
+                          value={u.role}
+                          onChange={(e) => {
+                            const role = e.target.value;
+                            setRows((prev) =>
+                              prev.map((x) => (x.id === u.id ? { ...x, role } : x))
+                            );
+                          }}
+                        >
+                          {ROLES.map((r) => (
+                            <option key={r} value={r}>
+                              {r}
+                            </option>
+                          ))}
+                        </select>
+                      ) : (
+                        u.role
+                      )}
+                    </td>
+
+                    {showBilling ? <td>{u.cadence_months ? `${u.cadence_months} mo` : "—"}</td> : null}
+                    {showBilling ? <td>{u.paid_status || "—"}</td> : null}
+
+                    <td>
+                      <div className="dash-actions">
+                        {canEditRole ? (
+                          <button className="dash-btn dash-btn-primary" onClick={() => saveRole(u.id, u.role)}>
+                            Save role
+                          </button>
+                        ) : null}
+
+                        <button
+                          className="dash-btn dash-btn-ghost"
+                          onClick={() => openEdit(rowsById.get(u.id) || u)}
+                        >
+                          Edit
+                        </button>
+
+                        {canDelete ? (
+                          <button
+                            className="dash-btn dash-btn-ghost"
+                            onClick={() => doDelete(u.id)}
+                            style={{ borderColor: "rgba(239,68,68,0.35)", color: "#b91c1c" }}
+                          >
+                            Delete
+                          </button>
+                        ) : null}
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Pagination */}
+        <div className="dash-pager">
+          <button
+            className="dash-btn dash-btn-ghost"
+            disabled={!canPrev}
+            onClick={async () => {
+              const p = page - 1;
+              setPage(p);
+              await load(p, pageSize, search);
+            }}
+          >
+            ← Prev
+          </button>
+
+          <div className="meta">
+            Page {page} / {totalPages} • Total {total}
+          </div>
+
+          <button
+            className="dash-btn dash-btn-primary"
+            disabled={!canNext}
+            onClick={async () => {
+              const p = page + 1;
+              setPage(p);
+              await load(p, pageSize, search);
+            }}
+          >
+            Next →
+          </button>
+        </div>
+      </div>
+
+      {/* Edit modal */}
+      {editing ? (
+        <div className="dash-modal-overlay" role="dialog" aria-modal="true">
+          <div className="dash-modal">
+            <div className="dash-modal-head">
+              <h3 className="dash-modal-title">Edit Member</h3>
+              <button className="dash-modal-close" onClick={closeEdit} aria-label="Close">
+                ✕
+              </button>
+            </div>
+
+            <div className="dash-modal-body">
+              <div className="dash-form compact">
+                <div className="dash-grid-2">
+                  <div className="dash-field">
+                    <div className="dash-label">First name</div>
+                    <input
+                      className="dash-input"
+                      value={editing.first_name}
+                      onChange={(e) => setEditing((p) => ({ ...p, first_name: e.target.value }))}
+                    />
+                  </div>
+
+                  <div className="dash-field">
+                    <div className="dash-label">Last name</div>
+                    <input
+                      className="dash-input"
+                      value={editing.last_name}
+                      onChange={(e) => setEditing((p) => ({ ...p, last_name: e.target.value }))}
+                    />
+                  </div>
+                </div>
+
+                <div className="dash-grid-2">
+                  <div className="dash-field">
+                    <div className="dash-label">Email</div>
+                    <input
+                      className="dash-input"
+                      value={editing.email}
+                      onChange={(e) => setEditing((p) => ({ ...p, email: e.target.value }))}
+                    />
+                  </div>
+
+                  <div className="dash-field">
+                    <div className="dash-label">Phone</div>
+                    <input
+                      className="dash-input"
+                      value={editing.phone}
+                      onChange={(e) => setEditing((p) => ({ ...p, phone: e.target.value }))}
+                    />
+                  </div>
+                </div>
+
+                <div className="dash-field">
+                  <div className="dash-label">Address 1</div>
+                  <input
+                    className="dash-input"
+                    value={editing.address_line1}
+                    onChange={(e) => setEditing((p) => ({ ...p, address_line1: e.target.value }))}
+                  />
+                </div>
+
+                <div className="dash-field">
+                  <div className="dash-label">Address 2</div>
+                  <input
+                    className="dash-input"
+                    value={editing.address_line2}
+                    onChange={(e) => setEditing((p) => ({ ...p, address_line2: e.target.value }))}
+                  />
+                </div>
+
+                <div className="dash-grid-3">
+                  <div className="dash-field">
+                    <div className="dash-label">City</div>
+                    <input
+                      className="dash-input"
+                      value={editing.city}
+                      onChange={(e) => setEditing((p) => ({ ...p, city: e.target.value }))}
+                    />
+                  </div>
+
+                  <div className="dash-field">
+                    <div className="dash-label">State</div>
+                    <input
+                      className="dash-input"
+                      value={editing.state}
+                      onChange={(e) => setEditing((p) => ({ ...p, state: e.target.value }))}
+                    />
+                  </div>
+
+                  <div className="dash-field">
+                    <div className="dash-label">ZIP</div>
+                    <input
+                      className="dash-input"
+                      value={editing.zip}
+                      onChange={(e) => setEditing((p) => ({ ...p, zip: e.target.value }))}
+                    />
+                  </div>
+                </div>
+
+                <label style={{ display: "flex", gap: 10, alignItems: "center", fontWeight: 950 }}>
+                  <input
+                    type="checkbox"
+                    checked={Number(editing.is_active) === 1}
+                    onChange={(e) =>
+                      setEditing((p) => ({ ...p, is_active: e.target.checked ? 1 : 0 }))
+                    }
+                  />
+                  Active account
+                </label>
+
+                <div className="dash-form-actions">
+                  <button className="dash-btn dash-btn-ghost" onClick={closeEdit}>
+                    Cancel
+                  </button>
+                  <button className="dash-btn dash-btn-primary" onClick={saveEdit} disabled={editBusy}>
+                    {editBusy ? "Saving…" : "Save changes"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
+    </div>
   );
 }

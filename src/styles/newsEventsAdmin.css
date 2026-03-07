@@ -1,0 +1,294 @@
+/* src/styles/newsEventsAdmin.css */
+:root{
+  --ad-bg: #f6f7fb;
+  --ad-card: #ffffff;
+  --ad-border: rgba(20, 30, 60, 0.12);
+  --ad-shadow: 0 12px 30px rgba(15, 23, 42, 0.10);
+  --ad-soft: rgba(15, 23, 42, 0.68);
+  --ad-text: #0f172a;
+  --ad-accent: #1c73c7;
+  --ad-danger: #c81e1e;
+  --ad-radius: 16px;
+  --ad-max: 1100px;
+}
+
+.neAdminWrap{
+  padding: 18px 14px 40px;
+  background: var(--ad-bg);
+  min-height: 100vh;
+  color: var(--ad-text);
+}
+
+.neAdminHeader{
+  max-width: var(--ad-max);
+  margin: 0 auto 14px;
+  background: var(--ad-card);
+  border: 1px solid var(--ad-border);
+  border-radius: var(--ad-radius);
+  box-shadow: var(--ad-shadow);
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.neAdminTitle{
+  margin: 0;
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.neAdminSub{
+  margin-top: 4px;
+  color: var(--ad-soft);
+  font-weight: 700;
+}
+
+.neAdminHeaderActions{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.neBtnSolid{
+  border: 1px solid var(--ad-border);
+  background: var(--ad-accent);
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.neBtnOutline{
+  border: 1px solid var(--ad-border);
+  background: #fff;
+  color: var(--ad-text);
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.neBtnDanger{
+  border: 1px solid rgba(200,30,30,0.35);
+  background: #fff;
+  color: var(--ad-danger);
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.neAdminFilters{
+  max-width: var(--ad-max);
+  margin: 0 auto 12px;
+  background: var(--ad-card);
+  border: 1px solid var(--ad-border);
+  border-radius: var(--ad-radius);
+  box-shadow: var(--ad-shadow);
+  padding: 14px;
+  display: grid;
+  grid-template-columns: 260px 1fr auto;
+  gap: 12px;
+  align-items: end;
+}
+
+@media (max-width: 820px){
+  .neAdminFilters{
+    grid-template-columns: 1fr;
+  }
+}
+
+.neField label{
+  display: block;
+  font-size: 13px;
+  font-weight: 900;
+  color: rgba(15,23,42,0.75);
+  margin-bottom: 6px;
+}
+
+.neField input,
+.neField select,
+.neField textarea{
+  width: 100%;
+  border: 1px solid var(--ad-border);
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-weight: 700;
+  outline: none;
+  background: #fff;
+}
+
+.neGrow{ min-width: 260px; }
+
+.nePager{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-end;
+  white-space: nowrap;
+}
+
+.nePagerText{
+  font-weight: 900;
+  color: rgba(15,23,42,0.7);
+}
+
+/* List */
+.neAdminList{
+  max-width: var(--ad-max);
+  margin: 0 auto;
+  display: grid;
+  gap: 10px;
+}
+
+.neAdminRow{
+  background: var(--ad-card);
+  border: 1px solid var(--ad-border);
+  border-radius: var(--ad-radius);
+  box-shadow: var(--ad-shadow);
+  padding: 14px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.neAdminRowTitle{
+  font-weight: 900;
+  font-size: 16px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.neAdminRowMeta{
+  margin-top: 6px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  color: rgba(15,23,42,0.70);
+  font-weight: 800;
+}
+
+.neMetaTag{
+  padding: 6px 10px;
+  border: 1px solid var(--ad-border);
+  border-radius: 999px;
+  background: rgba(28,115,199,0.06);
+}
+
+.nePill{
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-weight: 900;
+  border: 1px solid var(--ad-border);
+}
+
+.nePill.isOn{ background: rgba(16,185,129,0.10); color: #065f46; }
+.nePill.isOff{ background: rgba(245,158,11,0.12); color: #7c2d12; }
+
+.neAdminRowActions{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* Modal overlay + scroll fix */
+.neModalOverlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  display: grid;
+  place-items: center;
+  padding: 14px;
+  z-index: 9999;
+}
+
+.neModal{
+  width: min(980px, 100%);
+  background: #fff;
+  border-radius: 18px;
+  border: 1px solid var(--ad-border);
+  box-shadow: var(--ad-shadow);
+  display: flex;
+  flex-direction: column;
+  max-height: 92vh;
+  overflow: hidden;
+}
+
+.neModalHeader{
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--ad-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.neModalTitle{
+  font-weight: 900;
+  font-size: 18px;
+}
+
+.neIconBtn{
+  border: 1px solid var(--ad-border);
+  background: #fff;
+  border-radius: 12px;
+  padding: 8px 10px;
+  cursor: pointer;
+  font-weight: 900;
+}
+
+/* THIS makes the form scroll inside the modal */
+.neModalBody{
+  padding: 14px 16px;
+  overflow: auto;
+}
+
+.neGrid2{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+@media (max-width: 820px){
+  .neGrid2{ grid-template-columns: 1fr; }
+}
+
+.neSpan2{
+  grid-column: 1 / -1;
+}
+
+.neMiniRow{
+  margin-top: 8px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.neCheck{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 900;
+}
+
+.neHint{
+  margin-top: 6px;
+  font-size: 12px;
+  color: rgba(15,23,42,0.68);
+  font-weight: 700;
+}
+
+.neModalFooter{
+  padding: 14px 16px;
+  border-top: 1px solid var(--ad-border);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  background: #fff;
+}

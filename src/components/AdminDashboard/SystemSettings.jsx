@@ -1,10 +1,14 @@
 //src/components/AdminDashboard/SystemSettings.jsx
+// src/components/AdminDashboard/SystemSettings.jsx
 import React from "react";
-import DashboardLayout from "../Shared/DashboardLayout";
-export default function SystemSettings(){
-  return(
-    <DashboardLayout title="System Settings" nav={[{to:"/dash/admin",label:"Overview"}]}>
-      <p>Branding, email templates, backup, SSO, environment info.</p>
-    </DashboardLayout>
+
+export default function SystemSettings() {
+  return (
+    <div>
+      <h2 className="dash-title">System Settings</h2>
+      <p style={{ marginTop: 8, color: "#64748b" }}>
+        Branding, email templates, backup, SSO, environment info.
+      </p>
+    </div>
   );
 }

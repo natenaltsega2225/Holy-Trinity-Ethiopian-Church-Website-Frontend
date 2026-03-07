@@ -1,6 +1,5 @@
 
 // src/pages/DonationPage.jsx
-// src/pages/DonationPage.jsx
 import React, { useState } from "react";
 import api from "../components/api";
 import "../styles/donation.css";

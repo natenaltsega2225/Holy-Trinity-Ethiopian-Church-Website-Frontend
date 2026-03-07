@@ -50,7 +50,7 @@ export default function Payments() {
             <p className="payments-card-desc">
               You will be redirected to a secure Stripe checkout page to enter
               your card or bank information. The church does <strong>not</strong>{" "}
-              store your card numbers in our database.
+              store your card information in our database.
             </p>
             <p className="payments-card-desc" style={{ marginTop: "0.5rem" }}>
               You&apos;ll receive an email receipt for every contribution.
